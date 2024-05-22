@@ -1,11 +1,3 @@
-# FastBurguers
+# Bienvenidos a FastBurguers
 
-<<<<<<< HEAD
-# Participantes
-
-## Omar
-
-##Gustavo
-=======
-#comentario de la rama Gustavo 08:46
->>>>>>> develop
+## Colaboradores
