@@ -9,3 +9,4 @@ Prueba en memoria de paolo guerrero
 <<<<<<< HEAD
 estoy cansado jefe
 escrito por Gustavo
+escrito por omar
