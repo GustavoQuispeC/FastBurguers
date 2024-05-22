@@ -1,2 +1,10 @@
 Prueba remota.
+<<<<<<< HEAD
 Prueb
+=======
+Prueba 3 para omar.
+prueba 80 cambios.
+Prueba para Ash ketchup
+Prueba en memoria de paolo guerrero
+estoy cansado jefe
+>>>>>>> d3c84667a74723e1281aa533eaf4b1cb26e08efb
