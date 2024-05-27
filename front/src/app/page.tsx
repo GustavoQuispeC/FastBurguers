@@ -1,11 +1,5 @@
-import Autenticacion from "@/app/components/autenticar/Autenticar";
-
 const Home = () => {
-  return (
-    <>
-      <Autenticacion />
-    </>
-  );
+  return <></>;
 };
 
 export default Home;

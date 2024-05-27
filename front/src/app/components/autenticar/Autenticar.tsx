@@ -5,7 +5,7 @@ import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import FacebookLogin from "@greatsumini/react-facebook-login";
 import Image from "next/image";
 
-const Autenticacion = () => {
+const Autenticar = () => {
   const [user, setUser] = useState<{ name: string; imageUrl: string } | null>(
     null
   );
@@ -48,7 +48,7 @@ const Autenticacion = () => {
     <div>
       {!user ? (
         <GoogleOAuthProvider clientId={clientID}>
-          <div className="flex justify-around items-center  w-1/3">
+          <div className="flex justify-around items-center">
             <GoogleLogin
               onSuccess={onGoogleSuccess}
               onError={() => {
@@ -88,4 +88,4 @@ const Autenticacion = () => {
   );
 };
 
-export default Autenticacion;
+export default Autenticar;
