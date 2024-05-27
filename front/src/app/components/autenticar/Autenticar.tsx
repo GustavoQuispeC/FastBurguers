@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import FacebookLogin from "@greatsumini/react-facebook-login";
+import Image from "next/image";
 
 const Autenticacion = () => {
   const [user, setUser] = useState<{ name: string; imageUrl: string } | null>(
@@ -64,7 +65,12 @@ const Autenticacion = () => {
                 onProfileSuccess={onFacebookSuccess}
                 render={(renderProps: any) => (
                   <button onClick={renderProps.onClick}>
-                    <img src="/facebook.png" alt="facebook" className="w-8" />
+                    <Image
+                      src="/facebook.png"
+                      alt="facebook"
+                      width={30}
+                      height={30}
+                    />
                   </button>
                 )}
               />
