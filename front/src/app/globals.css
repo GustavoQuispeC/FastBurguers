@@ -3,3 +3,8 @@
 @tailwind utilities;
 
 
+/* Darle un color al fondo de la página */
+body {
+    background-color: rgb(255, 255, 255);
+    
+  }
