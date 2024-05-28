@@ -22,6 +22,9 @@ export class Products {
     @Column({type: 'text',default: 'https://www.pngitem.com/pimgs/m/407-4074353_defectos-criticos-de-un-producto-hd-png-download.png'})
     imgUrl: string;
 
+    @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
+    discount: number;
+
     @ManyToOne(() => Categories, (category) => category.products)
     category: Categories;
 
