@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Orders } from "./orders.entity";
 
 @Entity({ name: 'users' })
 export class Users {
@@ -31,4 +32,8 @@ export class Users {
 
     @Column({ type: 'varchar', length: 50, nullable: true })
     city: string;
+
+    @OneToMany(() => Orders, (order) => order.user)
+    @JoinColumn({name: 'order_id'})
+    orders: Orders[];
 }
