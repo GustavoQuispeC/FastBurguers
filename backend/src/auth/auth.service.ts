@@ -1,7 +1,7 @@
 import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
 import { UsersService } from "src/modules/users/users.service";
 import * as bcrypt from 'bcrypt'
-import { UpdateUserDto } from "src/modules/users/users.dto";
+import { CreateUserDto} from "src/modules/users/users.dto";
 import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
@@ -28,7 +28,7 @@ export class AuthService {
         }
     }
 
-    async signUp(user: UpdateUserDto){ // registrarse
+    async signUp(user: CreateUserDto){ // registrarse
         const findUser = await this.usersService.getByEmail(user.email)
         if(findUser){
             throw new ConflictException('El email ya ha sido registrado')
@@ -37,7 +37,7 @@ export class AuthService {
         if(!hashedPassword){
             throw new BadRequestException('Error al hashear constraseña')
         }
-        // const newUser = this.usersService.createUser({...user, password: hashedPassword}) 
+        const newUser = this.usersService.createUser({...user, password: hashedPassword}) 
         return newUser
     }
 
