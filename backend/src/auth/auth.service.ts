@@ -37,7 +37,7 @@ export class AuthService {
         if(!hashedPassword){
             throw new BadRequestException('Error al hashear constraseña')
         }
-        // const newUser = this.usersService.createUser({...user, password: hashedPassword})
+        // const newUser = this.usersService.createUser({...user, password: hashedPassword}) 
         return newUser
     }
 
