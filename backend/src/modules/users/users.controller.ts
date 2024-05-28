@@ -28,6 +28,16 @@ export class UsersController {
         return this.userService.getById(id)
     }
 
+    @Put('/makeAdmin/:id')
+    makeUserAdmin(@Param('id',ParseUUIDPipe) id:string){
+        this.userService.makeAdmin(id);
+    }
+
+    @Put('/makeSuperAdmin/:id')
+    makeUserSuperAdmin(@Param('id',ParseUUIDPipe) id:string){
+        this.userService.makeSuperAdmin(id);
+    }
+
     @Put(':id')
     @Roles(Role.SUPERADMIN)
     @Roles(Role.ADMIN)
@@ -42,5 +52,7 @@ export class UsersController {
     DeleteUser(@Param('id',ParseUUIDPipe) id:string){
         return this.userService.deleteUser(id)
     }
+
+    
 
 }

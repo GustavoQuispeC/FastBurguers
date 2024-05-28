@@ -72,4 +72,23 @@ export class UsersService {
         const {password, isAdmin, isSuperAdmin, ...userInfoPublic} = user;
         return userInfoPublic;
     }
+
+    async makeAdmin(id:string){
+        const user = await this.userRepository.findOneBy({id})
+        if(!user) new BadRequestException(`No se encontro usario con ${id}`)
+        this.userRepository.update(id,{isAdmin:true,isSuperAdmin:false})
+        return {
+            message:"Usuario Admin actualizado con exito"
+        }
+    }
+
+    async makeSuperAdmin(id:string){
+        const user = await this.userRepository.findOneBy({id})
+        if(!user) new BadRequestException(`No se encontro usario con ${id}`)
+        this.userRepository.update(id,{isAdmin:false,isSuperAdmin:true})
+        return{
+            message:"Usuario SuperAdmin actualizado con exito"
+        }
+    }
+
 }
