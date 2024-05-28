@@ -10,6 +10,7 @@ const productosPreload: IProduct[] = [
     stock: 10,
     imgUrl: "/hamburguesa1.png",
     categoryId: 1,
+    discount: 0,
   },
   {
     id: 2,
@@ -20,6 +21,7 @@ const productosPreload: IProduct[] = [
     stock: 15,
     imgUrl: "/hamburguesa2.jpg",
     categoryId: 1,
+    discount: 0,
   },
   {
     id: 3,
@@ -30,6 +32,7 @@ const productosPreload: IProduct[] = [
     stock: 8,
     imgUrl: "/hamburguesa3.webp",
     categoryId: 1,
+    discount: 0,
   },
   {
     id: 4,
@@ -40,6 +43,7 @@ const productosPreload: IProduct[] = [
     stock: 12,
     imgUrl: "/hamburguesa4.jpg",
     categoryId: 1,
+    discount: 0,
   },
   {
     id: 5,
@@ -50,6 +54,7 @@ const productosPreload: IProduct[] = [
     stock: 9,
     imgUrl: "/loginHamburguesa.jpeg",
     categoryId: 1,
+    discount: 0,
   },
   {
     id: 6,
@@ -60,6 +65,7 @@ const productosPreload: IProduct[] = [
     stock: 20,
     imgUrl: "/sandwich-pollo1.jpg",
     categoryId: 2,
+    discount: 0,
   },
   {
     id: 7,
@@ -70,6 +76,7 @@ const productosPreload: IProduct[] = [
     stock: 15,
     imgUrl: "/sandwich-pollo2.jpg",
     categoryId: 2,
+    discount: 0,
   },
   {
     id: 8,
@@ -80,6 +87,7 @@ const productosPreload: IProduct[] = [
     stock: 30,
     imgUrl: "/papas1.jpg",
     categoryId: 3,
+    discount: 0,
   },
   {
     id: 9,
@@ -89,6 +97,7 @@ const productosPreload: IProduct[] = [
     stock: 25,
     imgUrl: "/aros_cebolla.jpg",
     categoryId: 3,
+    discount: 0,
   },
   {
     id: 10,
@@ -98,6 +107,7 @@ const productosPreload: IProduct[] = [
     stock: 50,
     imgUrl: "/refresco.jpg",
     categoryId: 4,
+    discount: 0,
   },
   {
     id: 11,
@@ -107,6 +117,7 @@ const productosPreload: IProduct[] = [
     stock: 20,
     imgUrl: "/batido_chocolate.jpg",
     categoryId: 4,
+    discount: 0,
   },
   {
     id: 12,
@@ -116,6 +127,7 @@ const productosPreload: IProduct[] = [
     stock: 15,
     imgUrl: "/helado_vainilla.jpg",
     categoryId: 5,
+    discount: 0,
   },
   {
     id: 13,
@@ -125,6 +137,7 @@ const productosPreload: IProduct[] = [
     stock: 10,
     imgUrl: "/pastel_chocolate.jpg",
     categoryId: 5,
+    discount: 0,
   },
   {
     id: 14,
@@ -134,6 +147,7 @@ const productosPreload: IProduct[] = [
     stock: 12,
     imgUrl: "/ensalada_cesar.jpg",
     categoryId: 6,
+    discount: 0,
   },
   {
     id: 15,
@@ -143,6 +157,7 @@ const productosPreload: IProduct[] = [
     stock: 10,
     imgUrl: "/ensalada_griega.jpg",
     categoryId: 6,
+    discount: 0,
   },
 ];
 

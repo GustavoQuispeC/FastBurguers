@@ -34,6 +34,7 @@ const GridProducts = () => {
         <button
           onClick={handleNextClick}
           disabled={startIndex >= products.length - itemsPerPage}
+          className=" ml-3"
         >
           <Image
             src="/Flecha-derecha.png"
@@ -52,9 +53,11 @@ const GridProducts = () => {
               key={product.id}
               className="flex flex-col items-center border border-gray-300 overflow-hidden rounded-lg relative"
             >
-              <div className="bg-red-600 rounded-xl p-1 px-2 absolute left-28 top-5 z-10">
-                <p className="font-bold text-white">-30%</p>
-              </div>
+              {product.discount !== 0 && (
+                <div className="bg-red-600 rounded-xl p-1 px-2 absolute left-28 top-5 z-10">
+                  <p className="font-bold text-white">-{product.discount}%</p>
+                </div>
+              )}
               <Link href="#">
                 <img
                   src={product.imgUrl}
@@ -67,7 +70,7 @@ const GridProducts = () => {
                 <p className="text-gray-600 mt-1">{product.description}</p>
                 <p className="text-2xl font-bold">${product.price}</p>
 
-                <button className=" bg-blue-800 rounded-xl p-2 px-10 mt-2 text-white font-bold">
+                <button className=" bg-orange-500 rounded-xl p-2 px-10 mt-2 text-white font-bold border-none">
                   <Link href={`/product/${product.id}`} key={product.id}>
                     Ver más
                   </Link>
