@@ -1,11 +1,20 @@
+"use client"
+import HeadlineCards from "@/components/headlineCards/HeadlineCards";
+import Hero from "@/components/hero/hero";
+import Navbar from "@/components/navbar/Naavbar";
+import Head from "next/head";
+import React from "react";
 
-
-const Home = () => {
+const Home= () => {
   return (
-    <>
-      <div>HOla</div>
-    </>
+  
+      <div> 
+     <Navbar/>
+     <Hero/>
+     <HeadlineCards/>
+        </div>
+   
   );
 };
 
-export default Home;
+export default Home ;
