@@ -53,7 +53,6 @@ export class CreateUserDto{
     */
     @IsNumber()
     @IsInt()
-    @Length(9, 9)
     phone: number;
 
     /**
@@ -127,7 +126,6 @@ export class UpdateUserDto{
     @IsOptional()
     @IsNumber()
     @IsInt()
-    @Length(9, 9)
     phone?: number;
 
     /**

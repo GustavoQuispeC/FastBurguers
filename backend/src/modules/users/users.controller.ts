@@ -12,43 +12,46 @@ export class UsersController {
     constructor(private readonly userService:UsersService){}
 
     @Get()
-    @Roles(Role.SUPERADMIN)
     @Roles(Role.ADMIN)
     @UseGuards(AuthGuards, RolesGuard)
     getUsers(@Query('page') page:string, @Query('limit') limit:string){
         if(page && limit){
             return this.userService.getAll(page, limit)
         }
-        return this.userService.getAll('1','5')
+        return this.userService.getAll('1','10')
     }
 
     @Get(':id')
-    @Roles(Role.SUPERADMIN)
+    @Roles(Role.ADMIN)
+    @UseGuards(AuthGuards,RolesGuard)
     getUser(@Param('id',ParseUUIDPipe) id:string){
         return this.userService.getById(id)
     }
 
     @Put('/makeAdmin/:id')
+    @Roles(Role.SUPERADMIN)
+    @UseGuards(AuthGuards,RolesGuard)
     makeUserAdmin(@Param('id',ParseUUIDPipe) id:string){
         this.userService.makeAdmin(id);
     }
 
     @Put('/makeSuperAdmin/:id')
+    @Roles(Role.SUPERADMIN)
+    @UseGuards(AuthGuards,RolesGuard)
     makeUserSuperAdmin(@Param('id',ParseUUIDPipe) id:string){
         this.userService.makeSuperAdmin(id);
     }
 
     @Put(':id')
-    @Roles(Role.SUPERADMIN)
     @Roles(Role.ADMIN)
-    @UseGuards(AuthGuards)
+    @UseGuards(AuthGuards,RolesGuard)
     updateUser(@Param('id',ParseUUIDPipe) id:string, @Body() user:UpdateUserDto){
         return this.userService.updateUser(id,user)
     }
 
     @Delete(':id')
     @Roles(Role.SUPERADMIN)
-    @UseGuards(AuthGuards)
+    @UseGuards(AuthGuards,RolesGuard)
     DeleteUser(@Param('id',ParseUUIDPipe) id:string){
         return this.userService.deleteUser(id)
     }
