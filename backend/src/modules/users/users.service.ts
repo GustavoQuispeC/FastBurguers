@@ -1,8 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Users } from 'src/entities/Users';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Users } from 'src/entities/users.entity';
+import { CreateUserDto } from './users.dto';
 
 @Injectable()
 export class UsersService {
@@ -57,11 +58,18 @@ export class UsersService {
         return userInfoPublic;
     }
 
+    async createUser(user:CreateUserDto){
+        const newUser = await this.userRepository.save(user)
+        const dbUser = await this.userRepository.findOneBy({id:newUser.id})
+        const {password, isAdmin, isSuperAdmin, ...userInfoPublic} = dbUser;
+        return userInfoPublic;
+    }
+
     async deleteUser(id:string){
         const user = await this.userRepository.findOneBy({id})
         if(!user) new BadRequestException(`No se encontro usario con ${id}`)
         this.userRepository.remove(user)
         const {password, isAdmin, isSuperAdmin, ...userInfoPublic} = user;
         return userInfoPublic;
-    }   
+    }
 }
