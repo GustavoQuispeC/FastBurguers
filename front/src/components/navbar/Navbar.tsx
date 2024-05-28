@@ -37,7 +37,7 @@ const Navbar = () => {
     </section>
       <div className="md:flex lg:items-center relative py-3 lg:px-10 px-4 border-gray-200 border-b bg-blue-800 lg:min-h-[80px] max-lg:min-h-[60px]">
         <a href="#" className="max-sm:w-full max-sm:mb-3 shrink-0">
-          <img src="/logo.png" alt="logo" className="w-[70px]" />
+          <img src="/LogoFastBurgers.png" alt="logo" className="w-[90px]" />
         </a>
 
         <div className="flex flex-wrap w-full items-center">
@@ -108,9 +108,9 @@ const Navbar = () => {
                 </span>
               </li>
               <li className="flex text-[15px] max-lg:py-2 px-3 hover:text-[#007bff] hover:fill-[#007bff]">
-                <button className="px-4 py-2 text-sm rounded font-semibold text-[#333] border-2 border-[#333] bg-amber-300">
+                <a className="px-4 py-2 text-sm rounded font-semibold text-[#333] border-2 border-[#333] bg-amber-300" href="/login">
                   Ingresar
-                </button>
+                </a>
               </li>
               <li id="toggleOpen" className="lg:hidden">
                 <button>
@@ -201,7 +201,7 @@ const Navbar = () => {
           </li>
           <li className="max-lg:border-b max-lg:py-3 px-3">
             <a
-              href="#"
+              href="/contact"
               className="hover:text-yellow-300 text-blue-800 font-bold block"
             >
               Nosotros

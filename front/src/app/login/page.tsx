@@ -1,25 +1,70 @@
-import { Label, TextInput } from "flowbite-react";
+'use client'
+import { TextInput } from "flowbite-react";
 import { HiMail } from "react-icons/hi";
-import React from "react";
 import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
+
+import React, { useEffect, useState } from "react";
+import { LoginProps, LoginErrorProps } from "@/types";
+import { validateLoginForm } from "@/utils/loginFormValidation";
 
 const Login = () => {
+  const [dataUser, setDataUser] = useState<LoginProps>({
+    email: "",
+    password: "",
+  });
+
+  const [error, setError] = useState<LoginErrorProps>({
+    email: "",
+    password: "",
+  });
+
+   // Mostrar u ocultar contraseña
+   const [showPassword, setShowPassword] = useState(false);
+   const handleTogglePassword = () => {
+     setShowPassword(!showPassword);
+   };
+
+   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setDataUser({
+      ...dataUser,
+      [e.target.name]: e.target.value,
+    });
+   }
+
+   const handleSubmit = (e:any)=>{
+      e.preventDefault();
+    try {
+      
+    } catch (error: any) {
+      throw new Error(error);
+    }
+   }
+
+   //validar formulario
+   useEffect(() => {
+    const error = validateLoginForm(dataUser);
+    setError(error);
+   }, [dataUser]);
+   console.log(dataUser)
+
+
+ 
   return (
-    <div className="font-[sans-serif] text-[#333] bg-white flex items-center justify-center md:h-screen p-4">
-      <div className="shadow-[0_2px_16px_-3px_rgba(6,81,237,0.3)] max-w-6xl rounded-md p-6">
-        {/* <a href="#"><img
-          src="/logo.png" alt="logo" className='w-40 md:mb-4 mb-12' />
-        </a> */}
-        <h3 className="font-serif font-bold">fastburgers.com</h3>
+    <div className="font-[sans-serif] text-[#333]  flex items-start justify-center md:h-screen pt-10">
+      <div className="shadow-[0_2px_16px_-3px_rgba(6,81,237,0.3)] max-w-6xl rounded-md p-6  bg-white">
+      
+        <h3 className="font-serif font-bold">www.fastburgers.com</h3>
         <div className="grid md:grid-cols-2 items-center gap-8">
           <div className="max-md:order-1">
             <img
-              src="/loginHamburguesa.jpeg"
+              src="/LogoFastBurgers.png"
               className="lg:w-11/12 w-full h-96 object-cover"
               alt="login-image"
             />
           </div>
-          <form className="max-w-md w-full mx-auto">
+          <form onSubmit={handleSubmit} className="max-w-md w-full mx-auto">
             <div className="mb-12">
               <h3 className="text-4xl font-extrabold text-blue-600">
                 Iniciar sesión
@@ -28,25 +73,43 @@ const Login = () => {
             <div>
               <div className="relative flex items-center">
                 <TextInput
-                  id="email4"
+                  name="email"
                   type="email"
                   rightIcon={HiMail}
                   placeholder="name@ejemplo.com"
                   required
                   className="w-full"
+                  value={dataUser.email}
+                  onChange={handleChange}
                 />
+               
+                {error.email &&  <p style={{ color: "red" }}>{error.email}</p>}
               </div>
             </div>
             <div className="mt-8">
               <div className="relative flex items-center">
                 <TextInput
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   rightIcon={FaEye}
                   required
                   className="w-full "
-                  placeholder="Enter password"
+                  placeholder="********"
+                  value={dataUser.password}
+                  onChange={handleChange}
                 />
+                {error.password && <p style={{ color: "red" }}>{error.password}</p>}
+                <button
+                  type="button"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 focus:outline-none"
+                  onClick={handleTogglePassword}
+                >
+                  {showPassword ? (
+                    <FaEyeSlash className="text-gray-500" />
+                  ) : (
+                    <FaEye className="text-gray-500" />
+                  )}
+                </button>
               </div>
             </div>
             <div className="flex items-center justify-between gap-2 mt-6">
@@ -58,7 +121,7 @@ const Login = () => {
                   className="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
                 <label htmlFor="remember-me" className="ml-3 block text-sm">
-                  Remember me
+                  Recordar
                 </label>
               </div>
               <div>
@@ -73,14 +136,14 @@ const Login = () => {
             <div className="mt-12">
               <button
                 type="button"
-                className="w-full shadow-xl py-2.5 px-4 text-sm font-semibold rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                className="w-full shadow-xl py-2.5 px-4 text-sm font-semibold rounded-full text-amber-300 bg-blue-600 hover:bg-blue-700 focus:outline-none"
               >
-                Sign in
+                Ingresar
               </button>
               <p className="text-sm text-center mt-8">
                 No tienes una cuenta{" "}
                 <a
-                  href="#"
+                  href="/user"
                   className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap"
                 >
                   Registrate aquí
