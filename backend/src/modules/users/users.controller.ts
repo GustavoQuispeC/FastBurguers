@@ -12,6 +12,7 @@ export class UsersController {
     constructor(private readonly userService:UsersService){}
 
     @Get()
+    @Roles(Role.SUPERADMIN)
     @Roles(Role.ADMIN)
     @UseGuards(AuthGuards, RolesGuard)
     getUsers(@Query('page') page:string, @Query('limit') limit:string){
@@ -22,11 +23,13 @@ export class UsersController {
     }
 
     @Get(':id')
+    @Roles(Role.SUPERADMIN)
     getUser(@Param('id',ParseUUIDPipe) id:string){
         return this.userService.getById(id)
     }
 
     @Put(':id')
+    @Roles(Role.SUPERADMIN)
     @Roles(Role.ADMIN)
     @UseGuards(AuthGuards)
     updateUser(@Param('id',ParseUUIDPipe) id:string, @Body() user:UpdateUserDto){
@@ -34,6 +37,7 @@ export class UsersController {
     }
 
     @Delete(':id')
+    @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards)
     DeleteUser(@Param('id',ParseUUIDPipe) id:string){
         return this.userService.deleteUser(id)
