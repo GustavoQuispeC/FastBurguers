@@ -16,7 +16,7 @@ const page = () => {
           </div>
 
           <div>
-            <h2 className="text-3xl max-sm:text-2xl font-bold text-blue-800">
+            <h2 className="text-3xl max-sm:text-2xl font-bold text-gray-900">
               Hamburguesa Clásica a la Parrilla
             </h2>
             <div className="flex flex-wrap gap-4 mt-8">
@@ -81,7 +81,7 @@ const page = () => {
             <div className="mt-10 flex flex-wrap gap-4">
               <button
                 type="button"
-                className="flex items-center justify-center px-8 py-4 bg-gray-800 hover:bg-gray-900 text-white border border-gray-800 text-base rounded"
+                className="flex items-center justify-center px-8 py-4 bg-gray-800 hover:bg-gray-900 text-orange-400 border border-gray-800 text-base rounded"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

@@ -32,7 +32,7 @@ return (
                 </span>
             </div>
 
-            <h1 className="text-center text-2xl mb-6 text-gray-600 font-bold font-sans">
+            <h1 className="text-center text-2xl mb-6 text-gray-900 font-bold font-sans">
                 Crear una nueva cuenta
             </h1>
             <div>
@@ -112,7 +112,7 @@ return (
             </div>
             <button
                 type="submit"
-                className="w-full mt-6 bg-blue-800 hover:bg-blue-600 rounded-lg px-4 py-2 text-lg text-amber-300 tracking-wide font-bold font-sans"
+                className="w-full mt-6 bg-gray-900 hover:bg-gray-800 rounded-lg px-4 py-2 text-lg text-orange-400 tracking-wide font-bold font-sans"
             >
                 Registrar
             </button>
