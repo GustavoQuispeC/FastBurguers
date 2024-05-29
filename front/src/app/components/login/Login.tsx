@@ -5,8 +5,8 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 
 import React, { useEffect, useState } from "react";
-import { LoginProps, LoginErrorProps } from "@/types";
-import { validateLoginForm } from "@/utils/loginFormValidation";
+import { LoginProps, LoginErrorProps } from "@/app/types";
+import { validateLoginForm } from "@/app/utils/loginFormValidation";
 
 const Login = () => {
   const [dataUser, setDataUser] = useState<LoginProps>({

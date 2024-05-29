@@ -1,15 +1,7 @@
-"use client";
-import HeadlineCards from "@/components/headlineCards/HeadlineCards";
-import Hero from "@/components/hero/hero";
-import React from "react";
+import HomePage from "./home/page";
 
 const Home = () => {
-  return (
-    <div>
-      <Hero />
-      <HeadlineCards />
-    </div>
-  );
+  return <HomePage />;
 };
 
 export default Home;

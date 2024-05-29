@@ -1,3 +1,4 @@
+import { ApiHideProperty, PickType } from "@nestjs/swagger"
 import { IsBoolean, IsEmail, IsInt, IsNotEmpty, IsNumber, IsNumberString, IsOptional, IsString, Length, Matches, Validate, isString } from "class-validator"
 import { MatchPassword } from "src/decorators/matchPassword.decorator"
 
@@ -53,7 +54,6 @@ export class CreateUserDto{
     */
     @IsNumber()
     @IsInt()
-    @Length(9, 9)
     phone: number;
 
     /**
@@ -70,11 +70,12 @@ export class CreateUserDto{
     @Length(4,20)
     city:string
 
-
+    @ApiHideProperty()
     @IsOptional()
     @IsBoolean()
     isAdmin?:boolean
 
+    @ApiHideProperty()
     @IsOptional()
     @IsBoolean()
     isSuperAdmin?:boolean
@@ -127,7 +128,6 @@ export class UpdateUserDto{
     @IsOptional()
     @IsNumber()
     @IsInt()
-    @Length(9, 9)
     phone?: number;
 
     /**
@@ -156,3 +156,7 @@ export class UpdateUserDto{
     @IsBoolean()
     isSuperAdmin?:boolean
 }
+
+export class LoginUserDto extends PickType(CreateUserDto,[
+    'email', 'password'
+]){}

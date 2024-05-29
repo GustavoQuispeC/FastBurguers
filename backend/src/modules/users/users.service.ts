@@ -1,8 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Users } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { Users } from 'src/entities/users.entity';
 import { CreateUserDto } from './users.dto';
 
 @Injectable()
@@ -72,4 +72,23 @@ export class UsersService {
         const {password, isAdmin, isSuperAdmin, ...userInfoPublic} = user;
         return userInfoPublic;
     }
+
+    async makeAdmin(id:string){
+        const user = await this.userRepository.findOneBy({id})
+        if(!user) new BadRequestException(`No se encontro usario con ${id}`)
+        this.userRepository.update(id,{isAdmin:true,isSuperAdmin:false})
+        return {
+            message:"Usuario Admin actualizado con exito"
+        }
+    }
+
+    async makeSuperAdmin(id:string){
+        const user = await this.userRepository.findOneBy({id})
+        if(!user) new BadRequestException(`No se encontro usario con ${id}`)
+        this.userRepository.update(id,{isSuperAdmin:true,isAdmin:true})
+        return{
+            message:"Usuario SuperAdmin actualizado con exito"
+        }
+    }
+
 }
