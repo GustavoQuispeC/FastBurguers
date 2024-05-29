@@ -68,7 +68,7 @@ export class UsersService {
     async deleteUser(id:string){
         const user = await this.userRepository.findOneBy({id})
         if(!user) new BadRequestException(`No se encontro usario con ${id}`)
-        this.userRepository.remove(user)
+        await this.userRepository.remove(user)
         const {password, isAdmin, isSuperAdmin, ...userInfoPublic} = user;
         return userInfoPublic;
     }
@@ -76,7 +76,7 @@ export class UsersService {
     async makeAdmin(id:string){
         const user = await this.userRepository.findOneBy({id})
         if(!user) new BadRequestException(`No se encontro usario con ${id}`)
-        this.userRepository.update(id,{isAdmin:true,isSuperAdmin:false})
+        await this.userRepository.update(id,{isAdmin:true,isSuperAdmin:false})
         return {
             message:"Usuario Admin actualizado con exito"
         }
@@ -85,7 +85,7 @@ export class UsersService {
     async makeSuperAdmin(id:string){
         const user = await this.userRepository.findOneBy({id})
         if(!user) new BadRequestException(`No se encontro usario con ${id}`)
-        this.userRepository.update(id,{isSuperAdmin:true,isAdmin:true})
+        await this.userRepository.update(id,{isSuperAdmin:true,isAdmin:true})
         return{
             message:"Usuario SuperAdmin actualizado con exito"
         }
