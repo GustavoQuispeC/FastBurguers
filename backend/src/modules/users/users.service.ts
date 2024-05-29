@@ -85,7 +85,7 @@ export class UsersService {
     async makeSuperAdmin(id:string){
         const user = await this.userRepository.findOneBy({id})
         if(!user) new BadRequestException(`No se encontro usario con ${id}`)
-        this.userRepository.update(id,{isAdmin:false,isSuperAdmin:true})
+        this.userRepository.update(id,{isSuperAdmin:true,isAdmin:true})
         return{
             message:"Usuario SuperAdmin actualizado con exito"
         }
