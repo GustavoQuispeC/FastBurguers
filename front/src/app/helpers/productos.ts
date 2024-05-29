@@ -9,7 +9,7 @@ const productosPreload: IProduct[] = [
     price: 5.99,
     stock: 10,
     imgUrl: "/hamburguesa1.png",
-    categoryId: 1,
+    categoryId: [1],
     discount: 0,
   },
   {
@@ -20,7 +20,7 @@ const productosPreload: IProduct[] = [
     price: 6.99,
     stock: 15,
     imgUrl: "/hamburguesa2.jpg",
-    categoryId: 7,
+    categoryId: [1, 7],
     discount: 10, // Producto en promoción
   },
   {
@@ -31,7 +31,7 @@ const productosPreload: IProduct[] = [
     price: 5.49,
     stock: 8,
     imgUrl: "/hamburguesa3.webp",
-    categoryId: 1,
+    categoryId: [1],
     discount: 0,
   },
   {
@@ -42,7 +42,7 @@ const productosPreload: IProduct[] = [
     price: 7.49,
     stock: 12,
     imgUrl: "/hamburguesa4.jpg",
-    categoryId: 1,
+    categoryId: [1],
     discount: 0,
   },
   {
@@ -53,7 +53,7 @@ const productosPreload: IProduct[] = [
     price: 6.49,
     stock: 9,
     imgUrl: "/loginHamburguesa.jpeg",
-    categoryId: 7,
+    categoryId: [1, 7],
     discount: 20, // Producto en promoción
   },
   {
@@ -64,7 +64,7 @@ const productosPreload: IProduct[] = [
     price: 5.99,
     stock: 20,
     imgUrl: "/sandwich-pollo1.jpg",
-    categoryId: 2,
+    categoryId: [2],
     discount: 0,
   },
   {
@@ -75,7 +75,7 @@ const productosPreload: IProduct[] = [
     price: 6.99,
     stock: 15,
     imgUrl: "/sandwich-pollo2.jpg",
-    categoryId: 7,
+    categoryId: [2, 7],
     discount: 5, // Producto en promoción
   },
   {
@@ -86,7 +86,7 @@ const productosPreload: IProduct[] = [
     price: 2.99,
     stock: 30,
     imgUrl: "/papas1.jpg",
-    categoryId: 3,
+    categoryId: [3],
     discount: 0,
   },
   {
@@ -96,7 +96,7 @@ const productosPreload: IProduct[] = [
     price: 3.49,
     stock: 25,
     imgUrl: "/aros_cebolla.jpg",
-    categoryId: 3,
+    categoryId: [3],
     discount: 0,
   },
   {
@@ -106,7 +106,7 @@ const productosPreload: IProduct[] = [
     price: 1.99,
     stock: 50,
     imgUrl: "/refresco.jpg",
-    categoryId: 4,
+    categoryId: [4],
     discount: 0,
   },
   {
@@ -116,7 +116,7 @@ const productosPreload: IProduct[] = [
     price: 3.99,
     stock: 20,
     imgUrl: "/batido_chocolate.jpg",
-    categoryId: 7,
+    categoryId: [4, 7],
     discount: 20,
   },
   {
@@ -126,7 +126,7 @@ const productosPreload: IProduct[] = [
     price: 2.99,
     stock: 15,
     imgUrl: "/helado_vainilla.jpg",
-    categoryId: 5,
+    categoryId: [5],
     discount: 0,
   },
   {
@@ -136,7 +136,7 @@ const productosPreload: IProduct[] = [
     price: 4.99,
     stock: 10,
     imgUrl: "/pastel_chocolate.jpg",
-    categoryId: 5,
+    categoryId: [5],
     discount: 0,
   },
   {
@@ -146,7 +146,7 @@ const productosPreload: IProduct[] = [
     price: 5.49,
     stock: 12,
     imgUrl: "/ensalada_cesar.jpg",
-    categoryId: 6,
+    categoryId: [6],
     discount: 0,
   },
   {
@@ -156,7 +156,7 @@ const productosPreload: IProduct[] = [
     price: 5.99,
     stock: 10,
     imgUrl: "/ensalada_griega.jpg",
-    categoryId: 6,
+    categoryId: [6],
     discount: 0,
   },
 ];

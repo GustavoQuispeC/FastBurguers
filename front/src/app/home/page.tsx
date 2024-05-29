@@ -4,12 +4,12 @@ import productosPreload from "../helpers/productos";
 
 const Home = () => {
   // Filtrar productos de la categoría de promociones
-  const promocionesProducts = productosPreload.filter(
-    (product) => product.categoryId === 7
+  const promocionesProducts = productosPreload.filter((product) =>
+    product.categoryId.includes(7)
   );
 
-  const MenuHamburguesas = productosPreload.filter(
-    (product) => product.categoryId === 1
+  const MenuHamburguesas = productosPreload.filter((product) =>
+    product.categoryId.includes(1)
   );
 
   return (

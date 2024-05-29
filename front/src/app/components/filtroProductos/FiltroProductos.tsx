@@ -6,8 +6,8 @@ interface GridProductsProps {
 }
 
 const FiltroProductos: React.FC<GridProductsProps> = ({ categoryId }) => {
-  const filteredProducts = productosPreload.filter(
-    (product) => product.categoryId === categoryId
+  const filteredProducts = productosPreload.filter((product) =>
+    product.categoryId.includes(categoryId)
   );
 
   return (
