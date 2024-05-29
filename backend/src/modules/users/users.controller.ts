@@ -5,12 +5,14 @@ import { AuthGuards } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
-
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
     constructor(private readonly userService:UsersService){}
 
+    @ApiBearerAuth()
     @Get()
     @Roles(Role.ADMIN)
     @UseGuards(AuthGuards, RolesGuard)
@@ -21,6 +23,7 @@ export class UsersController {
         return this.userService.getAll('1','10')
     }
 
+    @ApiBearerAuth()
     @Get(':id')
     @Roles(Role.ADMIN)
     @UseGuards(AuthGuards,RolesGuard)
@@ -28,6 +31,7 @@ export class UsersController {
         return this.userService.getById(id)
     }
 
+    @ApiBearerAuth()
     @Put('/makeAdmin/:id')
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard)
@@ -35,6 +39,7 @@ export class UsersController {
         this.userService.makeAdmin(id);
     }
 
+    @ApiBearerAuth()
     @Put('/makeSuperAdmin/:id')
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard)
@@ -42,6 +47,7 @@ export class UsersController {
         this.userService.makeSuperAdmin(id);
     }
 
+    @ApiBearerAuth()
     @Put(':id')
     @Roles(Role.ADMIN)
     @UseGuards(AuthGuards,RolesGuard)
@@ -49,6 +55,7 @@ export class UsersController {
         return this.userService.updateUser(id,user)
     }
 
+    @ApiBearerAuth()
     @Delete(':id')
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard)
