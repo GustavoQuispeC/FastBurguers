@@ -6,6 +6,7 @@ import typeOrmConfig from './config/typeorm';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => configService.get('typeorm')
     }),
-    UsersModule,
+    UsersModule, AuthModule,
     JwtModule.register({
       global:true,
       secret: process.env.JWT_SECRET,
