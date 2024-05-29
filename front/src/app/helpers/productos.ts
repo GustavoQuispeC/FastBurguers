@@ -20,8 +20,8 @@ const productosPreload: IProduct[] = [
     price: 6.99,
     stock: 15,
     imgUrl: "/hamburguesa2.jpg",
-    categoryId: 1,
-    discount: 0,
+    categoryId: 7,
+    discount: 10, // Producto en promoción
   },
   {
     id: 3,
@@ -53,8 +53,8 @@ const productosPreload: IProduct[] = [
     price: 6.49,
     stock: 9,
     imgUrl: "/loginHamburguesa.jpeg",
-    categoryId: 1,
-    discount: 0,
+    categoryId: 7,
+    discount: 20, // Producto en promoción
   },
   {
     id: 6,
@@ -75,8 +75,8 @@ const productosPreload: IProduct[] = [
     price: 6.99,
     stock: 15,
     imgUrl: "/sandwich-pollo2.jpg",
-    categoryId: 2,
-    discount: 0,
+    categoryId: 7,
+    discount: 5, // Producto en promoción
   },
   {
     id: 8,
@@ -116,8 +116,8 @@ const productosPreload: IProduct[] = [
     price: 3.99,
     stock: 20,
     imgUrl: "/batido_chocolate.jpg",
-    categoryId: 4,
-    discount: 0,
+    categoryId: 7,
+    discount: 20,
   },
   {
     id: 12,

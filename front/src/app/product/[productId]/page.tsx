@@ -7,6 +7,12 @@ import productosPreload from "@/app/helpers/productos";
 const DetalleProduct = ({ params }: { params: { productId: string } }) => {
   const [producto, setProducto] = useState<IProduct>();
 
+  useEffect(() => {
+    const productIdNumber = parseInt(params.productId);
+    const product = buscarProductoPorId(productIdNumber);
+    setProducto(product);
+  }, [params.productId]);
+
   const buscarProductoPorId = (id: number) => {
     const productoEncontrado = productosPreload.find(
       (product) => product.id === id
@@ -15,14 +21,23 @@ const DetalleProduct = ({ params }: { params: { productId: string } }) => {
     return productoEncontrado;
   };
 
-  useEffect(() => {
-    const productIdNumber = parseInt(params.productId);
-    const product = buscarProductoPorId(productIdNumber);
-    setProducto(product);
-  }, [params.productId]);
+  const calculateDiscountedPrice = (price: number, discount: number) => {
+    return (price - (price * discount) / 100).toFixed(2);
+  };
+
+  const getPrecioConDescuento = (): string | null => {
+    if (producto && producto.discount && producto.discount > 0) {
+      const precioDescuento = calculateDiscountedPrice(
+        producto.price,
+        producto.discount
+      );
+      return precioDescuento;
+    }
+    return null;
+  };
 
   return (
-    <div className="font-sans h-screen mt-10">
+    <div className="font-sans my-10">
       <div className="p-4 max-w-6xl max-md:max-w-xl mx-auto">
         <div className="grid items-start grid-cols-1 md:grid-cols-2 gap-6">
           <div className="w-full h-5/6 lg:sticky top-0 flex justify-center items-center  ">
@@ -38,12 +53,20 @@ const DetalleProduct = ({ params }: { params: { productId: string } }) => {
               {producto?.name}
             </h2>
             <div className="flex flex-wrap gap-4 mt-8">
-              <h3 className="text-gray-800 text-4xl max-sm:text-3xl font-bold">
-                {producto?.price}
-              </h3>
-              <p className="text-gray-400 text-xl">
-                <s>$16</s> <span className="text-sm ml-1">Oferta</span>
-              </p>
+              {producto?.discount && producto.discount > 0 ? (
+                <>
+                  <h3 className="text-gray-800 text-4xl max-sm:text-3xl font-bold">
+                    ${getPrecioConDescuento()}
+                  </h3>
+                  <h3 className="text-gray-400 text-xl text-center mt-2">
+                    <s>${producto.price.toFixed(2)}</s>
+                  </h3>
+                </>
+              ) : (
+                <h3 className="text-gray-800 text-4xl max-sm:text-3xl font-bold">
+                  ${producto?.price.toFixed(2)}
+                </h3>
+              )}
             </div>
 
             <div className="mt-10">

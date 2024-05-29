@@ -1,11 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import products from "../../helpers/promociones";
+import { IProduct } from "../../interfaces/IProduct";
 import Image from "next/image";
 import Link from "next/link";
 
-const GridProducts = () => {
+interface GridProductsProps {
+  products: IProduct[];
+}
+
+const GridProducts: React.FC<GridProductsProps> = ({ products }) => {
   const [startIndex, setStartIndex] = useState(0);
   const itemsPerPage = 3;
 
@@ -55,18 +59,18 @@ const GridProducts = () => {
           .map((product) => (
             <div
               key={product.id}
-              className="flex flex-col items-center border border-gray-300 overflow-hidden rounded-lg relative"
+              className="flex flex-col items-center border border-gray-300 overflow-hidden rounded-lg relative  w-72"
             >
               {product.discount !== 0 && (
                 <div className="bg-red-600 rounded-xl p-1 px-2 absolute left-10 top-5 z-10">
                   <p className="font-bold text-white">-{product.discount}%</p>
                 </div>
               )}
-              <Link href="#">
+              <Link href={`/product/${product.id}`} key={product.id}>
                 <img
                   src={product.imgUrl}
                   alt={product.name}
-                  className="w-72 h-72 object-cover rounded-lg hover:scale-105 transition-transform duration-200"
+                  className="w-full h-72 object-cover hover:scale-x-105 transition-transform duration-200"
                 />
               </Link>
               <div className="p-4 text-center">
@@ -74,15 +78,15 @@ const GridProducts = () => {
                 <p className="text-gray-600 mt-1">{product.description}</p>
                 {product.discount !== 0 ? (
                   <div className="text-2xl font-bold">
-                    <span className="text-gray-500 line-through mr-2">
-                      ${product.price.toFixed(2)}
-                    </span>
-                    <span>
+                    <span className="mr-2">
                       $
                       {calculateDiscountedPrice(
                         product.price,
                         product.discount
                       )}
+                    </span>
+                    <span className="text-gray-500 line-through text-xl ">
+                      ${product.price.toFixed(2)}
                     </span>
                   </div>
                 ) : (
@@ -90,11 +94,11 @@ const GridProducts = () => {
                     ${product.price.toFixed(2)}
                   </p>
                 )}
-                <button className="bg-orange-500 rounded-xl p-2 px-10 mt-2 text-white font-bold border-none">
-                  <Link href={`/product/${product.id}`} key={product.id}>
+                <Link href={`/product/${product.id}`} key={product.id}>
+                  <button className="bg-orange-500 rounded-xl p-2 px-10 mt-2 text-white font-bold border-none">
                     Ver más
-                  </Link>
-                </button>
+                  </button>
+                </Link>
               </div>
             </div>
           ))}
