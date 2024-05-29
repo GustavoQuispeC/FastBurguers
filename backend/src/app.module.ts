@@ -22,7 +22,7 @@ import { FilesModule } from './modules/files/files.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => configService.get('typeorm')
     }),
-    UsersModule,
+    UsersModule, AuthModule,
     JwtModule.register({
       global:true,
       secret: process.env.JWT_SECRET,
