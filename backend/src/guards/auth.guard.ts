@@ -1,6 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { Request } from "express";
 import { Observable } from "rxjs";
 
 @Injectable()
@@ -22,6 +21,7 @@ export class AuthGuards implements CanActivate {
 
         user.exp = new Date(user.exp * 1000)
 
+        if(user.isSuperAdmin) user.roles = ['superAdmin'] 
         if(user.isAdmin) user.roles = ['admin'] 
         else user.roles = ['user'] 
 

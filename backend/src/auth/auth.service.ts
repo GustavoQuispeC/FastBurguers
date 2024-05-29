@@ -18,7 +18,7 @@ export class AuthService {
         if(!validPassword) throw new BadRequestException('Credenciales incorrectas')
 
         // firmar token
-        const payload = {id: user.id, email: user.email, isAdmin: user.isAdmin}
+        const payload = {id: user.id, email: user.email, isAdmin: user.isAdmin, isSuperAdmin: user.isSuperAdmin}
         const token = this.jwtService.sign(payload)
         console.log('token creado y firmado es: ' , token)
         // retornar mensaje con el token
