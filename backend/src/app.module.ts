@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
 import { AuthModule } from './auth/auth.module';
+import { FilesModule } from './modules/files/files.module';
 
 @Module({
   imports: [
@@ -29,7 +30,8 @@ import { AuthModule } from './auth/auth.module';
     }),
     CategoriesModule,
     ProductsModule,
-    AuthModule
+    AuthModule,
+    FilesModule
   ],
   controllers: [AppController],
   providers: [AppService],
