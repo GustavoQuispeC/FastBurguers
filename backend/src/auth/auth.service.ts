@@ -22,9 +22,11 @@ export class AuthService {
         const token = this.jwtService.sign(payload)
         console.log('token creado y firmado es: ' , token)
         // retornar mensaje con el token
+        const {password:passwordFound,id,isAdmin,isSuperAdmin,...infoPublicUser}=user
         return {
             message: 'Usuario logueado',
-            token
+            token,
+            data: infoPublicUser,
         }
     }
 

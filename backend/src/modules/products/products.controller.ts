@@ -5,6 +5,8 @@ import { Role } from 'src/enum/roles.enum';
 import { AuthGuards } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { UpdatedProductdto, CreateProductdto } from './products.dto';
+import { ApiTags } from '@nestjs/swagger';
+
 
 @ApiTags('Products')
 @Controller('products')
