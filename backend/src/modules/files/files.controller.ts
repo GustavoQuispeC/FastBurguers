@@ -1,15 +1,35 @@
-import { Controller, HttpStatus, Param, ParseFilePipeBuilder, ParseUUIDPipe, Post, UploadedFile, UseInterceptors } from "@nestjs/common";
+import { Controller, HttpStatus, Param, ParseFilePipeBuilder, ParseUUIDPipe, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { FilesService } from "./files.service";
 import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from "@nestjs/swagger";
+import { AuthGuards } from "src/guards/auth.guard";
 
+@ApiTags('Files')
 @Controller('files')
 export class FilesController {
     constructor(
         private readonly filesService: FilesService,
     ) {}
     
+    @ApiBearerAuth()
     @Post('uploadImage/:id')
+    @UseGuards(AuthGuards)
     @UseInterceptors(FileInterceptor('file'))
+    @ApiConsumes('multipart/form-data')
+    @ApiBody({
+        description: 'Upload image',
+        required: true,
+        type: 'multipart/form-data',
+        schema: {
+            type: 'object',
+            properties: {
+                file: {
+                    type: 'string',
+                    format: 'binary',
+                },
+            },
+        },
+    })
     async uploadImage(@Param('id', ParseUUIDPipe) productId: string,
     @UploadedFile(
         new ParseFilePipeBuilder()
