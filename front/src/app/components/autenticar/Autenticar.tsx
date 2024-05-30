@@ -18,6 +18,7 @@ const Autenticar = () => {
         `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${credentialResponse.credential}`
       );
       const profile = await response.json();
+      console.log(profile);
       setUser({ name: profile.name, imageUrl: profile.picture });
     } catch (error) {
       console.error("Error fetching user info:", error);
