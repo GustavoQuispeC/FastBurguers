@@ -77,7 +77,7 @@ export class ProductsService {
         if(!productfound) throw new NotFoundException(`No se encontro producto con ${id}`)
         await this.productsRepository.remove(productfound)
         return {
-            message:`Usuario ${id} eliminado con exito` 
+            message:`Producto ${id} eliminado con exito` 
         }
     }
 }
