@@ -1,0 +1,123 @@
+import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUrl, Length, MaxLength } from "class-validator";
+
+export class CreateProductdto{
+
+    /**
+     * Must be a name beetween 3 to 40 characters
+     * @example 'Hamburguesa Premium'
+     */
+    @IsString()
+    @Length(3, 40)
+    name:string
+
+    /**
+     * Must be a name beetween 3 to 200 characters
+     * @example 'La ultradestructiva aniquiladora hamgruesa '
+     */
+    @IsString()
+    @Length(1, 200)
+    description:string
+
+    /**
+     * Must be a positive number
+     * @example 32.3
+     */
+    @IsNumber()
+    @IsPositive()
+    price:number
+
+
+    /**
+     * Must be a integer
+     * @example 10  
+     */
+    @IsNumber()
+    @IsPositive()
+    @IsInt()
+    stock:number
+
+    /**
+     * Must be a URL
+     * @example https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.violetaalvarezphotography.com%2Fimage%2FI0000EPEHajJzegI%2F&psig=AOvVaw1WmHynkU3yzbJwoB-0muAK&ust=1714572260524000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMjey82N6oUDFQAAAAAdAAAAABAE  
+     */
+    @IsString()
+    @IsUrl()
+    imgUrl:string
+
+    /**
+     * Must be a number
+     * Example 10
+     */
+    @IsNumber()
+    @IsPositive()
+    discount: number
+
+    /**
+     *  Must be a string
+     * @example 'hamburguesas'
+     */
+    @IsString()
+    category:string
+
+}
+
+
+export class UpdatedProductdto {
+    
+    /**
+     * Must be a name beetween 3 to 40 characters
+     * @example ' Update Hamburguer'
+     */
+    @IsOptional()
+    @IsString()
+    @Length(3, 40)
+    name?:string
+
+    /**
+     * Must be a name beetween 3 to 100 characters
+     * @example 'Update description'
+     */
+    @IsOptional()
+    @IsString()
+    @IsNotEmpty()
+    @Length(3, 100)
+    description?:string
+
+    /**
+     * Must be a number
+     * @example 12
+     */
+    @IsOptional()
+    @IsNumber()
+    @IsPositive()
+    price?:number
+
+
+    /**
+     * Must be a integer
+     * @example 5
+     */
+    @IsOptional()
+    @IsNumber()
+    @IsPositive()
+    @IsInt()
+    stock?:number
+
+    /**
+     * Must be a number
+     * Example 9
+     */
+    @IsOptional()
+    @IsNumber()
+    @IsPositive()
+    discount: number
+
+    /**
+     * Must be a URL
+     * @example https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.violetaalvarezphotography.com%2Fimage%2FI0000EPEHajJzegI%2F&psig=AOvVaw1WmHynkU3yzbJwoB-0muAK&ust=1714572260524000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMjey82N6oUDFQAAAAAdAAAAABAE  
+     */
+    @IsOptional()
+    @IsString()
+    @IsUrl()
+    imgUrl?:string
+}
