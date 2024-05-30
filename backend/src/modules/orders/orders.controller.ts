@@ -23,7 +23,7 @@ export class OrdersController {
     @Post()
     @Roles(Role.ADMIN)
     @UseGuards(AuthGuards, RolesGuard)
-    addOrder(@Body() orders: OrdersDto){  // orders: any
+    addOrder(@Body() orders: OrdersDto){  
         const {userId, products} = orders
         console.log(orders)
         return this.ordersService.addOrder(userId, products)
