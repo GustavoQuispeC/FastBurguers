@@ -45,7 +45,7 @@ export class ProductsController {
     @Put(':id')
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard)
-    updateProduct(@Param('id',ParseUUIDPipe) id:string, product: UpdatedProductdto){
+    updateProduct(@Param('id',ParseUUIDPipe) id:string, @Body() product: UpdatedProductdto){
         return this.productService.updateProduct(id,product)
     }
 

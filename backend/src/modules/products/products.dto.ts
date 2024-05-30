@@ -85,7 +85,7 @@ export class UpdatedProductdto {
 
     /**
      * Must be a number
-     * @example 12
+     * @example 12.4
      */
     @IsOptional()
     @IsNumber()
@@ -105,7 +105,7 @@ export class UpdatedProductdto {
 
     /**
      * Must be a number
-     * Example 9
+     * @Example 0.1
      */
     @IsOptional()
     @IsNumber()
