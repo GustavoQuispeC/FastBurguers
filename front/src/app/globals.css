@@ -8,9 +8,9 @@ body {
     background-color: rgb(245, 248, 252);
     
   }
-
+/* 
   @layer base {
     button {
       @apply border border-black rounded-xl px-5 py-1
     }
-  }
+  } */
