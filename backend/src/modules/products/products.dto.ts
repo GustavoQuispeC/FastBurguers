@@ -46,7 +46,7 @@ export class CreateProductdto{
 
     /**
      * Must be a number
-     * Example 10
+     * Example 0.50
      */
     @IsNumber()
     @IsPositive()
@@ -54,7 +54,7 @@ export class CreateProductdto{
 
     /**
      *  Must be a string
-     * @example 'hamburguesas'
+     * @example 'Hamburguesas'
      */
     @IsString()
     category:string

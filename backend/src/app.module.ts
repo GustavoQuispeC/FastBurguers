@@ -10,6 +10,10 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
 import { AuthModule } from './auth/auth.module';
 import { FilesModule } from './modules/files/files.module';
+import { PreloadService } from './preload.service';
+import { Products } from './entities/products.entity';
+import { Categories } from './entities/categories.entity';
+import { Users } from './entities/users.entity';
 
 @Module({
   imports: [
@@ -31,9 +35,10 @@ import { FilesModule } from './modules/files/files.module';
     CategoriesModule,
     ProductsModule,
     AuthModule,
-    FilesModule
+    FilesModule,
+    TypeOrmModule.forFeature([Products,Categories,Users])
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PreloadService],
 })
 export class AppModule {}
