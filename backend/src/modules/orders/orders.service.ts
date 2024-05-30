@@ -84,10 +84,4 @@ export class OrdersService {
         return order
     }
 
-    // async updateOrders(orders: OrdersDto, id: string) {
-    //     const updateData = await this.ordersRepository.update({id:id}, orders)
-    //     if (!updateData) throw new NotFoundException("no se encuentra el usuario guardado")
-    //     else return updateData
-    // }
-
 }
