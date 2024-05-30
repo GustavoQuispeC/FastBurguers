@@ -1,21 +1,32 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   AiFillTag,
   AiOutlineClose,
   AiOutlineMenu,
   AiOutlineSearch,
 } from "react-icons/ai";
-import { BsFillCartFill, BsFillSaveFill } from "react-icons/bs";
-import { FaUserFriends, FaWallet } from "react-icons/fa";
-import { MdFavorite, MdHelp } from "react-icons/md";
+import { BsFillCartFill } from "react-icons/bs";
+import { AiFillProduct } from "react-icons/ai";
+import { MdHelp } from "react-icons/md";
+import { FaHome, FaCartPlus } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
+
 import productosPreload from "@/app/helpers/productos";
 import { IProduct } from "@/app/interfaces/IProduct";
 import Link from "next/link";
+import {
+  Avatar,
+  Dropdown,
+  DropdownDivider,
+  DropdownHeader,
+  DropdownItem,
+} from "flowbite-react";
 
 const Navbar = () => {
+  const router = useRouter();
   const [nav, setnav] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<IProduct[]>([]);
@@ -40,7 +51,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="max-w-[1640px] mx-auto flex justify-between items-center p-4">
+    <div className="max-w-[1640px] bg-white mx-auto flex justify-between items-center p-4">
       {/* Lado Izquierdo */}
       <div className="flex items-center">
         <div onClick={() => setnav(!nav)} className="cursor-pointer">
@@ -50,7 +61,7 @@ const Navbar = () => {
           Fast<span className="font-bold">Burger</span>
         </h1>
         <div className="hidden lg:flex  items-center bg-gray-200 rounded-full p-1 text-[14px] ">
-          <p className=" bg-black text-white rounded-full p-2">Delivery</p>
+          <p className=" bg-black text-orange-400 rounded-full p-2">Delivery</p>
           <p className="p-2">Pickup</p>
         </div>
       </div>
@@ -88,10 +99,37 @@ const Navbar = () => {
         </div>
       )}
       {/* Cart Button */}
-      <button className="bg-black text-white hidden md:flex items-center py-2 rounded-full">
-        <BsFillCartFill size={20} className="mr-2" />
-        Cart
+      <button
+        onClick={() => router.push("/cart")}
+        className="bg-gray-900 text-orange-400 hidden md:flex items-center py-2 rounded-full"
+      >
+        <FaCartPlus size={20} />
       </button>
+      <div className="flex md:order-2">
+        <Dropdown
+          arrowIcon={false}
+          inline
+          label={
+            <Avatar
+              alt="User settings"
+              img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+              rounded
+            />
+          }
+        >
+          <Dropdown.Header>
+            <span className="block text-sm">Gustavo</span>
+            <span className="block truncate text-sm font-medium">
+              gusstavo@gmail.com
+            </span>
+          </Dropdown.Header>
+          <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
+          <Dropdown.Item>Settings</Dropdown.Item>
+          <Dropdown.Item>Earnings</Dropdown.Item>
+          <Dropdown.Item>Salir</Dropdown.Item>
+        </Dropdown>
+      </div>
+
       {/* Mobile Menu*/}
       {/* Overlay*/}
       {nav ? (
@@ -115,28 +153,45 @@ const Navbar = () => {
         <h2 className="text-2xl p-4 ">
           Fast<span className="font-bold"> Burgers</span>
         </h2>
+
         <nav>
           <ul className="flex flex-col p-4 text-gray-800">
             <li className="text-xl py-4 flex">
-              <TbTruckDelivery size={25} className="mr-4" /> Orders
+              <TbTruckDelivery size={25} className="mr-4" />
+              <Link href="#" className="hover:text-orange-400">
+                Delivery
+              </Link>
             </li>
             <li className="text-xl py-4 flex">
-              <MdFavorite size={25} className="mr-4" /> Favourites
+              <FaHome size={25} className="mr-4" />
+              <Link href="/" className="hover:text-orange-400">
+                Home
+              </Link>
             </li>
             <li className="text-xl py-4 flex">
-              <FaWallet size={25} className="mr-4" /> Wallet
+              <AiFillProduct size={25} className="mr-4" />
+              <Link href="/product" className="hover:text-orange-400">
+                Productos
+              </Link>
+            </li>
+
+            <li className="text-xl py-4 flex">
+              <AiFillTag size={25} className="mr-4" />
+              <Link href="#" className="hover:text-orange-400">
+                Promociones
+              </Link>
             </li>
             <li className="text-xl py-4 flex">
-              <MdHelp size={25} className="mr-4" /> Help
+              <FaCartPlus size={25} className="mr-4" />
+              <Link href="/cart" className="hover:text-orange-400">
+                Carrito
+              </Link>
             </li>
             <li className="text-xl py-4 flex">
-              <AiFillTag size={25} className="mr-4" /> Promotions
-            </li>
-            <li className="text-xl py-4 flex">
-              <BsFillSaveFill size={25} className="mr-4" /> Best Ones
-            </li>
-            <li className="text-xl py-4 flex">
-              <FaUserFriends size={25} className="mr-4" /> Invite a Friend
+              <MdHelp size={25} className="mr-4" />
+              <Link href="/contact" className="hover:text-orange-400">
+                Nosotros
+              </Link>
             </li>
           </ul>
         </nav>

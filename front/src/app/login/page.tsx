@@ -3,26 +3,24 @@ import { HiMail } from "react-icons/hi";
 import React from "react";
 import { FaEye } from "react-icons/fa";
 import Autenticar from "../components/autenticar/Autenticar";
+import Link from "next/link";
 
 const Login = () => {
   return (
-    <div className="font-[sans-serif] text-[#333] bg-white flex items-center justify-center md:h-screen p-4">
-      <div className="shadow-[0_2px_16px_-3px_rgba(6,81,237,0.3)] max-w-6xl rounded-md p-6">
-        {/* <a href="#"><img
-          src="/logo.png" alt="logo" className='w-40 md:mb-4 mb-12' />
-        </a> */}
-        <h3 className="font-serif font-bold">fastburgers.com</h3>
+    <div className="font-[sans-serif] text-gray-900 flex items-center justify-center md:h-screen p-4 ">
+      <div className="shadow-2xl max-w-6xl rounded-md p-6 bg-white">
+        <h3 className="font-serif font-bold">www.fastburgers.com</h3>
         <div className="grid md:grid-cols-2 items-center gap-8">
           <div className="max-md:order-1">
             <img
-              src="/loginHamburguesa.jpeg"
+              src="/LogoFastBurgers.png"
               className="lg:w-11/12 w-full h-96 object-cover"
               alt="login-image"
             />
           </div>
           <form className="max-w-md w-full mx-auto">
             <div className="mb-12">
-              <h3 className="text-4xl font-extrabold text-blue-600">
+              <h3 className="text-4xl font-extrabold text-gray-900">
                 Iniciar sesión
               </h3>
             </div>
@@ -32,7 +30,7 @@ const Login = () => {
                   id="email4"
                   type="email"
                   rightIcon={HiMail}
-                  placeholder="name@ejemplo.com"
+                  placeholder="nombre@ejemplo.com"
                   required
                   className="w-full"
                 />
@@ -46,7 +44,7 @@ const Login = () => {
                   rightIcon={FaEye}
                   required
                   className="w-full "
-                  placeholder="Enter password"
+                  placeholder="Ingrese su contraseña"
                 />
               </div>
             </div>
@@ -56,16 +54,16 @@ const Login = () => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 shrink-0 text-orange-500 focus:ring-gray-500 border-orange-400 rounded"
                 />
                 <label htmlFor="remember-me" className="ml-3 block text-sm">
-                  Remember me
+                  Recordarme
                 </label>
               </div>
               <div>
                 <a
                   href="jajvascript:void(0);"
-                  className="text-blue-600 text-sm hover:underline"
+                  className="text-orange-400 text-sm hover:underline"
                 >
                   Olvidó su contraseña?
                 </a>
@@ -74,18 +72,18 @@ const Login = () => {
             <div className="mt-12">
               <button
                 type="button"
-                className="w-full shadow-xl py-2.5 px-4 text-sm font-semibold rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none"
+                className="w-full shadow-xl py-2.5 px-4 text-sm font-semibold rounded-full text-orange-400 bg-gray-900 hover:bg-gray-700 focus:outline-none"
               >
-                Sign in
+                Ingresar
               </button>
               <p className="text-sm text-center mt-8">
                 No tienes una cuenta{" "}
-                <a
-                  href="#"
-                  className="text-blue-600 font-semibold hover:underline ml-1 whitespace-nowrap"
+                <Link
+                  href="/user"
+                  className="text-orange-400 font-semibold hover:underline ml-1 whitespace-nowrap"
                 >
                   Registrate aquí
-                </a>
+                </Link>
               </p>
             </div>
             <hr className="my-6 border-gray-300" />
