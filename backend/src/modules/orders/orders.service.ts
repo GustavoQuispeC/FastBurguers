@@ -5,6 +5,7 @@ import { Orders } from "src/entities/orders.entity";
 import { Products } from "src/entities/products.entity";
 import { Users } from "src/entities/users.entity";
 import { Repository } from "typeorm";
+import { dateOrdersDto } from "./orders.dto";
 
 
 @Injectable()
@@ -82,6 +83,24 @@ export class OrdersService {
             throw new NotFoundException(`Orden con id ${id} no encontrada`)
         }
         return order
+    }
+
+    async updateOrders(orders: dateOrdersDto, id: string) {
+        const orderfound = await this.ordersRepository.findOneBy({id})
+        if(!orderfound) throw new NotFoundException(`No se encontro la orden con ${id}`)
+        
+        await this.ordersRepository.update(id,orders)
+        const updatedOrder = await this.ordersRepository.findOneBy({id});
+        return updatedOrder;
+    }
+
+    async deleteOrders(id: string) {
+        const orderfound = await this.ordersRepository.findOneBy({id})
+        if(!orderfound) throw new NotFoundException(`No se encontro la orden con ${id}`)
+        await this.ordersRepository.remove(orderfound)
+        return {
+            message:`Orden con ${id} eliminado con exito` 
+        }
     }
 
 }
