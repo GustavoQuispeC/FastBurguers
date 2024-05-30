@@ -141,7 +141,7 @@ const Checkout = () => {
               </div>
 
               <div className="bg-gray-100 p-6 rounded-md">
-                <h2 className="text-2xl font-extrabold text-[#333]">
+                <h2 className="text-2xl font-extrabold text-gray-900">
                   Resumen del pedido
                 </h2>
 
@@ -163,14 +163,14 @@ const Checkout = () => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 shrink-0 text-gray-900 focus:ring-gray-700 border-gray-300 rounded"
                   defaultChecked={false}
                 />
                 <label htmlFor="remember-me" className="ml-3 block text-sm">
                   Acepta los{" "}
                   <a
                     href="#"
-                    className="text-blue-600 font-semibold hover:underline ml-1"
+                    className="text-orange-400 font-semibold hover:underline ml-1"
                   >
                     Términos y Condiciones.
                   </a>
@@ -186,7 +186,7 @@ const Checkout = () => {
                 </button>
                 <button
                   type="button"
-                  className="min-w-[150px] px-6 py-3.5 text-sm bg-[#333] text-white rounded-md hover:bg-[#111]"
+                  className="min-w-[150px] px-6 py-3.5 text-sm bg-gray-900 text-orange-400 rounded-md hover:bg-gray-700"
                 >
                   Confirmar Pago
                 </button>

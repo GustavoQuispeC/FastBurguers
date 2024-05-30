@@ -2,11 +2,11 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className="font-sans max-w-4xl mx-auto bg-white py-4 h-screen">
+    <div className="font-sans max-w-4xl mx-auto py-4 h-screen">
       <div className="grid md:grid-cols-3 gap-4">
-        <div className="md:col-span-2 bg-gray-100 p-4 rounded-md">
-          <h2 className="text-2xl font-bold text-gray-800">Cart</h2>
-          <hr className="border-gray-300 my-4" />
+        <div className="md:col-span-2 bg-white p-4 rounded-md">
+          <h2 className="text-2xl font-bold text-gray-900">Carrito</h2>
+          <hr className="border-white my-4" />
 
           <div className="space-y-4">
             <div className="grid sm:grid-cols-3 items-center gap-4">
@@ -30,7 +30,7 @@ const page = () => {
                     <div>
                       <button
                         type="button"
-                        className="flex items-center px-2.5 py-1.5 border border-gray-300 text-gray-800 text-xs outline-none bg-transparent rounded-md"
+                        className="flex items-center px-2.5 py-1.5 border border-white text-gray-900 text-xs outline-none bg-transparent rounded-md"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +76,7 @@ const page = () => {
                   <h3 className="text-base font-bold text-gray-800">
                     Hamburguesa 2
                   </h3>
-                  <h6 className="text-xs text-red-500 cursor-pointer mt-0.5">
+                  <h6 className="text-xs text-red-600 cursor-pointer mt-0.5">
                     Eliminar
                   </h6>
 
@@ -84,7 +84,7 @@ const page = () => {
                     <div>
                       <button
                         type="button"
-                        className="flex items-center px-2.5 py-1.5 border border-gray-300 text-gray-800 text-xs outline-none bg-transparent rounded-md"
+                        className="flex items-center px-2.5 py-1.5 border border-gray-300 text-gray-900 text-xs outline-none bg-transparent rounded-md"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -131,7 +131,7 @@ const page = () => {
                   <h3 className="text-base font-bold text-gray-800">
                     Hamburguesa 3
                   </h3>
-                  <h6 className="text-xs text-red-500 cursor-pointer mt-0.5">
+                  <h6 className="text-xs text-red-400 cursor-pointer mt-0.5">
                     Eliminar
                   </h6>
 
@@ -177,7 +177,7 @@ const page = () => {
         </div>
 
         <div className="bg-gray-100 rounded-md p-4 md:sticky top-0">
-          <div className="flex border border-blue-600 overflow-hidden rounded-md">
+          {/* <div className="flex border border-blue-600 overflow-hidden rounded-md">
             <input
               type="email"
               placeholder="Promo code"
@@ -189,7 +189,8 @@ const page = () => {
             >
               Apply
             </button>
-          </div>
+          </div> */}
+          <h2 className="text-base font-bold text-gray-800">Resúmen de compra</h2>
 
           <ul className="text-gray-800 mt-8 space-y-4">
             <li className="flex flex-wrap gap-4 text-sm">
@@ -209,7 +210,7 @@ const page = () => {
           <div className="mt-8 space-y-2">
             <button
               type="button"
-              className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-blue-600 hover:bg-blue-700 text-white rounded-md"
+              className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-gray-900 hover:bg-gray-800 text-orange-400 rounded-md"
             >
               Checkout
             </button>
@@ -217,7 +218,7 @@ const page = () => {
               type="button"
               className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent text-gray-800 border border-gray-300 rounded-md"
             >
-              Continue Shopping{" "}
+              Continuar comprando{" "}
             </button>
           </div>
         </div>

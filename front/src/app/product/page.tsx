@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 import FiltroProductos from "../components/filtroProductos/FiltroProductos";
 
@@ -72,6 +71,7 @@ const Product = () => {
       </ul>
 
       <FiltroProductos categoryId={selectedCategory} />
+
     </>
   );
 };
