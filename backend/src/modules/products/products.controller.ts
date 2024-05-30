@@ -5,7 +5,7 @@ import { Role } from 'src/enum/roles.enum';
 import { AuthGuards } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { UpdatedProductdto, CreateProductdto } from './products.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 
 @ApiTags('Products')
@@ -25,6 +25,7 @@ export class ProductsController {
         return this.productService.getAll('1','10')
     }
 
+    @ApiBearerAuth()
     @Get(':id')
     @Roles(Role.ADMIN)
     @UseGuards(AuthGuards,RolesGuard)
@@ -32,13 +33,15 @@ export class ProductsController {
         return this.productService.getById(id)
     }
 
+    @ApiBearerAuth()
     @Post()
-    @Roles(Role.SUPERADMIN)
+    @Roles(Role.ADMIN)
     @UseGuards(AuthGuards,RolesGuard)
     createProduct(@Body() product:CreateProductdto){
         return this.productService.createProduct(product)
     }
 
+    @ApiBearerAuth()
     @Put(':id')
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard)
@@ -46,8 +49,7 @@ export class ProductsController {
         return this.productService.updateProduct(id,product)
     }
 
-    
-
+    @ApiBearerAuth()
     @Delete(':id')
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard) 

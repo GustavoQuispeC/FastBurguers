@@ -5,7 +5,7 @@ import { retry } from 'rxjs';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -30,6 +30,7 @@ export class CategoriesController {
         return this.categoryService.getById(id)
     }
 
+    @ApiBearerAuth()
     @Put(':id')
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard)
@@ -37,6 +38,7 @@ export class CategoriesController {
         return this.categoryService.updateName(id,name)
     }
 
+    @ApiBearerAuth()
     @Post()
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard)
@@ -44,6 +46,7 @@ export class CategoriesController {
         return this.categoryService.createCategory({name})
     }
 
+    @ApiBearerAuth()
     @Delete()
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard)
