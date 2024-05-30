@@ -54,7 +54,7 @@ export class CreateProductdto{
 
     /**
      *  Must be a string
-     * @example 'hamburguesas'
+     * @example 'Hamburguesas'
      */
     @IsString()
     category:string
