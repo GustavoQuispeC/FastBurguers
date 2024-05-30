@@ -37,9 +37,7 @@ export class UsersService {
     }
 
     async getByEmail(email:string){
-        const user = await this.userRepository.findOneBy({email});
-        if(!user) throw new BadRequestException(`No se encontro usario con email ${email}`)
-        return user        
+        return  await this.userRepository.findOneBy({email});       
     }
 
     async updateUser(id:string,newUser: Partial<Users>){

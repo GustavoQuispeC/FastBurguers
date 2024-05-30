@@ -21,7 +21,11 @@ export class AuthGuards implements CanActivate {
 
         user.exp = new Date(user.exp * 1000)
 
-        if(user.isSuperAdmin) user.roles = ['superAdmin'] 
+        if(user.isSuperAdmin && user.isAdmin){
+            user.roles = ['superAdmin']
+            request.user = user
+            return true
+        } 
         if(user.isAdmin) user.roles = ['admin'] 
         else user.roles = ['user'] 
 
