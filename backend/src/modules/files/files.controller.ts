@@ -34,8 +34,8 @@ export class FilesController {
     @UploadedFile(
         new ParseFilePipeBuilder()
         .addMaxSizeValidator({
-            maxSize: 300000,
-            message: 'El archivo es muy largo, el tamaño maximo es de 200KB',
+            maxSize: 500000,
+            message: 'El archivo es muy largo, el tamaño maximo es de 500KB',
         })
         .build({
             errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,

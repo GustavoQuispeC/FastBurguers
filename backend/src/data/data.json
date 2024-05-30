@@ -1,210 +1,210 @@
 [
     {
     "name": "Classic Burger",
-    "description": "A delicious classic burger with beef patty, lettuce, tomato, and cheese.",
+    "description": "Una deliciosa hamburguesa clásica con hamburguesa de ternera, lechuga, tomate y queso..",
     "price": 8.99,
     "stock": 50,
     "imgUrl": "https://www.eatingwell.com/thmb/UY5N-tQKYgA91XJBwiolc_1nbJ0=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/3757723-7c4020ccc47240138323b9bc5b730e8d.jpg",
     "discount": 0.00,
-    "category": "Burgers"
+    "category": "Hamburguesas"
     },
     {
     "name": "Cheeseburger",
-    "description": "Juicy beef patty with melted cheese, lettuce, and tomato.",
+    "description": "Jugosa hamburguesa de ternera con queso derretido, lechuga y tomate.",
     "price": 9.49,
     "stock": 45,
     "imgUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Cheeseburger.jpg",
     "discount": 0.00,
-    "category": "Burgers"
+    "category": "Hamburguesas"
     },
     {
     "name": "Bacon Burger",
-    "description": "Beef patty topped with crispy bacon, cheese, and BBQ sauce.",
+    "description": "Hamburguesa de ternera cubierta con tocino crujiente, queso y salsa BBQ.",
     "price": 10.99,
     "stock": 40,
     "imgUrl": "https://simply-delicious-food.com/wp-content/uploads/2015/07/Bacon-and-cheese-burgers-3.jpg",
     "discount": 0.10,
-    "category": "Burgers"
+    "category": "Hamburguesas"
     },
     {
     "name": "Veggie Burger",
-    "description": "A healthy veggie patty with lettuce, tomato, and avocado.",
+    "description": "Una hamburguesa vegetal saludable con lechuga, tomate y aguacate.",
     "price": 8.49,
     "stock": 30,
     "imgUrl": "https://cookieandkate.com/images/2013/05/best-veggie-burger-recipe-3.jpg",
     "discount": 0.50,
-    "category": "Burgers"
+    "category": "Hamburguesas"
     },
     {
     "name": "Chicken Burger",
-    "description": "Grilled chicken breast with lettuce, tomato, and mayo.",
+    "description": "Pechuga de pollo a la plancha con lechuga, tomate y mayonesa.",
     "price": 9.99,
     "stock": 35,
     "imgUrl": "https://images.fidhouse.com/fidelitynews/wp-content/uploads/sites/6/2016/10/1476374074_6347c4b4503328b1fdb3a57c9cb704a079fe66ed-1424529436.jpg?width=1280&height=720&quality=80",
     "discount": 0.00,
-    "category": "Burgers"
+    "category": "Hamburguesas"
     },
     {
     "name": "Double Cheeseburger",
-    "description": "Two beef patties with double cheese, lettuce, and tomato.",
+    "description": "Dos hamburguesas de ternera con doble queso, lechuga y tomate.",
     "price": 11.99,
     "stock": 25,
     "imgUrl": "https://recipes.net/wp-content/uploads/2023/05/hardees-double-cheeseburger-recipe_d48b79ef43b714e98a3ad95a7ab9e12e.jpeg",
     "discount": 0.50,
-    "category": "Burgers"
+    "category": "Hamburguesas"
     },
     {
     "name": "Mushroom Swiss Burger",
-    "description": "Beef patty topped with mushrooms and Swiss cheese.",
+    "description": "Empanada de ternera cubierta con champiñones y queso suizo.",
     "price": 10.49,
     "stock": 20,
     "imgUrl": "https://recipes.net/wp-content/uploads/2023/05/johnnys-mushroom-swiss-burger-recipe_f3473d10d43a09e7ac488d97b4be78e0.jpeg",
     "discount": 0.75,
-    "category": "Burgers"
+    "category": "Hamburguesas"
     },
     {
     "name": "Spicy Burger",
-    "description": "Beef patty with jalapeños, spicy sauce, and pepper jack cheese.",
+    "description": "Empanada de ternera con jalapeños, salsa picante y queso pepper jack.",
     "price": 10.49,
     "stock": 30,
     "imgUrl": "https://www.gardengourmet.com/sites/default/files/recipes/aeead5804e79ff6fb98b2039619c5230_200828_MEDIAMONKS_GG_Spicytarian.jpg",
     "discount": 0.00,
-    "category": "Burgers"
+    "category": "Hamburguesas"
     },
     {
     "name": "BBQ Burger",
-    "description": "Beef patty with BBQ sauce, onions, and cheese.",
+    "description": "Empanada de ternera con salsa BBQ, cebolla y queso.",
     "price": 9.99,
     "stock": 20,
     "imgUrl": "https://mccormick.widen.net/content/hj4whcfmkr/original/applewood_bbq_burgers_800x800.jpg",
     "discount": 0.50,
-    "category": "Burgers"
+    "category": "Hamburguesas"
     },
     {
     "name": "Blue Cheese Burger",
-    "description": "Beef patty topped with blue cheese and caramelized onions.",
+    "description": "Hamburguesa de ternera cubierta con queso azul y cebolla caramelizada.",
     "price": 11.49,
     "stock": 15,
     "imgUrl": "https://laurenslatest.com/wp-content/uploads/2021/07/bacon-blue-cheese-burger-1.jpg",
     "discount": 0.10,
-    "category": "Burgers"
+    "category": "Hamburguesas"
     },
     {
     "name": "Chocolate Cake",
-    "description": "Rich and moist chocolate cake with chocolate frosting.",
+    "description": "Pastel de chocolate rico y húmedo con glaseado de chocolate.",
     "price": 4.99,
     "stock": 40,
     "imgUrl": "https://sugargeekshow.com/wp-content/uploads/2023/10/easy_chocolate_cake_slice-500x500.jpg",
     "discount": 0.00,
-    "category": "Desserts"
+    "category": "Postres"
     },
     {
     "name": "Cheesecake",
-    "description": "Creamy cheesecake with a graham cracker crust.",
+    "description": "Tarta de queso cremosa con corteza de galleta Graham.",
     "price": 5.99,
     "stock": 30,
     "imgUrl": "https://peopleenespanol.com/thmb/8vzve3hmeCgC-SVqkvAmuXnMMBE=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/cheesecake-facil-con-leche-condensada-2000-4160526441114bf3ad8f3409586a2c8a.jpg",
     "discount": 0.50,
-    "category": "Desserts"
+    "category": "Postres"
     },
     {
     "name": "Apple Pie",
-    "description": "Classic apple pie with a flaky crust.",
+    "description": "Tarta de manzana clásica con corteza hojaldrada.",
     "price": 3.99,
     "stock": 20,
     "imgUrl": "https://www.ifyougiveablondeakitchen.com/wp-content/uploads/2023/04/best-apple-pie-from-scratch.jpg",
     "discount": 0.25,
-    "category": "Desserts"
+    "category": "Postres"
     },
     {
     "name": "Brownie",
-    "description": "Rich and fudgy chocolate brownie.",
+    "description": "Brownie de chocolate rico y esponjoso.",
     "price": 2.99,
     "stock": 50,
     "imgUrl": "https://www.recetasnestle.com.pe/sites/default/files/srh_recipes/e59c05c5b0984fc87e6000a43ca38648.png",
     "discount": 0.00,
-    "category": "Desserts"
+    "category": "Postres"
     },
     {
     "name": "Ice Cream Sundae",
-    "description": "Vanilla ice cream with chocolate syrup, nuts, and a cherry.",
+    "description": "Helado de vainilla con sirope de chocolate, nueces y cereza.",
     "price": 4.49,
     "stock": 35,
     "imgUrl": "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/D7889FB7-3957-45A0-86FB-3F5BF28C4B43/Derivates/0ac187d7-d257-4158-9868-5909722a0b4b.jpg",
     "discount": 0.00,
-    "category": "Desserts"
+    "category": "Postres"
     },
     {
     "name": "Milkshake",
-    "description": "Thick and creamy milkshake available in various flavors.",
+    "description": "Batido espeso y cremoso disponible en varios sabores.",
     "price": 3.99,
     "stock": 40,
     "imgUrl": "https://www.cookedbyjulie.com/wp-content/uploads/2022/03/oreo-milkshake-one.jpg",
     "discount": 0.00,
-    "category": "Desserts"
+    "category": "Postres"
     },
     {
     "name": "Fruit Tart",
-    "description": "Fresh fruit tart with a creamy filling and a flaky crust.",
+    "description": "Tarta de frutas frescas con relleno cremoso y corteza hojaldrada.",
     "price": 5.49,
     "stock": 20,
     "imgUrl": "https://www.marcellinaincucina.com/wp-content/uploads/2017/09/mini-fruit-tarts-featured.jpg",
     "discount": 0.75,
-    "category": "Desserts"
+    "category": "Postres"
     },
     {
     "name": "Lemon Meringue Pie",
-    "description": "Tangy lemon filling with a fluffy meringue topping.",
+    "description": "Relleno picante de limón con cobertura de merengue esponjoso.",
     "price": 4.99,
     "stock": 25,
     "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqBQO_8hVGM9-Fz7TAB65EFAGCr8DSi8ypYw&s",
     "discount": 0.00,
-    "category": "Desserts"
+    "category": "Postres"
     },
     {
     "name": "Tiramisu",
-    "description": "Classic Italian dessert with layers of coffee-soaked ladyfingers and mascarpone cheese.",
+    "description": "Postre clásico italiano con capas de bizcochos empapados en café y queso mascarpone.",
     "price": 6.49,
     "stock": 15,
     "imgUrl": "https://www.recetasnestle.com.ec/sites/default/files/srh_recipes/7f45d6f8807ebc775928651a3398dce9.png",
     "discount": 0.20,
-    "category": "Desserts"
+    "category": "Postres"
     },
     {
     "name": "Panna Cotta",
-    "description": "Creamy Italian dessert topped with fresh berries.",
+    "description": "Postre italiano cremoso cubierto con bayas frescas.",
     "price": 5.99,
     "stock": 20,
     "imgUrl": "https://i.blogs.es/bb86a3/panna_cotta/1366_2000.jpg",
     "discount": 0.75,
-    "category": "Desserts"
+    "category": "Postres"
     },
     {
     "name": "Coca-Cola",
-    "description": "Classic Coca-Cola soft drink.",
+    "description": "Refresco clásico de Coca-Cola.",
     "price": 1.99,
     "stock": 100,
     "imgUrl": "https://i0.wp.com/kyodai.com.pe/market/wp-content/uploads/2020/10/coca-cola.png?fit=1771%2C1771&ssl=1",
     "discount": 0.00,
-    "category": "Beverages"
+    "category": "Bebidas"
     },
     {
     "name": "Pepsi",
-    "description": "Classic Pepsi soft drink.",
+    "description": "Refresco clásico de Pepsi.",
     "price": 1.99,
     "stock": 100,
     "imgUrl": "https://s3.amazonaws.com/bsalemarket/75518/product/1314032103181-1.jpg",
     "discount": 0.00,
-    "category": "Beverages"
+    "category": "Bebidas"
     },
     {
     "name": "Inka Cola",
-    "description": "Freshly squeezed orange juice.",
+    "description": "Refresco clásico de Inka Cola.",
     "price": 2.99,
     "stock": 50,
     "imgUrl": "https://kyotorolls.com/cdn/shop/products/IncaKola.png?v=1674195785",
     "discount": 0.00,
-    "category": "Beverages"
+    "category": "Bebidas"
     }
 
 ]

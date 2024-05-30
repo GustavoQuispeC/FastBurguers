@@ -55,8 +55,8 @@ export class ProductsService {
             .insert()
             .into(Products)
             .values(objectProduct)
-            .orUpdate(
-                ['description','price','imgUrl', 'stock','discount'], ['name']
+            .orIgnore(
+                // ['description','price','imgUrl', 'stock','discount'], ['name']
             )
             .execute()
 

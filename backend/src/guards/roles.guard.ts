@@ -20,6 +20,7 @@ export class RolesGuard implements CanActivate {
     const user = request.user // admin
     console.log('obteniendo el valor token y secret mas tiempo de exp. anteriormente: ', user)
     const hasRole = () => requiredRoles.some((role) => user?.roles?.includes(role))
+    console.log(requiredRoles)
     console.log('valor hasRole() es: ', hasRole())
     const valid = user && user.roles && hasRole()
 
