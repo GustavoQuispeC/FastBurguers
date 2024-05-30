@@ -8,7 +8,7 @@ export class RolesGuard implements CanActivate {
   constructor(private readonly reflector: Reflector){}
   canActivate(
     context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  ): boolean {
     const requiredRoles = this.reflector.getAllAndOverride<Role[]>('elRol', [  // 'roles'
       context.getHandler(),
       context.getClass()
@@ -19,15 +19,14 @@ export class RolesGuard implements CanActivate {
     const request = context.switchToHttp().getRequest()
     const user = request.user // admin
     console.log('obteniendo el valor token y secret mas tiempo de exp. anteriormente: ', user)
-    const hasRole = () => requiredRoles.some((role) => user?.roles?.includes(role))
-    console.log(requiredRoles)
+    const hasRole = () => requiredRoles.some((role) => user.roles?.includes(role))
     console.log('valor hasRole() es: ', hasRole())
     const valid = user && user.roles && hasRole()
 
     if(!valid){
       throw new UnauthorizedException('No tiene permisos para acceder a esta ruta')
     }
-    return true
+    return valid
   }
 
 }
