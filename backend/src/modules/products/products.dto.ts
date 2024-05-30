@@ -46,7 +46,7 @@ export class CreateProductdto{
 
     /**
      * Must be a number
-     * Example 10
+     * Example 0.50
      */
     @IsNumber()
     @IsPositive()
