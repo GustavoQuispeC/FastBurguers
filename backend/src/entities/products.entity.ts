@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn, TableInheritance } from "typeorm";
 import { OrderDetails } from "./orderdetails.entity";
 import { Categories } from "./categories.entity";
 import { SizeProduct } from "src/enum/sizeProduct.enum";
