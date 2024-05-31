@@ -11,7 +11,7 @@ interface GridProductsProps {
 
 const GridProducts: React.FC<GridProductsProps> = ({ products }) => {
   const [startIndex, setStartIndex] = useState(0);
-  const itemsPerPage = 5;
+  const itemsPerPage = 4;
 
   const handlePrevClick = () => {
     setStartIndex((prevIndex) => Math.max(prevIndex - itemsPerPage, 0));
@@ -53,13 +53,13 @@ const GridProducts: React.FC<GridProductsProps> = ({ products }) => {
           />
         </button>
       </div>
-      <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-11/12 justify-items-center">
+      <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 w-11/12 justify-items-center">
         {products
           .slice(startIndex, startIndex + itemsPerPage)
           .map((product) => (
             <div
               key={product.id}
-              className="flex flex-col items-center border border-gray-300 overflow-hidden rounded-lg relative  w-72"
+              className="flex flex-col items-center border border-gray-300 overflow-hidden rounded-lg relative w-72"
             >
               {product.discount !== 0 && (
                 <div className="bg-red-600 rounded-xl p-1 px-2 absolute left-10 top-5">
