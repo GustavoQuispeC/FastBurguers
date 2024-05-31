@@ -1,7 +1,6 @@
-import Carrusel from "../components/carrusel/Carrusel";
-import GridProducts from "../components/gridProducts/GridProducts";
-import productosPreload from "../helpers/productos";
-
+import Carrusel from "../../components/carrusel/Carrusel";
+import GridProducts from "../../components/gridProducts/GridProducts";
+import productosPreload from "../../helpers/productos";
 
 const Home = () => {
   // Filtrar productos de la categoría de promociones
@@ -15,7 +14,6 @@ const Home = () => {
 
   return (
     <div className=" dark:bg-gray-800 my-10">
-     
       <Carrusel />
 
       <h1 className="font-bold mt-10 ml-5">
