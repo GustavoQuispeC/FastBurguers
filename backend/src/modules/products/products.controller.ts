@@ -23,13 +23,14 @@ export class ProductsController {
         return this.productService.getAll('1','10')
     }
 
+    @Get('/categories')
+    getProductByCategory(@Body() arrayCategories: string[]){
+        return this.productService.getProductByCategory(arrayCategories)
+    }
+
     @Get(':id')
     getProduct(@Param('id',ParseUUIDPipe) id:string){
         return this.productService.getById(id)
-    }
-
-    getProductByCategory(@Body() arrayCategories: string[]){
-        return this.productService.getProductByCategory(arrayCategories)
     }
 
     @ApiBearerAuth()

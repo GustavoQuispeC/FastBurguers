@@ -43,22 +43,24 @@ export class ProductsService {
     }
 
     async getProductByCategory(arrayCategories: string[]){
-    
+        
         const categorias = await this.categoriesRepository.find({
             where: { name: In(arrayCategories) }
         });
-    
+        
+        
         const categoriaIds = categorias.map(categoria => categoria.id);
-    
+        console.log(categoriaIds)
+
         if (categoriaIds.length === 0) {
             return [];
         }
-    
-        const productos = await this.productsRepository.find({
-            where: { category: In(categoriaIds) },
-            relations: ['categoria']
-        });
-    
+        
+        
+        const productos = await this.productsRepository.createQueryBuilder('products')
+        .innerJoinAndSelect('products.category', 'categories')
+        .where('categories.id IN (:...categoriaIds)', { categoriaIds })
+        .getMany();
         return productos;
     }
 
