@@ -15,10 +15,10 @@ export async function getProducts() {
 
 export async function getProductsById(id: string) {
   try {
-    const products = await getProducts();
-    const product = products.find((product) => product.id.toString() === id);
-    if (!product) throw new Error("Product no encontrado");
-    return product;
+    const res = await fetch(`${apiURL}/products/${id}`);
+
+    const products: IProduct[] = await res.json();
+    return products;
   } catch (error: any) {
     throw new Error(error);
   }
