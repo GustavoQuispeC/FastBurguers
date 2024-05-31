@@ -19,7 +19,7 @@ export class ProductsService {
             if(npage<=0 || nlimit<=0) throw new Error();
             const products = await this.productsRepository.find({
                 take: nlimit,
-                skip: (npage-1)*nlimit
+                skip: (npage-1)*nlimit,
             })
             return products
 
