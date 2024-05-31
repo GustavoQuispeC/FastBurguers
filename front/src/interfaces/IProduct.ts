@@ -5,6 +5,7 @@ export interface IProduct {
   price: number;
   stock: number;
   imgUrl: string;
+  size: string;
   discount: number;
-  categoryId: number[];
+  category: string;
 }
