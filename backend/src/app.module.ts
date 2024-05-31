@@ -14,6 +14,7 @@ import { PreloadService } from './preload.service';
 import { Products } from './entities/products.entity';
 import { Categories } from './entities/categories.entity';
 import { Users } from './entities/users.entity';
+import { OrdersModule } from './modules/orders/orders.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { Users } from './entities/users.entity';
     ProductsModule,
     AuthModule,
     FilesModule,
+    OrdersModule,
     TypeOrmModule.forFeature([Products,Categories,Users])
   ],
   controllers: [AppController],
