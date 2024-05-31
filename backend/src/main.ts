@@ -14,8 +14,8 @@ async function bootstrap() {
   .build();
   const documentSwagger = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, documentSwagger);
-  await app.listen(3000);
-  console.log(`Server listening on port 3000`);
+  await app.listen(3001);
+  console.log(`Server listening on port 3001`);
   
 }
 bootstrap();
