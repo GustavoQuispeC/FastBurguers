@@ -24,7 +24,7 @@ export class ProductsController {
         return this.productService.getAll('1','10')
     }
 
-    @Get('/categories')
+    @Post('/categories')
     getProductByCategory(@Body() categories: GetByCategoriesDto){
         const {categories: arrayCategories} = categories
         return this.productService.getProductByCategory(arrayCategories)
