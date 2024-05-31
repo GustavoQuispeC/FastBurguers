@@ -28,6 +28,10 @@ export class ProductsController {
         return this.productService.getById(id)
     }
 
+    getProductByCategory(@Body() arrayCategories: string[]){
+        return this.productService.getProductByCategory(arrayCategories)
+    }
+
     @ApiBearerAuth()
     @Post()
     @Roles(Role.ADMIN)

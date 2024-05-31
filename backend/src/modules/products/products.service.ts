@@ -2,7 +2,7 @@ import { BadRequestException, Inject, Injectable, NotFoundException } from '@nes
 import { InjectRepository } from '@nestjs/typeorm';
 import { Categories } from 'src/entities/categories.entity';
 import { Products } from 'src/entities/products.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { UpdatedProductdto, CreateProductdto } from './products.dto';
 
 @Injectable()
@@ -32,6 +32,26 @@ export class ProductsService {
         const product = await this.productsRepository.findOneBy({id})
         if(!product) throw new NotFoundException(`No se encontro producto con ${id}`)
         return product;
+    }
+
+    async getProductByCategory(arrayCategories: string[]){
+    
+        const categorias = await this.categoriesRepository.find({
+            where: { name: In(arrayCategories) }
+        });
+    
+        const categoriaIds = categorias.map(categoria => categoria.id);
+    
+        if (categoriaIds.length === 0) {
+            return [];
+        }
+    
+        const productos = await this.productsRepository.find({
+            where: { category: In(categoriaIds) },
+            relations: ['categoria']
+        });
+    
+        return productos;
     }
 
     async createProduct(product:CreateProductdto){
