@@ -71,7 +71,7 @@ const Testimonials = () => {
 
   return (
     <div className="py-10 mb-10">
-      <div className="container">
+      {/* <div className="container"> */}
         {/* Header section */}
         <div className="text-center mb-10 max-w-lg mx-auto">
           <p className="text-sm text-primary font-semibold">
@@ -111,7 +111,7 @@ const Testimonials = () => {
           </Slider>
         </div>
       </div>
-    </div>
+    
   );
 };
 

@@ -1,4 +1,4 @@
-import { IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUrl, Length, MaxLength } from "class-validator";
+import { IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUrl, Length, MaxLength, isArray } from "class-validator";
 import { SizeProduct } from "src/enum/sizeProduct.enum";
 
 export class CreateProductdto{
@@ -137,4 +137,14 @@ export class UpdatedProductdto {
     @IsEnum(SizeProduct,
         {message: 'Size take only : personal | regular | extrema values'})
     size: SizeProduct
+}
+
+export class GetByCategoriesDto {
+
+    /**
+     * Must be an array of string with categories for filter
+     * @example ["Hamburguesas","Postres"]
+     */
+    @IsArray()
+    categories: string[]
 }

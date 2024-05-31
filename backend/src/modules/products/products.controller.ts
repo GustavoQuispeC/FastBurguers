@@ -4,7 +4,7 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
 import { AuthGuards } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
-import { UpdatedProductdto, CreateProductdto } from './products.dto';
+import { UpdatedProductdto, CreateProductdto, GetByCategoriesDto } from './products.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 
@@ -21,6 +21,12 @@ export class ProductsController {
             return this.productService.getAll(page,limit)
         }
         return this.productService.getAll('1','10')
+    }
+
+    @Get('/categories')
+    getProductByCategory(@Body() categories: GetByCategoriesDto){
+        const {categories: arrayCategories} = categories
+        return this.productService.getProductByCategory(arrayCategories)
     }
 
     @Get(':id')
