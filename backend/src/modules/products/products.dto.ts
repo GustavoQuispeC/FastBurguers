@@ -1,4 +1,5 @@
-import { IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUrl, Length, MaxLength } from "class-validator";
+import { IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUrl, Length, MaxLength } from "class-validator";
+import { SizeProduct } from "src/enum/sizeProduct.enum";
 
 export class CreateProductdto{
 
@@ -59,6 +60,13 @@ export class CreateProductdto{
     @IsString()
     category:string
 
+    /**
+     *  Must be : personal, regular or extrema
+     * @example 'personal'
+     */
+    @IsEnum(SizeProduct,
+        {message: 'Size take only : personal | regular | extrema values'})
+    size: SizeProduct
 }
 
 
@@ -120,4 +128,13 @@ export class UpdatedProductdto {
     @IsString()
     @IsUrl()
     imgUrl?:string
+
+    /**
+     *  Must be : personal, regular or extrema
+     * @example 'personal'
+     */
+    @IsOptional()
+    @IsEnum(SizeProduct,
+        {message: 'Size take only : personal | regular | extrema values'})
+    size: SizeProduct
 }
