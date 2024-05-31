@@ -1,87 +1,130 @@
-import React from "react";
+"use client";
 
-const page = () => {
+import { IProduct } from "@/app/interfaces/IProduct";
+import { useState, useEffect } from "react";
+import productosPreload from "@/app/helpers/productos";
+
+const DetalleProduct = ({ params }: { params: { productId: string } }) => {
+  const [producto, setProducto] = useState<IProduct>();
+
+  useEffect(() => {
+    const productIdNumber = parseInt(params.productId);
+    const product = buscarProductoPorId(productIdNumber);
+    setProducto(product);
+  }, [params.productId]);
+
+  const buscarProductoPorId = (id: number) => {
+    const productoEncontrado = productosPreload.find(
+      (product) => product.id === id
+    );
+
+    return productoEncontrado;
+  };
+
+  const calculateDiscountedPrice = (price: number, discount: number) => {
+    return (price - (price * discount) / 100).toFixed(2);
+  };
+
+  const getPrecioConDescuento = (): string | null => {
+    if (producto && producto.discount && producto.discount > 0) {
+      const precioDescuento = calculateDiscountedPrice(
+        producto.price,
+        producto.discount
+      );
+      return precioDescuento;
+    }
+    return null;
+  };
+
   return (
-    <div className="font-sans h-screen">
+    <div className="font-sans my-10">
       <div className="p-4 max-w-6xl max-md:max-w-xl mx-auto">
         <div className="grid items-start grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="w-full lg:sticky top-0 flex gap-3">
+          <div className="w-full h-5/6 lg:sticky top-0 flex justify-center items-center  ">
             <img
-              src="/hamburguesa4.jpg"
-              alt="Product"
-              className="w-3/4 rounded-xl object-cover"
+              src={producto?.imgUrl}
+              alt={producto?.name}
+              className="w-3/4 h-3/4 rounded-xl object-cover"
             />
-            <div className="w-20 flex flex-col max-sm:mb-4 gap-3">
-            </div>
           </div>
 
           <div>
-            <h2 className="text-3xl max-sm:text-2xl font-bold text-blue-800">
-              Hamburguesa Clásica a la Parrilla
+            <h2 className="text-3xl max-sm:text-2xl font-bold text-orange-500">
+              {producto?.name}
             </h2>
             <div className="flex flex-wrap gap-4 mt-8">
-              <h3 className="text-gray-800 text-4xl max-sm:text-3xl font-bold">
-                $12
-              </h3>
-              <p className="text-gray-400 text-xl">
-                <s>$16</s> <span className="text-sm ml-1">Oferta</span>
-              </p>
+              {producto?.discount && producto.discount > 0 ? (
+                <>
+                  <h3 className="text-gray-800 text-4xl max-sm:text-3xl font-bold">
+                    ${getPrecioConDescuento()}
+                  </h3>
+                  <h3 className="text-gray-400 text-xl text-center mt-2">
+                    <s>${producto.price.toFixed(2)}</s>
+                  </h3>
+                </>
+              ) : (
+                <h3 className="text-gray-800 text-4xl max-sm:text-3xl font-bold">
+                  ${producto?.price.toFixed(2)}
+                </h3>
+              )}
             </div>
 
             <div className="mt-10">
-              <h3 className="text-lg font-bold text-gray-800">ELIGE EL TAMAÑO</h3>
+              <h3 className="text-lg font-bold text-gray-800">
+                ELIGE EL TAMAÑO
+              </h3>
               <div className="flex flex-wrap gap-4 mt-4">
                 <button
                   type="button"
-                  className="w-16 h-11 border-2 hover:border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0"
+                  className="w-16 h-11 border-2 hover:border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 hover:bg-orange-500 "
                 >
                   Clásica
                 </button>
                 <button
                   type="button"
-                  className="w-16 h-11 border-2 hover:border-gray-800 border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0"
+                  className="w-16 h-11 border-2 hover:border-gray-800 border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 hover:bg-orange-500"
                 >
                   Mediana
                 </button>
                 <button
                   type="button"
-                  className="w-16 h-11 border-2 hover:border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0"
+                  className="w-16 h-11 border-2 hover:border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 hover:bg-orange-500"
                 >
                   Grande
                 </button>
-                
               </div>
             </div>
 
             <div className="mt-10">
-              <h3 className="text-lg font-bold text-gray-800">DESEA AÑADIR BEBIDA</h3>
+              <h3 className="text-lg font-bold text-gray-800">
+                DESEA AÑADIR BEBIDA
+              </h3>
               <div className="flex flex-wrap gap-4 mt-4">
                 <button
                   type="button"
-                  className="w-20 h-11 border-2 hover:border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0"
+                  className="w-20 h-11 border-2 hover:border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 hover:bg-orange-500"
                 >
                   Coca Cola
                 </button>
                 <button
                   type="button"
-                  className="w-20 h-11 border-2 hover:border-gray-800 border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0"
+                  className="w-20 h-11 border-2 hover:border-gray-800 border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 hover:bg-orange-500"
                 >
                   Inka Kola
                 </button>
                 <button
                   type="button"
-                  className="w-20 h-11 border-2 hover:border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0"
+                  className="w-20 h-11 border-2 hover:border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 hover:bg-orange-500"
                 >
                   Pepsi
                 </button>
-                
               </div>
             </div>
 
             <div className="mt-10 flex flex-wrap gap-4">
               <button
                 type="button"
-                className="flex items-center justify-center px-8 py-4 bg-gray-800 hover:bg-gray-900 text-white border border-gray-800 text-base rounded"
+                className="flex items-center justify-center px-8 py-4 bg-gray-800 hover:bg-gray-900 text-orange-400 border border-gray-800 text-base rounded"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -102,7 +145,7 @@ const page = () => {
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 cursor-pointer fill-current inline mr-3"
+                  className="w-5 h-5 cursor-pointer fill-current inline mr-3 "
                   viewBox="0 0 64 64"
                 >
                   <path
@@ -121,14 +164,8 @@ const page = () => {
             </ul>
 
             <ul className="space-y-3 list-disc pl-4 text-sm text-gray-800 mt-8">
-              <li>
-                ¿Ya probaste la deliciosa hamburguesa a la parrilla clásica
-                Bembos? Con su delicioso sabor ahumado y consistencia
-                característica, este clásico Bembos lleva como ingredientes:
-              </li>
-              <li>Mayonesa.</li>
-              <li>Tomate.</li>
-              <li>Lechuga.</li>
+              <li>{producto?.description}</li>
+
               <li>¡Pídela ya con delivery!</li>
             </ul>
           </div>
@@ -138,4 +175,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default DetalleProduct;

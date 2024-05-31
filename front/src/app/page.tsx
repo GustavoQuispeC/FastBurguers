@@ -1,25 +1,29 @@
 "use client"
 
-import Footer from "@/components/foooter/Footer";
-import HeadlineCards from "@/components/headlineCards/HeadlineCards";
-import Hero from "@/components/hero/hero";
-import Navbar from "@/components/navbar/Naavbar";
+
+import HeadlineCards from "@/app/components/headlineCards/HeadlineCards";
+import Hero from "@/app/components/hero/hero";
+import Products from "@/app/components/Products/Products";
+import Banner from "@/app/components/Banner/Banner";
 import Head from "next/head";
 import React from "react";
+import Testimonials from "./components/Testimonials/Testimonials";
+
 
 
 const Home= () => {
   return (
   
       <div> 
-     <Navbar/>
-     <Hero/>
-     <HeadlineCards/>
-   
-     <Footer/>
+
+    <Hero/>
+  <HeadlineCards/>
+  <Products/>
+  <Banner/>
+  <Testimonials/>
   </div>
    
   );
-};
+;}
 
-export default Home ;
+export default Home;
