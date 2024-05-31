@@ -1,8 +1,8 @@
 "use client";
 import { Alert, TextInput } from "flowbite-react";
 import { useRouter } from "next/navigation";
-import { RegisterErrorProps, RegisterProps } from "../types";
-import { validateRegisterForm } from "../utils/registerFormValidation";
+import { RegisterErrorProps, RegisterProps } from "../../types";
+import { validateRegisterForm } from "../../utils/registerFormValidation";
 import {
   FaEye,
   FaEyeSlash,
@@ -63,11 +63,9 @@ const Register = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent default form submission
-   
 
-      notify();
-      // Add form submission logic here if needed
-    
+    notify();
+    // Add form submission logic here if needed
   };
 
   //Validar formulario
