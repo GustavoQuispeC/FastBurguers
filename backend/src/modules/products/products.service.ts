@@ -20,6 +20,9 @@ export class ProductsService {
             const products = await this.productsRepository.find({
                 take: nlimit,
                 skip: (npage-1)*nlimit,
+                relations:{
+                    category:true
+                }
             })
             return products
 
@@ -29,7 +32,12 @@ export class ProductsService {
     }
 
     async getById(id:string){
-        const product = await this.productsRepository.findOneBy({id})
+        const product = await this.productsRepository.findOne({
+            where: { id },
+            relations: {
+              category: true,
+            },
+          });
         if(!product) throw new NotFoundException(`No se encontro producto con ${id}`)
         return product;
     }
@@ -50,6 +58,7 @@ export class ProductsService {
         objectProduct.imgUrl = product.imgUrl
         objectProduct.stock = product.stock
         objectProduct.discount = product.discount
+        objectProduct.size = product.size
 
         await this.productsRepository.createQueryBuilder()
             .insert()

@@ -1,8 +1,8 @@
 "use client";
 
-import { IProduct } from "@/app/interfaces/IProduct";
+import { IProduct } from "@/interfaces/IProduct";
 import { useState, useEffect } from "react";
-import productosPreload from "@/app/helpers/productos";
+import productosPreload from "@/helpers/productos";
 
 const DetalleProduct = ({ params }: { params: { productId: string } }) => {
   const [producto, setProducto] = useState<IProduct>();

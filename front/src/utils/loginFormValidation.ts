@@ -1,6 +1,5 @@
 import { LoginErrorProps, LoginProps } from "../types";
 
-
 export function validateLoginForm(values: LoginProps): LoginErrorProps {
   let errors: LoginErrorProps = {
     email: "",
