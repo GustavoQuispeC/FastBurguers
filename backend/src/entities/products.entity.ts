@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { OrderDetails } from "./orderdetails.entity";
 import { Categories } from "./categories.entity";
+import { SizeProduct } from "src/enum/sizeProduct.enum";
 
 @Entity({name: 'products'})
 export class Products {
@@ -24,6 +25,9 @@ export class Products {
 
     @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
     discount: number;
+
+    @Column({ type: 'enum', enum: SizeProduct, default: SizeProduct.PERSONAL })
+    size: SizeProduct;
 
     @ManyToOne(() => Categories, (category) => category.products)
     category: Categories;
