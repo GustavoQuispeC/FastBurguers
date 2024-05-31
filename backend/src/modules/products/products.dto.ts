@@ -116,18 +116,11 @@ export class UpdatedProductdto {
      * @Example 0.1
      */
     @IsOptional()
-    @IsNumber()
-    @IsPositive()
-    discount: number
+    discount?: number
 
-    /**
-     * Must be a URL
-     * @example https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.violetaalvarezphotography.com%2Fimage%2FI0000EPEHajJzegI%2F&psig=AOvVaw1WmHynkU3yzbJwoB-0muAK&ust=1714572260524000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCMjey82N6oUDFQAAAAAdAAAAABAE  
-     */
+
     @IsOptional()
-    @IsString()
-    @IsUrl()
-    imgUrl?:string
+    category?:string
 
     /**
      *  Must be : personal, regular or extrema
@@ -148,3 +141,4 @@ export class GetByCategoriesDto {
     @IsArray()
     categories: string[]
 }
+    
