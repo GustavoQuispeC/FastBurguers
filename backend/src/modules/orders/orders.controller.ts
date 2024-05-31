@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { OrdersService } from './orders.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuards } from 'src/guards/auth.guard';
 import { OrdersDto, dateOrdersDto } from './orders.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
@@ -13,6 +13,7 @@ export class OrdersController {
 
     constructor(private readonly ordersService: OrdersService){}
 
+    @ApiBearerAuth()
     @Get(':id')
     @Roles(Role.ADMIN)
     @UseGuards(AuthGuards, RolesGuard)
@@ -20,6 +21,7 @@ export class OrdersController {
         return this.ordersService.getOrder(id)
     }
 
+    @ApiBearerAuth()
     @Post()
     @Roles(Role.ADMIN)
     @UseGuards(AuthGuards, RolesGuard)
@@ -29,6 +31,7 @@ export class OrdersController {
         return this.ordersService.addOrder(userId, products)
     }
 
+    @ApiBearerAuth()
     @Put(':id')
     @Roles(Role.ADMIN)
     @UseGuards(AuthGuards, RolesGuard)
@@ -36,6 +39,7 @@ export class OrdersController {
         return this.ordersService.updateOrders(orders, id)
     }
 
+    @ApiBearerAuth()
     @Delete(':id')
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard)

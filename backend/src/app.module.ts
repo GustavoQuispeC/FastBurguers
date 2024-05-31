@@ -14,6 +14,7 @@ import { PreloadService } from './preload.service';
 import { Products } from './entities/products.entity';
 import { Categories } from './entities/categories.entity';
 import { Users } from './entities/users.entity';
+import { OrdersModule } from './modules/orders/orders.module';
 import { MorganMiddleware } from './middlewares/morgan.middleware';
 
 @Module({
@@ -37,6 +38,7 @@ import { MorganMiddleware } from './middlewares/morgan.middleware';
     ProductsModule,
     AuthModule,
     FilesModule,
+    OrdersModule,
     TypeOrmModule.forFeature([Products,Categories,Users])
   ],
   controllers: [AppController],
