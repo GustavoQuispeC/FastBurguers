@@ -1,29 +1,27 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+
 import {
   AiFillTag,
   AiOutlineClose,
   AiOutlineMenu,
   AiOutlineSearch,
 } from "react-icons/ai";
-import { BsFillCartFill } from "react-icons/bs";
 import { AiFillProduct } from "react-icons/ai";
 import { MdHelp } from "react-icons/md";
 import { FaHome, FaCartPlus } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import productosPreload from "@/app/helpers/productos";
 import { IProduct } from "@/app/interfaces/IProduct";
 import Link from "next/link";
 import {
   Avatar,
   Dropdown,
-  DropdownDivider,
-  DropdownHeader,
-  DropdownItem,
 } from "flowbite-react";
+import { DarkThemeToggle } from "flowbite-react";
 
 const Navbar = () => {
   const router = useRouter();
@@ -51,13 +49,14 @@ const Navbar = () => {
   };
 
   return (
-    <div className="max-w-[1640px] bg-white mx-auto flex justify-between items-center p-4">
+    <>
+    <div className="max-w-[1640px] dark:bg-gray-600 mx-auto flex dark:text-white justify-between items-center p-4">
       {/* Lado Izquierdo */}
       <div className="flex items-center">
         <div onClick={() => setnav(!nav)} className="cursor-pointer">
           <AiOutlineMenu size={30} />
         </div>
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl px-2 ">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl px-2">
           Fast<span className="font-bold">Burger</span>
         </h1>
         <div className="hidden lg:flex  items-center bg-gray-200 rounded-full p-1 text-[14px] ">
@@ -66,7 +65,7 @@ const Navbar = () => {
         </div>
       </div>
       {/* SearchInput */}
-      <div className="bg-gray-200 rounded-full flex items-center px-2 w-[200px] sm:w-[400px] lg:w-[500px]">
+      <div className="bg-gray-200  rounded-full flex items-center px-2 w-[200px] sm:w-[400px] lg:w-[500px]">
         <AiOutlineSearch size={20} />
         <input
           className="bg-transparent w-full border-none rounded-full focus:ring-0 focus:border-transparent"
@@ -98,6 +97,7 @@ const Navbar = () => {
           ))}
         </div>
       )}
+       <DarkThemeToggle />
       {/* Cart Button */}
       <button
         onClick={() => router.push("/cart")}
@@ -142,15 +142,15 @@ const Navbar = () => {
         className={
           nav
             ? "fixed top-0 left-0 w-[300px] h-screen bg-white z-10 duration-300"
-            : "fixed top-0 left-[-100%] w-[300px] h-screen bg-white z-10 duration-300"
+            : "fixed top-0 left-[-100%] w-[300px] h-screen bg-white z-10 duration-300 "
         }
       >
         <AiOutlineClose
           onClick={() => setnav(!nav)}
           size={30}
-          className="absolute right-4 top-4 cursor-pointer"
+          className="absolute right-4 top-4 cursor-pointer dark:text-black"
         />
-        <h2 className="text-2xl p-4 ">
+        <h2 className="text-2xl p-4 dark:text-black">
           Fast<span className="font-bold"> Burgers</span>
         </h2>
 
@@ -197,6 +197,9 @@ const Navbar = () => {
         </nav>
       </div>
     </div>
+
+    
+    </>
   );
 };
 
