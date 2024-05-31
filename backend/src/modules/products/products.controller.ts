@@ -15,8 +15,6 @@ export class ProductsController {
         private readonly productService:ProductsService
     ){}
 
-
-
     @Get()
     getProducts(@Query('page') page:string, @Query('limit') limit:string){
         if(page && limit){
@@ -25,10 +23,7 @@ export class ProductsController {
         return this.productService.getAll('1','10')
     }
 
-    @ApiBearerAuth()
     @Get(':id')
-    @Roles(Role.ADMIN)
-    @UseGuards(AuthGuards,RolesGuard)
     getProduct(@Param('id',ParseUUIDPipe) id:string){
         return this.productService.getById(id)
     }

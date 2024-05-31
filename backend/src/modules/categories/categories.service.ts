@@ -31,11 +31,11 @@ export class CategoriesService {
         return categorie
     }
 
-    async updateName(id:string,name:string){
+    async updateName(id:string,category:Partial<Categories>){
         const oldCategorie = this.categoryRepository.findOneBy({id})
         if(!oldCategorie) throw new BadRequestException(`No se encontro categorie con ${id}`)
         
-        await this.categoryRepository.update(id,{name});
+        await this.categoryRepository.update(id,category);
         const updatedCategory =  await this.categoryRepository.findOneBy({id});
         return updatedCategory;
     }
