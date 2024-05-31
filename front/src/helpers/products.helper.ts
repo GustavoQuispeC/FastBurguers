@@ -13,12 +13,18 @@ export async function getProducts() {
   }
 }
 
-export async function getProductsById(id: string) {
+export async function getProductsById(id: number): Promise<IProduct> {
   try {
     const res = await fetch(`${apiURL}/products/${id}`);
+    const productData: any = await res.json();
 
-    const products: IProduct[] = await res.json();
-    return products;
+    const product: IProduct = {
+      ...productData,
+      price: parseFloat(productData.price),
+      stock: parseInt(productData.stock),
+    };
+
+    return product;
   } catch (error: any) {
     throw new Error(error);
   }

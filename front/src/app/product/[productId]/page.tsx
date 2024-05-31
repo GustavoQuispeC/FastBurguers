@@ -2,25 +2,23 @@
 
 import { IProduct } from "@/interfaces/IProduct";
 import { useState, useEffect } from "react";
-import productosPreload from "@/helpers/productos";
+import { getProductsById } from "@/helpers/products.helper";
 
-const DetalleProduct = ({ params }: { params: { productId: string } }) => {
+const DetalleProduct = ({ params }: { params: { productId: number } }) => {
   const [producto, setProducto] = useState<IProduct>();
 
   useEffect(() => {
-    const productIdNumber = parseInt(params.productId);
-    const product = buscarProductoPorId(productIdNumber);
-    setProducto(product);
+    const fetchProduct = async () => {
+      try {
+        const product = await getProductsById(params.productId);
+        setProducto(product);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      }
+    };
+
+    fetchProduct();
   }, [params.productId]);
-
-  const buscarProductoPorId = (id: number) => {
-    const productoEncontrado = productosPreload.find(
-      (product) => product.id === id
-    );
-
-    return productoEncontrado;
-  };
-
   const calculateDiscountedPrice = (price: number, discount: number) => {
     return (price - (price * discount) / 100).toFixed(2);
   };
