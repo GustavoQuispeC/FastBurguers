@@ -2,7 +2,7 @@
 import { TextInput } from "flowbite-react";
 import { HiMail } from "react-icons/hi";
 import { FaEye } from "react-icons/fa";
-import Autenticar from "../components/autenticar/Autenticar";
+
 import Link from "next/link";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
@@ -10,6 +10,9 @@ import { useEffect, useState } from "react";
 import { LoginErrorProps, LoginProps } from "../types";
 import { validateLoginForm } from "../utils/loginFormValidation";
 import { FaEyeSlash } from "react-icons/fa6";
+
+import Image from "next/image";
+import { signIn } from "next-auth/react";
 
 const Login = () => {
   const Router = useRouter();
@@ -23,6 +26,19 @@ const Login = () => {
     email: "",
     password: "",
   });
+
+  const GoogleOnClick = async () => {
+    await signIn("google", {
+      callbackUrl: "/home",
+      redirect: true,
+    });
+  };
+  const FacebookOnClick = async () => {
+    await signIn("facebook", {
+      callbackUrl: "/home",
+      redirect: true,
+    });
+  };
 
   //! Mostrar u ocultar contraseña
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -165,7 +181,20 @@ const Login = () => {
             </div>
             <hr className="my-6 border-gray-300" />
 
-            <Autenticar />
+            <div className="flex justify-around items-center">
+              <button onClick={GoogleOnClick}>
+                <Image src="/google.png" alt="google" width={30} height={30} />
+              </button>
+
+              <button onClick={FacebookOnClick}>
+                <Image
+                  src="/facebook.png"
+                  alt="facebook"
+                  width={35}
+                  height={35}
+                />
+              </button>
+            </div>
           </form>
         </div>
       </div>

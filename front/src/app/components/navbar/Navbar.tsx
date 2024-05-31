@@ -1,4 +1,6 @@
 "use client";
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
 
 
 import {
@@ -25,6 +27,8 @@ import { DarkThemeToggle } from "flowbite-react";
 
 const Navbar = () => {
   const router = useRouter();
+  const { data: sesion, status, update } = useSession();
+
   const [nav, setnav] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState<IProduct[]>([]);
@@ -56,14 +60,18 @@ const Navbar = () => {
         <div onClick={() => setnav(!nav)} className="cursor-pointer">
           <AiOutlineMenu size={30} />
         </div>
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl px-2">
-          Fast<span className="font-bold">Burger</span>
-        </h1>
+        <Link href="/home">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl px-2 ">
+            Fast<span className="font-bold">Burger</span>
+          </h1>
+        </Link>
+       
         <div className="hidden lg:flex  items-center bg-gray-200 rounded-full p-1 text-[14px] ">
           <p className=" bg-black text-orange-400 rounded-full p-2">Delivery</p>
           <p className="p-2">Pickup</p>
         </div>
       </div>
+
       {/* SearchInput */}
       <div className="bg-gray-200  rounded-full flex items-center px-2 w-[200px] sm:w-[400px] lg:w-[500px]">
         <AiOutlineSearch size={20} />
@@ -101,7 +109,7 @@ const Navbar = () => {
       {/* Cart Button */}
       <button
         onClick={() => router.push("/cart")}
-        className="bg-gray-900 text-orange-400 hidden md:flex items-center py-2 rounded-full"
+        className=" text-orange-400 hidden md:flex items-center p-2 rounded-full"
       >
         <FaCartPlus size={20} />
       </button>
@@ -110,23 +118,31 @@ const Navbar = () => {
           arrowIcon={false}
           inline
           label={
-            <Avatar
-              alt="User settings"
-              img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-              rounded
+            <Image
+              src={sesion?.user?.image || "/perfil.png"}
+              alt="imagen"
+              width={30}
+              height={30}
+              className="rounded-full"
             />
           }
         >
           <Dropdown.Header>
-            <span className="block text-sm">Gustavo</span>
+            <span className="block text-sm">{sesion?.user?.name}</span>
             <span className="block truncate text-sm font-medium">
-              gusstavo@gmail.com
+              {sesion?.user?.email}
             </span>
           </Dropdown.Header>
           <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
           <Dropdown.Item>Settings</Dropdown.Item>
           <Dropdown.Item>Earnings</Dropdown.Item>
-          <Dropdown.Item>Salir</Dropdown.Item>
+          <button
+            onClick={() => {
+              signOut();
+            }}
+          >
+            <Dropdown.Item>Salir</Dropdown.Item>
+          </button>
         </Dropdown>
       </div>
 

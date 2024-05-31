@@ -15,13 +15,15 @@ const FiltroProductos: React.FC<GridProductsProps> = ({ categoryId }) => {
       {filteredProducts.map((product) => (
         <div
           key={product.id}
-          className="bg-white rounded-lg shadow-md p-4 text-center "
+          className="bg-white rounded-lg shadow-md p-4 text-center  flex flex-col items-center justify-center"
         >
-          <img
-            src={product.imgUrl}
-            alt={product.name}
-            className="w-72 h-72 object-cover rounded-t-lg "
-          />
+          <Link href={`/product/${product.id}`} key={product.id}>
+            <img
+              src={product.imgUrl}
+              alt={product.name}
+              className="w-72 h-72 object-cover rounded-t-lg "
+            />
+          </Link>
           <h2 className="font-bold text-lg mt-2">{product.name}</h2>
           <p className="text-gray-600 mt-1">{product.description}</p>
           <p className="text-gray-800 text-2xl font-bold mt-2">
