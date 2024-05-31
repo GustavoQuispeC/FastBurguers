@@ -1,23 +1,43 @@
+"use client"
 import { AiFillInstagram, AiFillTwitterCircle, AiFillYoutube } from "react-icons/ai";
 import Container from "@/app/components/container/Container";
 import FooterList from "./FooterList";
 import Link from "next/link";
 import { MdFacebook } from "react-icons/md";
+import React, { useState, useEffect } from 'react';
 
 
+const Footer: React.FC = (): React.ReactElement => {
+    const [footerHeight, setFooterHeight] = useState('500px');
 
-const Footer: React.FC= (): React.ReactElement=>{
+    useEffect(() => {
+        // Función para actualizar el height basado en el tamaño de la pantalla
+        function updateSize() {
+            if (window.innerWidth < 640) {
+                setFooterHeight('800px');
+            } else {
+                setFooterHeight('500px');
+            }
+        }
+
+        // Establecer el tamaño inicialmente y añadir listener para resize
+        updateSize();
+        window.addEventListener('resize', updateSize);
+
+        // Limpiar el listener al desmontar el componente
+        return () => window.removeEventListener('resize', updateSize);
+    }, []);
+
     return (
-       <footer    style={{
-        backgroundImage: 'url("/footer-pattern.jpg")',
-        backgroundPosition: "bottom",
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "cover",
-  height: "500px",
-  width: "100%",
-
-    }} className="bg-black text-slate-200 text-sm">
-        <Container>
+        <footer style={{
+            backgroundImage: 'url("/footer-pattern.jpg")',
+            backgroundPosition: "bottom",
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            height: footerHeight,
+            width: "100%",
+        }} className="bg-black text-slate-200 text-sm">
+            <Container>
             <div className="flex flex-col md:flex-row justify-between pt-16 pb-8">   
 <FooterList>
     <h3 className=" text-base text-orange-500 font-bold mb-2">
