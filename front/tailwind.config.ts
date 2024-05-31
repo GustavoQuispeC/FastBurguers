@@ -13,10 +13,8 @@ const config: Config = {
     flowbite.content(),
   ],
   theme: {
-    extend: {
-      
-    },
+    extend: {},
   },
-  plugins: [flowbite.plugin(),],
+  plugins: [flowbite.plugin()],
 };
 export default config;

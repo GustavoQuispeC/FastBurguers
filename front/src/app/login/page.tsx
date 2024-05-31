@@ -1,11 +1,28 @@
+"use client";
+
 import { Label, TextInput } from "flowbite-react";
 import { HiMail } from "react-icons/hi";
 import React from "react";
 import { FaEye } from "react-icons/fa";
-import Autenticar from "../components/autenticar/Autenticar";
+
 import Link from "next/link";
+import Image from "next/image";
+import { signIn } from "next-auth/react";
 
 const Login = () => {
+  const GoogleOnClick = async () => {
+    await signIn("google", {
+      callbackUrl: "/home",
+      redirect: true,
+    });
+  };
+  const FacebookOnClick = async () => {
+    await signIn("facebook", {
+      callbackUrl: "/home",
+      redirect: true,
+    });
+  };
+
   return (
     <div className="font-[sans-serif] text-gray-900 flex items-center justify-center md:h-screen p-4 ">
       <div className="shadow-2xl max-w-6xl rounded-md p-6 bg-white">
@@ -88,7 +105,20 @@ const Login = () => {
             </div>
             <hr className="my-6 border-gray-300" />
 
-            <Autenticar />
+            <div className="flex justify-around items-center">
+              <button onClick={GoogleOnClick}>
+                <Image src="/google.png" alt="google" width={30} height={30} />
+              </button>
+
+              <button onClick={FacebookOnClick}>
+                <Image
+                  src="/facebook.png"
+                  alt="facebook"
+                  width={35}
+                  height={35}
+                />
+              </button>
+            </div>
           </form>
         </div>
       </div>
