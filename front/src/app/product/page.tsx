@@ -19,8 +19,8 @@ const Product = () => {
 
   return (
     <>
-      <ul className="flex gap-3 bg-slate-700 mt-10 p-3 justify-around font-bold text-white w-11/12 rounded-lg items-center m-auto">
-        <li>
+      <ul className="flex flex-wrap gap-3 bg-slate-700 mt-10 p-3 justify-around font-bold text-white w-11/12 rounded-lg items-center m-auto">
+        <li className="w-full sm:w-auto text-center">
           <button
             onClick={() => handleCategoryClick(1)}
             className={getButtonClass(1)}
@@ -28,7 +28,7 @@ const Product = () => {
             Hamburguesas
           </button>
         </li>
-        <li>
+        <li className="w-full sm:w-auto text-center">
           <button
             onClick={() => handleCategoryClick(2)}
             className={getButtonClass(2)}
@@ -36,7 +36,7 @@ const Product = () => {
             Sandwich de pollo
           </button>
         </li>
-        <li>
+        <li className="w-full sm:w-auto text-center">
           <button
             onClick={() => handleCategoryClick(3)}
             className={getButtonClass(3)}
@@ -44,7 +44,7 @@ const Product = () => {
             Papas y complementos
           </button>
         </li>
-        <li>
+        <li className="w-full sm:w-auto text-center">
           <button
             onClick={() => handleCategoryClick(4)}
             className={getButtonClass(4)}
@@ -52,7 +52,7 @@ const Product = () => {
             Bebidas
           </button>
         </li>
-        <li>
+        <li className="w-full sm:w-auto text-center">
           <button
             onClick={() => handleCategoryClick(5)}
             className={getButtonClass(5)}
@@ -60,7 +60,7 @@ const Product = () => {
             Postres
           </button>
         </li>
-        <li>
+        <li className="w-full sm:w-auto text-center">
           <button
             onClick={() => handleCategoryClick(6)}
             className={getButtonClass(6)}
