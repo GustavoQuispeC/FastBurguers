@@ -19,7 +19,7 @@ export class ProductsService {
             if(npage<=0 || nlimit<=0) throw new Error();
             const products = await this.productsRepository.find({
                 take: nlimit,
-                skip: (npage-1)*nlimit
+                skip: (npage-1)*nlimit,
             })
             return products
 
@@ -55,8 +55,8 @@ export class ProductsService {
             .insert()
             .into(Products)
             .values(objectProduct)
-            .orUpdate(
-                ['description','price','imgUrl', 'stock','discount'], ['name']
+            .orIgnore(
+                // ['description','price','imgUrl', 'stock','discount'], ['name']
             )
             .execute()
 
@@ -77,7 +77,7 @@ export class ProductsService {
         if(!productfound) throw new NotFoundException(`No se encontro producto con ${id}`)
         await this.productsRepository.remove(productfound)
         return {
-            message:`Usuario ${id} eliminado con exito` 
+            message:`Producto ${id} eliminado con exito` 
         }
     }
 }

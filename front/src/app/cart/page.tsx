@@ -1,6 +1,9 @@
+'use client';
+import { useRouter } from "next/navigation";
 import React from "react";
 
-const page = () => {
+const Cart = () => {
+  const router = useRouter();
   return (
     <div className="font-sans max-w-4xl mx-auto py-4 h-screen">
       <div className="grid md:grid-cols-3 gap-4">
@@ -212,10 +215,11 @@ const page = () => {
               type="button"
               className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-gray-900 hover:bg-gray-800 text-orange-400 rounded-md"
             >
-              Checkout
+              Ir a pagar
             </button>
             <button
               type="button"
+              onClick={() => router.push("/")}
               className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent text-gray-800 border border-gray-300 rounded-md"
             >
               Continuar comprando{" "}
@@ -227,4 +231,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Cart;

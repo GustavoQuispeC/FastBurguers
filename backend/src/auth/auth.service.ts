@@ -32,6 +32,8 @@ export class AuthService {
 
     async signUp(user: CreateUserDto){ // registrarse
         const findUser = await this.usersService.getByEmail(user.email)
+        console.log('findUser: ' + findUser)
+        console.log('user: ' + user)
         if(findUser){
             throw new ConflictException('El email ya ha sido registrado')
         }

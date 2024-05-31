@@ -5,7 +5,7 @@ import { Role } from 'src/enum/roles.enum';
 import { AuthGuards } from 'src/guards/auth.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { UpdatedProductdto, CreateProductdto } from './products.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 
 @ApiTags('Products')
@@ -14,8 +14,6 @@ export class ProductsController {
     constructor(
         private readonly productService:ProductsService
     ){}
-
-
 
     @Get()
     getProducts(@Query('page') page:string, @Query('limit') limit:string){
@@ -26,28 +24,27 @@ export class ProductsController {
     }
 
     @Get(':id')
-    @Roles(Role.ADMIN)
-    @UseGuards(AuthGuards,RolesGuard)
     getProduct(@Param('id',ParseUUIDPipe) id:string){
         return this.productService.getById(id)
     }
 
+    @ApiBearerAuth()
     @Post()
-    @Roles(Role.SUPERADMIN)
+    @Roles(Role.ADMIN)
     @UseGuards(AuthGuards,RolesGuard)
     createProduct(@Body() product:CreateProductdto){
         return this.productService.createProduct(product)
     }
 
+    @ApiBearerAuth()
     @Put(':id')
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard)
-    updateProduct(@Param('id',ParseUUIDPipe) id:string, product: UpdatedProductdto){
+    updateProduct(@Param('id',ParseUUIDPipe) id:string, @Body() product: UpdatedProductdto){
         return this.productService.updateProduct(id,product)
     }
 
-    
-
+    @ApiBearerAuth()
     @Delete(':id')
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard) 

@@ -5,7 +5,8 @@ import { retry } from 'rxjs';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { CreateCategoryDto, UpdateCategoryDto } from './category.dto';
 
 @ApiTags('Categories')
 @Controller('categories')
@@ -25,25 +26,27 @@ export class CategoriesController {
 
     @Get(':id')
     @UseGuards(AuthGuards)
-    getCategory(@Param('id',ParseUUIDPipe) id:
-    string){
+    getCategory(@Param('id',ParseUUIDPipe) id: string){
         return this.categoryService.getById(id)
     }
 
+    @ApiBearerAuth()
     @Put(':id')
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard)
-    updateName(@Param('id',ParseUUIDPipe) id:string ,@Body() name:string){
-        return this.categoryService.updateName(id,name)
+    updateName(@Param('id',ParseUUIDPipe) id:string ,@Body() category:UpdateCategoryDto){
+        return this.categoryService.updateName(id,category)
     }
 
+    @ApiBearerAuth()
     @Post()
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard)
-    createCategory(@Body() name:string){
-        return this.categoryService.createCategory({name})
+    createCategory(@Body() category:CreateCategoryDto){
+        return this.categoryService.createCategory(category)
     }
 
+    @ApiBearerAuth()
     @Delete()
     @Roles(Role.SUPERADMIN)
     @UseGuards(AuthGuards,RolesGuard)

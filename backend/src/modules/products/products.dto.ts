@@ -46,7 +46,7 @@ export class CreateProductdto{
 
     /**
      * Must be a number
-     * Example 10
+     * Example 0.50
      */
     @IsNumber()
     @IsPositive()
@@ -54,7 +54,7 @@ export class CreateProductdto{
 
     /**
      *  Must be a string
-     * @example 'hamburguesas'
+     * @example 'Hamburguesas'
      */
     @IsString()
     category:string
@@ -85,7 +85,7 @@ export class UpdatedProductdto {
 
     /**
      * Must be a number
-     * @example 12
+     * @example 12.4
      */
     @IsOptional()
     @IsNumber()
@@ -105,7 +105,7 @@ export class UpdatedProductdto {
 
     /**
      * Must be a number
-     * Example 9
+     * @Example 0.1
      */
     @IsOptional()
     @IsNumber()
