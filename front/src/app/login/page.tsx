@@ -7,8 +7,8 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LoginErrorProps, LoginProps } from "../types";
-import { validateLoginForm } from "../utils/loginFormValidation";
+import { LoginErrorProps, LoginProps } from "../../types";
+import { validateLoginForm } from "../../utils/loginFormValidation";
 import { FaEyeSlash } from "react-icons/fa6";
 
 import Image from "next/image";
@@ -133,7 +133,6 @@ const Login = () => {
                   className="w-full pr-10"
                 />{" "}
                 <HiMail className="text-gray-900 dark:text-gray-200 absolute right-2" />
-                
               </div>
               {error.email && <p style={{ color: "red" }}>{error.email}</p>}
             </div>
@@ -161,7 +160,7 @@ const Login = () => {
                 <p className="text-red-500 text-sm">{error.password}</p>
               )}
             </div>
-            
+
             <div className="mt-12">
               <button
                 type="submit"

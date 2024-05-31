@@ -22,16 +22,10 @@ export class AuthGuards implements CanActivate {
 
         user.exp = new Date(user.exp * 1000)
 
-        if(user.isSuperAdmin && user.isAdmin){
-            user.roles = [Role.SUPERADMIN, Role.ADMIN]
-            request.user = user
-            return true
-        } 
-        if(user.isAdmin) user.roles = [Role.ADMIN] 
+        if(user.isSuperAdmin) user.roles = [Role.SUPERADMIN, Role.ADMIN]
+        else if(user.isAdmin) user.roles = [Role.ADMIN] 
         else user.roles = [Role.USER] 
-
         console.log('valor verificado de token y secret mas tiempo de exp. es: ', user)
-
         request.user = user
         console.log('request.user: ', request.user)
         
