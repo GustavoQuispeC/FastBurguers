@@ -7,9 +7,15 @@ import { getProductsByCategory } from "@/helpers/categories.helper";
 
 interface GridProductsProps {
   categoryId: number;
+  minPrice: number;
+  maxPrice: number;
 }
 
-const FiltroProductos: React.FC<GridProductsProps> = ({ categoryId }) => {
+const FiltroProductos: React.FC<GridProductsProps> = ({
+  categoryId,
+  minPrice,
+  maxPrice,
+}) => {
   const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -19,7 +25,10 @@ const FiltroProductos: React.FC<GridProductsProps> = ({ categoryId }) => {
       try {
         const categoryName = getCategoryName(categoryId);
         const fetchedProducts = await getProductsByCategory(categoryName);
-        setProducts(fetchedProducts);
+        const filteredProducts = fetchedProducts.filter(
+          (product) => product.price >= minPrice && product.price <= maxPrice
+        );
+        setProducts(filteredProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
@@ -27,7 +36,7 @@ const FiltroProductos: React.FC<GridProductsProps> = ({ categoryId }) => {
     };
 
     fetchProducts();
-  }, [categoryId]);
+  }, [categoryId, minPrice, maxPrice]);
 
   const getCategoryName = (categoryId: number): string => {
     switch (categoryId) {

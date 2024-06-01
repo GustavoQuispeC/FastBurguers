@@ -5,9 +5,19 @@ import FiltroProductos from "../../components/filtroProductos/FiltroProductos";
 
 const Product = () => {
   const [selectedCategory, setSelectedCategory] = useState<number>(1);
+  const [minPrice, setMinPrice] = useState<string>("1");
+  const [maxPrice, setMaxPrice] = useState<string>(String(Infinity));
 
   const handleCategoryClick = (categoryId: number) => {
     setSelectedCategory(categoryId);
+  };
+
+  const handleMinPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMinPrice(event.target.value);
+  };
+
+  const handleMaxPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMaxPrice(event.target.value);
   };
 
   const getButtonClass = (categoryId: number) => {
@@ -16,6 +26,18 @@ const Product = () => {
         ? "text-orange-400 shadow-lg"
         : "hover:text-orange-400"
     }`;
+  };
+
+  const handleBlurMinPrice = () => {
+    if (minPrice === "" || Number(minPrice) < 1) {
+      setMinPrice("1");
+    }
+  };
+
+  const handleBlurMaxPrice = () => {
+    if (maxPrice === "" || Number(maxPrice) < 1) {
+      setMaxPrice(String(Infinity));
+    }
   };
 
   return (
@@ -71,7 +93,36 @@ const Product = () => {
         </li>
       </ul>
 
-      <FiltroProductos categoryId={selectedCategory} />
+      <div className="flex flex-wrap gap-3 bg-slate-700 mt-5 p-3 justify-around font-bold text-white w-11/12 rounded-lg items-center m-auto">
+        <div>
+          <label>Precio Mínimo:</label>
+          <input
+            type="number"
+            value={minPrice}
+            onChange={handleMinPriceChange}
+            onBlur={handleBlurMinPrice}
+            min={1}
+            className="p-2 rounded-xl text-black"
+          />
+        </div>
+        <div>
+          <label>Precio Máximo:</label>
+          <input
+            type="number"
+            value={maxPrice}
+            onChange={handleMaxPriceChange}
+            onBlur={handleBlurMaxPrice}
+            min={1}
+            className="p-2 rounded-xl text-black"
+          />
+        </div>
+      </div>
+
+      <FiltroProductos
+        categoryId={selectedCategory}
+        minPrice={Number(minPrice)}
+        maxPrice={Number(maxPrice)}
+      />
     </>
   );
 };
