@@ -20,9 +20,7 @@ const Home = () => {
 
         // Filtrar productos promocionales
         console.log("Todos los productos:", products);
-        const promociones = products.filter(
-          (product) => product.discount && parseFloat(product.discount) > 0
-        );
+        const promociones = products.filter((product) => product.discount > 0);
         console.log("Productos con descuento:", promociones);
         setPromocionesProducts(promociones);
 

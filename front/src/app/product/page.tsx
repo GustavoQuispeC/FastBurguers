@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import FiltroProductos from "../../components/filtroProductos/FiltroProductos";
 
@@ -12,7 +13,7 @@ const Product = () => {
   const getButtonClass = (categoryId: number) => {
     return `p-2 rounded-xl border-none shadow-md ${
       selectedCategory === categoryId
-        ? " text-orange-400 shadow-lg"
+        ? "text-orange-400 shadow-lg"
         : "hover:text-orange-400"
     }`;
   };
