@@ -90,20 +90,20 @@ const Register = () => {
         transition={Zoom}
       />
 
-      <div className="min-h-screen flex justify-center py-10 md:pt-0 md:items-center">
+      <div className="min-h-screen dark:bg-gray-800 flex justify-center py-10 md:pt-0 md:items-center">
         <div className="w-11/12 sm:w-2/3 md:w-1/2 lg:w-2/5">
           <form
             onClick={handleSubmit}
-            className="bg-white p-6 md:p-10 rounded-lg shadow-lg w-full"
+            className="bg-white dark:bg-gray-800 p-6 md:p-10 rounded-lg shadow-lg w-full"
           >
             <div className="flex justify-center mb-6">
-              <span className="inline-block bg-gray-200 rounded-full p-3">
+              <span className="inline-block  bg-gray-200 rounded-full p-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="28"
                   height="28"
                   viewBox="0 0 24 24"
-                >
+                > 
                   <path
                     fill="currentColor"
                     d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"
@@ -112,7 +112,7 @@ const Register = () => {
               </span>
             </div>
 
-            <h1 className="text-center text-2xl mb-6 text-gray-900 font-bold font-sans">
+            <h1 className="text-center text-2xl mb-6 text-gray-900 dark:text-white font-bold font-sans">
               Crear una nueva cuenta
             </h1>
 
