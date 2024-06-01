@@ -16,12 +16,12 @@ export class ProductsController {
         private readonly productService:ProductsService
     ){}
 
-    @Get()
+    @Get('')
     getAllProducts(){
         return this.productService.getAll()
     }
 
-    @Get('/page')
+    @Get('/query')
     getProducts(@Query('page') page:string, @Query('limit') limit:string){
         if(page && limit){
             return this.productService.getAllPage(page,limit)
