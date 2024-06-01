@@ -1,4 +1,3 @@
-import axios from "axios";
 import { IProduct } from "@/interfaces/IProduct";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
@@ -7,11 +6,19 @@ export async function getProductsByCategory(
   categoryName: string
 ): Promise<IProduct[]> {
   try {
-    const response = await axios.get(`${apiURL}/products/categories`, {
-      params: { category: categoryName }, // Usar parámetros de consulta
+    const res = await fetch(`${apiURL}/products/categories`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ categories: [categoryName] }),
     });
 
-    const products: IProduct[] = response.data;
+    if (!res.ok) {
+      throw new Error(`Failed to fetch products: ${res.status}`);
+    }
+
+    const products: IProduct[] = await res.json();
     console.log(products);
     return products;
   } catch (error: any) {

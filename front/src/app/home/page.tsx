@@ -3,19 +3,31 @@
 import { useEffect, useState } from "react";
 import Carrusel from "../../components/carrusel/Carrusel";
 import GridProducts from "../../components/gridProducts/GridProducts";
+import { getProducts } from "@/helpers/products.helper";
+import { IProduct } from "@/interfaces/IProduct";
 import { getProductsByCategory } from "@/helpers/categories.helper";
 
 const Home = () => {
-  const [promocionesProducts, setPromocionesProducts] = useState([]);
-  const [menuHamburguesas, setMenuHamburguesas] = useState([]);
+  const [promocionesProducts, setPromocionesProducts] = useState<IProduct[]>(
+    []
+  );
+  const [menuHamburguesas, setMenuHamburguesas] = useState<IProduct[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const promociones = await getProductsByCategory("Promociones");
-        const hamburguesas = await getProductsByCategory("Hamburguesas");
+        const products = await getProducts();
 
+        // Filtrar productos promocionales
+        console.log("Todos los productos:", products);
+        const promociones = products.filter(
+          (product) => product.discount && parseFloat(product.discount) > 0
+        );
+        console.log("Productos con descuento:", promociones);
         setPromocionesProducts(promociones);
+
+        const hamburguesas = await getProductsByCategory("Hamburguesas");
+        console.log("Productos de hamburguesas:", hamburguesas);
         setMenuHamburguesas(hamburguesas);
       } catch (error) {
         console.error("Error fetching products:", error);
