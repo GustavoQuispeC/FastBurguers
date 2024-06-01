@@ -20,7 +20,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
     fetchProduct();
   }, [params.productId]);
   const calculateDiscountedPrice = (price: number, discount: number) => {
-    return (price - (price * discount) / 100).toFixed(2);
+    return (price - price * discount).toFixed(2);
   };
 
   const getPrecioConDescuento = (): string | null => {

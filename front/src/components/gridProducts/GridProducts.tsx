@@ -71,7 +71,7 @@ const GridProducts: React.FC<GridProductsProps> = ({ products }) => {
                 <img
                   src={product.imgUrl}
                   alt={product.name}
-                  className="w-full h-72 object-cover hover:scale-x-105 transition-transform duration-200"
+                  className="w-72 h-72 object-cover hover:scale-x-105 transition-transform duration-200"
                 />
               </Link>
               <div className="p-4 text-center">
