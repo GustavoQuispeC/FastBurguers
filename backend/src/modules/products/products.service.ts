@@ -14,7 +14,18 @@ export class ProductsService {
         private readonly fileUploadRepository: FileUploadRepository
     ){}
 
-    async getAll(page:string, limit:string){
+
+    async getAll(){
+        const allProducts = await this.productsRepository.find({
+            relations:{
+                category:true
+            }
+        })
+
+        return allProducts;
+    }
+
+    async getAllPage(page:string, limit:string){
         try {
             const npage = Number(page)  
             const nlimit = Number(limit)

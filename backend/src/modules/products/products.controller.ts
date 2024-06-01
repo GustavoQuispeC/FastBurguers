@@ -17,22 +17,27 @@ export class ProductsController {
     ){}
 
     @Get()
+    getAllProducts(){
+        return this.productService.getAll()
+    }
+
+    @Get('/page')
     getProducts(@Query('page') page:string, @Query('limit') limit:string){
         if(page && limit){
-            return this.productService.getAll(page,limit)
+            return this.productService.getAllPage(page,limit)
         }
-        return this.productService.getAll('1','10')
+        return this.productService.getAllPage('1','10')
+    }
+    
+    @Get(':id')
+    getProduct(@Param('id',ParseUUIDPipe) id:string){
+        return this.productService.getById(id)
     }
 
     @Post('/categories')
     getProductByCategory(@Body() categories: GetByCategoriesDto){
         const {categories: arrayCategories} = categories
         return this.productService.getProductByCategory(arrayCategories)
-    }
-
-    @Get(':id')
-    getProduct(@Param('id',ParseUUIDPipe) id:string){
-        return this.productService.getById(id)
     }
 
     @ApiBearerAuth()
@@ -67,6 +72,8 @@ export class ProductsController {
     ){
         return this.productService.createProduct(product, file)
     }
+
+    
 
     @ApiBearerAuth()
     @Put(':id')
