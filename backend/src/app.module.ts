@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -15,6 +15,7 @@ import { Products } from './entities/products.entity';
 import { Categories } from './entities/categories.entity';
 import { Users } from './entities/users.entity';
 import { OrdersModule } from './modules/orders/orders.module';
+import { MorganMiddleware } from './middlewares/morgan.middleware';
 
 @Module({
   imports: [
@@ -43,4 +44,8 @@ import { OrdersModule } from './modules/orders/orders.module';
   controllers: [AppController],
   providers: [AppService, PreloadService],
 })
-export class AppModule {}
+export class AppModule implements NestModule{
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(MorganMiddleware).forRoutes('*');
+  }
+}
