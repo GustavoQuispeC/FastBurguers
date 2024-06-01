@@ -11,13 +11,13 @@ import {
 import { MdHelp } from "react-icons/md";
 import { FaHome, FaCartPlus } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Nota: el correcto es 'next/router', no 'next/navigation'
-import productosPreload from "@/helpers/productos";
 import { IProduct } from "@/interfaces/IProduct";
 import Link from "next/link";
 import { Avatar, Dropdown } from "flowbite-react";
 import { DarkThemeToggle } from "flowbite-react";
+import { getProducts } from "@/helpers/products.helper";
 
 const Navbar = () => {
   const router = useRouter();
@@ -25,24 +25,39 @@ const Navbar = () => {
 
   const [nav, setNav] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [allProducts, setAllProducts] = useState<IProduct[]>([]);
   const [searchResults, setSearchResults] = useState<IProduct[]>([]);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const products = await getProducts();
+        setAllProducts(products);
+        setSearchResults(products);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    }
+
+    fetchProducts();
+  }, []);
 
   const handleSearch = (event: { target: { value: string } }) => {
     const value = event.target.value.toLowerCase();
     setSearchTerm(value);
     if (value.length > 0) {
-      const results = productosPreload.filter((product) =>
+      const results = allProducts.filter((product) =>
         product.name.toLowerCase().includes(value)
       );
       setSearchResults(results);
     } else {
-      setSearchResults([]);
+      setSearchResults(allProducts);
     }
   };
 
   const handleProductClick = () => {
     setSearchTerm("");
-    setSearchResults([]);
+    setSearchResults(allProducts);
   };
 
   return (
@@ -76,7 +91,7 @@ const Navbar = () => {
           />
         </div>
 
-        {searchResults.length > 0 && (
+        {searchResults.length > 0 && searchTerm && (
           <div className="absolute top-16 left-0 right-0 z-50 bg-white shadow-md">
             {searchResults.map((product) => (
               <Link

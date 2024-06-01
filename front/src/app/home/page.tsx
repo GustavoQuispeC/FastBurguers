@@ -19,13 +19,13 @@ const Home = () => {
         const products = await getProducts();
 
         // Filtrar productos promocionales
-        console.log("Todos los productos:", products);
+
         const promociones = products.filter((product) => product.discount > 0);
-        console.log("Productos con descuento:", promociones);
+
         setPromocionesProducts(promociones);
 
         const hamburguesas = await getProductsByCategory("Hamburguesas");
-        console.log("Productos de hamburguesas:", hamburguesas);
+
         setMenuHamburguesas(hamburguesas);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -39,12 +39,10 @@ const Home = () => {
     <div className="dark:bg-gray-800 my-10">
       <Carrusel />
 
-      <h1 className="font-bold mt-10 ml-5">
-        PROMOCIONES DE HAMBURGUESAS ONLINE
-      </h1>
+      <h1 className="font-bold mt-10 ml-5 text-2xl">NUESTRAS PROMOCIONES</h1>
       <GridProducts products={promocionesProducts} />
 
-      <h1 className="font-bold mt-10 ml-5">MENU DE HAMBURGUESAS</h1>
+      <h1 className="font-bold mt-10 ml-5 text-2xl">MENU DE HAMBURGUESAS</h1>
       <GridProducts products={menuHamburguesas} />
     </div>
   );
