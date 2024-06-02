@@ -1,11 +1,18 @@
 "use client";
-
+import Swal from "sweetalert2";
 import { IProduct } from "@/interfaces/IProduct";
 import { useState, useEffect } from "react";
 import { getProductsById } from "@/helpers/products.helper";
+import { useRouter } from "next/navigation";
+import { FaCartPlus } from "react-icons/fa";
+import { LuSandwich } from "react-icons/lu";
+import Link from "next/link";
 
 const DetalleProduct = ({ params }: { params: { productId: number } }) => {
+  const router = useRouter();
   const [producto, setProducto] = useState<IProduct>();
+  const [tamaño, setTamaño] = useState("Mediana");
+  const [bebida, setBebida] = useState("Coca Cola");
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -34,8 +41,45 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
     return null;
   };
 
+  //! seteamos el tamaño del producto
+  const handleSizeChange = (e: any) => {
+    setTamaño(e.target.value);
+  };
+  //! seteamos la bebida
+  const handleDrinkChange = (e: any) => {
+    setBebida(e.target.value);
+  };
+  const handleBuyClickAgregar = () => {
+    const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const existingProduct = currentCart.find(
+      (item: any) => item.id === params.productId
+    );
+
+    if (existingProduct) {
+      Swal.fire({
+        title: "¡Producto ya en el carrito!",
+        text: "¿Seleccione?",
+        icon: "info",
+        showCancelButton: true,
+        confirmButtonText: "Ir al carrito",
+        cancelButtonText: "Seguir comprando",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Redireccionar al usuario al carrito
+          router.push("/cart");
+        }
+      });
+    } else {
+      // Agregar el producto al carrito si no existe
+      currentCart.push({ ...producto, size: tamaño, drink: bebida });
+      localStorage.setItem("cart", JSON.stringify(currentCart));
+      router.push("/home");
+      console.log(producto);
+    }
+  };
+
   return (
-    <div className="font-sans my-10 h-screen">
+    <div className="font-sans my-10 h-screen dark:bg-gray-700">
       <div className="p-4 max-w-6xl max-md:max-w-xl mx-auto">
         <div className="grid items-start grid-cols-1 md:grid-cols-2 gap-6">
           <div className="w-full h-5/6 lg:sticky top-0 flex justify-center items-center  ">
@@ -72,87 +116,147 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
                 ELIGE EL TAMAÑO
               </h3>
               <div className="flex flex-wrap gap-4 mt-4">
-                <button
-                  type="button"
-                  className="w-16 h-11 border-2 hover:border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 hover:bg-orange-500 "
-                >
-                  Clásica
-                </button>
-                <button
-                  type="button"
-                  className="w-16 h-11 border-2 hover:border-gray-800 border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 hover:bg-orange-500"
-                >
-                  Mediana
-                </button>
-                <button
-                  type="button"
-                  className="w-16 h-11 border-2 hover:border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 hover:bg-orange-500"
-                >
-                  Grande
-                </button>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="size"
+                    value="Clásica"
+                    className="hidden"
+                    onChange={handleSizeChange}
+                    checked={tamaño === "Clásica"}
+                  />
+                  <div
+                    className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${
+                      tamaño === "Clásica"
+                        ? "bg-orange-400 border-gray-800"
+                        : "hover:bg-orange-500 hover:text-white"
+                    }`}
+                  >
+                    Clásica
+                  </div>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="size"
+                    value="Mediana"
+                    className="hidden"
+                    onChange={handleSizeChange}
+                    checked={tamaño === "Mediana"}
+                  />
+                  <div
+                    className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${
+                      tamaño === "Mediana"
+                        ? "bg-orange-400 border-gray-800"
+                        : "hover:bg-orange-500 hover:text-white"
+                    }`}
+                  >
+                    Mediana
+                  </div>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="size"
+                    value="Grande"
+                    className="hidden"
+                    onChange={handleSizeChange}
+                    checked={tamaño === "Grande"}
+                  />
+                  <div
+                    className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${
+                      tamaño === "Grande"
+                        ? "bg-orange-400 border-gray-800"
+                        : "hover:bg-orange-500 hover:text-white"
+                    }`}
+                  >
+                    Grande
+                  </div>
+                </label>
               </div>
             </div>
 
             <div className="mt-10">
-              <h3 className="text-lg font-bold text-gray-800">
-                DESEA AÑADIR BEBIDA
-              </h3>
+              <h3 className="text-lg font-bold text-gray-900">AÑADIR BEBIDA</h3>
               <div className="flex flex-wrap gap-4 mt-4">
-                <button
-                  type="button"
-                  className="w-20 h-11 border-2 hover:border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 hover:bg-orange-500"
-                >
-                  Coca Cola
-                </button>
-                <button
-                  type="button"
-                  className="w-20 h-11 border-2 hover:border-gray-800 border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 hover:bg-orange-500"
-                >
-                  Inka Kola
-                </button>
-                <button
-                  type="button"
-                  className="w-20 h-11 border-2 hover:border-gray-800 font-semibold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 hover:bg-orange-500"
-                >
-                  Pepsi
-                </button>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="drink"
+                    value="Coca Cola"
+                    className="hidden"
+                    onChange={handleDrinkChange}
+                    checked={bebida === "Coca Cola"}
+                  />
+                  <div
+                    className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${
+                      bebida === "Coca Cola"
+                        ? "bg-orange-400 border-gray-800"
+                        : "hover:bg-orange-500 hover:text-white"
+                    }`}
+                  >
+                    Coca Cola
+                  </div>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="drink"
+                    value="Inka Kola"
+                    className="hidden"
+                    onChange={handleDrinkChange}
+                    checked={bebida === "Inka Kola"}
+                  />
+                  <div
+                    className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${
+                      bebida === "Inka Kola"
+                        ? "bg-orange-400 border-gray-800"
+                        : "hover:bg-orange-500 hover:text-white"
+                    }`}
+                  >
+                    Inka Kola
+                  </div>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="radio"
+                    name="drink"
+                    value="Pepsi"
+                    className="hidden"
+                    onChange={handleDrinkChange}
+                    checked={bebida === "Pepsi"}
+                  />
+                  <div
+                    className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${
+                      bebida === "Pepsi"
+                        ? "bg-orange-400 border-gray-800"
+                        : "hover:bg-orange-500 hover:text-white"
+                    }`}
+                  >
+                    Pepsi
+                  </div>
+                </label>
               </div>
             </div>
 
             <div className="mt-10 flex flex-wrap gap-4">
               <button
                 type="button"
-                className="flex items-center justify-center px-8 py-4 bg-gray-800 hover:bg-gray-900 text-orange-400 border border-gray-800 text-base rounded"
+                onClick={handleBuyClickAgregar}
+                className="flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-700 text-orange-500 border border-gray-800 text-base rounded"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 cursor-pointer fill-current inline mr-3"
-                  viewBox="0 0 512 512"
-                >
-                  <path
-                    d="M164.96 300.004h.024c.02 0 .04-.004.059-.004H437a15.003 15.003 0 0 0 14.422-10.879l60-210a15.003 15.003 0 0 0-2.445-13.152A15.006 15.006 0 0 0 497 60H130.367l-10.722-48.254A15.003 15.003 0 0 0 105 0H15C6.715 0 0 6.715 0 15s6.715 15 15 15h77.969c1.898 8.55 51.312 230.918 54.156 243.71C131.184 280.64 120 296.536 120 315c0 24.812 20.188 45 45 45h272c8.285 0 15-6.715 15-15s-6.715-15-15-15H165c-8.27 0-15-6.73-15-15 0-8.258 6.707-14.977 14.96-14.996zM477.114 90l-51.43 180H177.032l-40-180zM150 405c0 24.813 20.188 45 45 45s45-20.188 45-45-20.188-45-45-45-45 20.188-45 45zm45-15c8.27 0 15 6.73 15 15s-6.73 15-15 15-15-6.73-15-15 6.73-15 15-15zm167 15c0 24.813 20.188 45 45 45s45-20.188 45-45-20.188-45-45-45-45 20.188-45 45zm45-15c8.27 0 15 6.73 15 15s-6.73 15-15 15-15-6.73-15-15 6.73-15 15-15zm0 0"
-                    data-original="#000000"
-                  ></path>
-                </svg>
-                Agregar
+                <FaCartPlus size={20} />
+                &nbsp; Agregar
               </button>
 
-              <button
+              <Link
+                href="/home"
                 type="button"
-                className="flex items-center justify-center px-8 py-4 bg-transparent hover:bg-gray-50 text-gray-800 border border-gray-800 text-base rounded"
+                className="flex items-center justify-center px-8 py-4 bg-transparent hover:bg-orange-500 hover:text-white text-gray-800 border border-gray-800 text-base rounded"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="w-5 h-5 cursor-pointer fill-current inline mr-3 "
-                  viewBox="0 0 64 64"
-                >
-                  <path
-                    d="M45.5 4A18.53 18.53 0 0 0 32 9.86 18.5 18.5 0 0 0 0 22.5C0 40.92 29.71 59 31 59.71a2 2 0 0 0 2.06 0C34.29 59 64 40.92 64 22.5A18.52 18.52 0 0 0 45.5 4ZM32 55.64C26.83 52.34 4 36.92 4 22.5a14.5 14.5 0 0 1 26.36-8.33 2 2 0 0 0 3.27 0A14.5 14.5 0 0 1 60 22.5c0 14.41-22.83 29.83-28 33.14Z"
-                    data-original="#000000"
-                  ></path>
-                </svg>
-                Favorito
-              </button>
+                <LuSandwich size={20} />
+                &nbsp; Ir a la tienda
+              </Link>
             </div>
 
             <ul className="grid grid-cols-2 mt-10">

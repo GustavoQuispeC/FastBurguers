@@ -9,3 +9,7 @@ export interface IProduct {
   discount: number;
   category: string;
 }
+
+export interface IProductCart extends IProduct {
+  quantity: number
+}
