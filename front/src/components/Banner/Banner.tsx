@@ -9,42 +9,42 @@ const Banner = () => {
     <div className="min-h-[550px] flex justify-center items-center py-12 sm:py-0">
       <div className="container">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-          {/* image section */}
+          {/* sección de imagen */}
           <div data-aos="zoom-in">
             <img
               src="/spe.jpg"
-              alt="Delicious Cheeseburger"
+              alt="Deliciosa Hamburguesa con Queso"
               className="max-w-[400px] h-[350px] w-full mx-auto drop-shadow-[-10px_10px_12px_rgba(0,0,0,1)] object-cover"
             />
           </div>
 
-          {/* text details section */}
+          {/* sección de detalles de texto */}
           <div className="flex flex-col justify-center gap-6 sm:pt-0">
             <h1 data-aos="fade-up" className="text-3xl sm:text-4xl font-bold">
-              Enjoy Our Special Burger Deals!
+              ¡Disfruta de Nuestras Ofertas Especiales de Hamburguesas!
             </h1>
             <p
               data-aos="fade-up"
               className="text-sm text-gray-500 tracking-wide leading-5"
             >
-              Dive into the world of flavors with our top-rated burgers. Fresh ingredients and unforgettable taste - all at a great price.
+              Sumérgete en el mundo de sabores con nuestras hamburguesas mejor valoradas. Ingredientes frescos y un sabor inolvidable - todo a un excelente precio.
             </p>
             <div className="flex flex-col gap-4">
               <div data-aos="fade-up" className="flex items-center gap-4">
                 <GrSecure className="text-4xl h-12 w-12 shadow-sm p-4 rounded-full bg-violet-100 dark:bg-violet-400" />
-                <p>Guaranteed Quality</p>
+                <p>Calidad Garantizada</p>
               </div>
               <div data-aos="fade-up" className="flex items-center gap-4">
                 <IoFastFood className="text-4xl h-12 w-12 shadow-sm p-4 rounded-full bg-orange-100 dark:bg-orange-400" />
-                <p>Fast Service</p>
+                <p>Servicio Rápido</p>
               </div>
               <div data-aos="fade-up" className="flex items-center gap-4">
                 <GiFoodTruck className="text-4xl h-12 w-12 shadow-sm p-4 rounded-full bg-green-100 dark:bg-green-400" />
-                <p>Convenient Delivery</p>
+                <p>Entrega Conveniente</p>
               </div>
               <div data-aos="fade-up" className="flex items-center gap-4">
                 <GiFoodTruck className="text-4xl h-12 w-12 shadow-sm p-4 rounded-full bg-yellow-100 dark:bg-yellow-400" />
-                <p>Exclusive Offers</p>
+                <p>Ofertas Exclusivas</p>
               </div>
             </div>
           </div>

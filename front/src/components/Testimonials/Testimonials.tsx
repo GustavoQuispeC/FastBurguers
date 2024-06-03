@@ -7,26 +7,26 @@ const testimonialData = [
   {
     id: 1,
     name: 'Carlos Herrera',
-    text: 'The best burgers I have tasted in a long time. Top-notch ingredients and unmatched flavor.',
-    img: 'https://picsum.photos/101/101', // Replace with appropriate images
+    text: 'Las mejores hamburguesas que he probado en mucho tiempo. Ingredientes de primera y un sabor inigualable.',
+    img: 'https://picsum.photos/101/101',
   },
   {
     id: 2,
     name: 'Jessica Pearson',
-    text: 'Absolutely phenomenal! The gourmet experience is evident in each bite. Highly recommend the truffle burger.',
-    img: 'https://picsum.photos/102/102', // Replace with appropriate images
+    text: '¡Simplemente fenomenal! La experiencia gourmet es evidente en cada bocado. Recomiendo altamente la hamburguesa de trufa.',
+    img: 'https://picsum.photos/102/102', 
   },
   {
     id: 3,
     name: 'Mark Johnson',
-    text: 'Excellent service and the quality of the burgers is superb. The Wagyu beef burger is a must-try!',
-    img: 'https://picsum.photos/103/103', // Replace with appropriate images
+    text: 'Servicio excelente y la calidad de las hamburguesas es superba. ¡La hamburguesa de carne Wagyu es imprescindible!',
+    img: 'https://picsum.photos/103/103', 
   },
   {
     id: 4,
     name: 'Samantha Reed',
-    text: 'I love the unique flavors and the fresh, local ingredients they use. The ambiance is just perfect for a gourmet burger place.',
-    img: 'https://picsum.photos/104/104', // Replace with appropriate images
+    text: 'Me encantan los sabores únicos y los ingredientes frescos y locales que utilizan. El ambiente es simplemente perfecto para un lugar de hamburguesas gourmet.',
+    img: 'https://picsum.photos/104/104', 
   },
 ];
 
@@ -71,28 +71,27 @@ const Testimonials = () => {
 
   return (
     <div className="py-10 mb-10">
-      {/* <div className="container"> */}
-        {/* Header section */}
+        {/* Sección de encabezado */}
         <div className="text-center mb-10 max-w-lg mx-auto">
           <p className="text-sm text-primary font-semibold">
-            What our customers are saying
+            Lo que nuestros clientes están diciendo
           </p>
           <h1 className="text-3xl font-bold text-gray-800">
-            Testimonials
+            Testimonios
           </h1>
           <p className="text-xs text-gray-500">
-            Discover why our guests love our gourmet burgers!
+            ¡Descubre por qué a nuestros invitados les encantan nuestras hamburguesas gourmet!
           </p>
         </div>
 
-        {/* Testimonial cards */}
+        {/* Tarjetas de testimonios */}
         <div>
           <Slider {...settings}>
             {testimonialData.map((data) => (
               <div key={data.id} className="my-6">
                 <div className="flex flex-col gap-4 shadow-lg py-8 px-6 mx-4 rounded-xl bg-white relative">
                   <div className="mb-4">
-                    <img src={data.img} alt="" className="rounded-full w-20 h-20 border-2 border-gray-300" />
+                    <img src={data.img} alt={data.name} className="rounded-full w-20 h-20 border-2 border-gray-300" />
                   </div>
                   <div className="flex flex-col items-center gap-4">
                     <div className="space-y-3">
@@ -110,8 +109,7 @@ const Testimonials = () => {
             ))}
           </Slider>
         </div>
-      </div>
-    
+    </div>
   );
 };
 

@@ -27,6 +27,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/MTailwind.tsx"
-  ],
+, "next-i18next.config.js", "next-i18next.config.js", "public/static/locales/es/common.js"  ],
   "exclude": ["node_modules"]
 }
