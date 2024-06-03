@@ -19,6 +19,7 @@ export async function getProductsByCategory(
     }
 
     const products: IProduct[] = await res.json();
+    console.log(products);
 
     return products;
   } catch (error: any) {

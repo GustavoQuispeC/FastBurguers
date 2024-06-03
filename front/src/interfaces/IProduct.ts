@@ -11,5 +11,6 @@ export interface IProduct {
 }
 
 export interface IProductCart extends IProduct {
-  quantity: number
+  quantity: number;
+  drink?: string;
 }
