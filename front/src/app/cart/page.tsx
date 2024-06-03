@@ -1,28 +1,25 @@
 "use client";
+
 import { IProductCart } from "@/interfaces/IProduct";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ImTelegram } from "react-icons/im";
 import Swal from "sweetalert2";
 
 const Cart = () => {
   const router = useRouter();
   const [cart, setCart] = useState<IProductCart[]>([]);
 
-  // Obtener el carrito del localStorage
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
       const initializedCartItems = cartItems.map((item: IProductCart) => ({
         ...item,
-        quantity: item.quantity || 1, // Inicializa quantity si no está presente
+        quantity: item.quantity || 1,
       }));
-      console.log(initializedCartItems);
       setCart(initializedCartItems);
     }
   }, []);
 
-  // Aumentar cantidad
   const handleIncrease = (id: number) => {
     const newCart: IProductCart[] = cart.map((item: IProductCart) => {
       if (item.id === id) {
@@ -34,35 +31,37 @@ const Cart = () => {
     localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
-  //! Disminuir cantidad
   const handleDecrease = (id: number) => {
     const newCart: IProductCart[] = cart.map((item: IProductCart) => {
       if (item.id === id) {
-        return { ...item, quantity: Math.max(item.quantity - 1, 1) }; // Evitar cantidad menor que 1
+        return { ...item, quantity: Math.max(item.quantity - 1, 1) };
       }
       return item;
     });
     setCart(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
   };
-//! Calcular el subtotal, descuento y total
+
   const calcularCompra = () => {
     let subtotal = 0;
+    let descuento = 0;
+    let totalWithDrink = 0; // Total incluyendo el precio de la bebida
+
     cart.forEach((item: any) => {
       subtotal += item.quantity * item.price;
+      totalWithDrink +=
+        item.quantity * (item.price + parseFloat(item.drinkPrice));
+      if (item.discount) {
+        descuento = Math.max(descuento, item.discount);
+      }
     });
-    let descuento = 0
-    cart.forEach((item: any) => {
-      descuento += item.discount * item.quantity;
-    });
-    
-    
-    const total = subtotal - descuento; //+ envio;
+
+    const total = totalWithDrink - totalWithDrink * descuento; // Aplicar descuento al total con la bebida
     return { subtotal, descuento, total };
   };
 
   const { subtotal, descuento, total } = calcularCompra();
-  //! Eliminar producto del carrito
+
   const removeFromCart = (index: any) => {
     Swal.fire({
       title: "¿Estás seguro?",
@@ -94,7 +93,7 @@ const Cart = () => {
           <hr className="border-white my-4" />
 
           <div className="space-y-4">
-            {cart.map((item: any) => (
+            {cart.map((item: any, index: number) => (
               <div
                 key={item.id}
                 className="grid sm:grid-cols-3 items-center gap-4"
@@ -108,9 +107,12 @@ const Cart = () => {
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-gray-800">
-                      {item.name} + {item.drink}
+                      {item.name} + {item.drink} (${item.drinkPrice})
                     </h3>
-                    <h6 onClick={() => removeFromCart(item)} className="text-xs text-red-500 cursor-pointer mt-0.5">
+                    <h6
+                      onClick={() => removeFromCart(index)}
+                      className="text-xs text-red-500 cursor-pointer mt-0.5"
+                    >
                       Eliminar
                     </h6>
 
@@ -134,7 +136,24 @@ const Cart = () => {
                   </div>
                 </div>
                 <div className="ml-auto">
-                  <h4 className="text-lg font-bold text-gray-800">${item.price * item.quantity}</h4>
+                  {item.discount && item.discount > 0 ? (
+                    <div>
+                      <h4 className="text-lg font-bold text-gray-800">
+                        ${total.toFixed(2)}
+                      </h4>
+                      <h4 className="text-gray-500 line-through">
+                        $
+                        {(
+                          item.price +
+                          parseFloat(item.drinkPrice) * item.quantity
+                        ).toFixed(2)}
+                      </h4>
+                    </div>
+                  ) : (
+                    <h4 className="text-lg font-bold text-gray-800">
+                      ${total.toFixed(2)}
+                    </h4>
+                  )}
                 </div>
               </div>
             ))}
@@ -142,20 +161,33 @@ const Cart = () => {
         </div>
 
         <div className="bg-gray-100 rounded-md p-4 md:sticky top-0">
-          <h2 className="text-base font-bold text-gray-800">Resúmen de compra</h2>
+          <h2 className="text-base font-bold text-gray-800">
+            Resúmen de compra
+          </h2>
 
           <ul className="text-gray-800 mt-8 space-y-4">
             <li className="flex flex-wrap gap-4 text-sm">
-              Subtotal <span className="ml-auto font-bold">${subtotal}</span>
+              Subtotal{" "}
+              <span className="ml-auto font-bold">${subtotal.toFixed(2)}</span>
             </li>
+
+            {cart.map((item: any) => (
+              <li key={item.id} className="flex flex-wrap gap-4 text-sm">
+                {item.drink}
+                <span className="ml-auto font-bold">${item.drinkPrice}</span>
+              </li>
+            ))}
             <li className="flex flex-wrap gap-4 text-sm">
-              Descuento <span className="ml-auto font-bold">${descuento}</span>
+              Descuento{" "}
+              <span className="ml-auto font-bold">
+                -{(descuento * 100).toFixed(0)}%
+              </span>
             </li>
             <li className="flex flex-wrap gap-4 text-sm">
               Envío <span className="ml-auto font-bold">$0.00</span>
             </li>
             <li className="flex flex-wrap gap-4 text-sm font-bold">
-              Total <span className="ml-auto">${total}</span>
+              Total <span className="ml-auto">${total.toFixed(2)}</span>
             </li>
           </ul>
 

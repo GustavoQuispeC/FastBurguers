@@ -2,7 +2,8 @@
 import Swal from "sweetalert2";
 import { IProduct } from "@/interfaces/IProduct";
 import { useState, useEffect } from "react";
-import { getProductsById } from "@/helpers/products.helper";
+import { getProductsById } from "@/helpers/products.helper"; // Importar la función para obtener productos por categoría
+import { getProductsByCategory } from "@/helpers/categories.helper";
 import { useRouter } from "next/navigation";
 import { FaCartPlus } from "react-icons/fa";
 import { LuSandwich } from "react-icons/lu";
@@ -12,7 +13,8 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
   const router = useRouter();
   const [producto, setProducto] = useState<IProduct>();
   const [tamaño, setTamaño] = useState("Mediana");
-  const [bebida, setBebida] = useState("Coca Cola");
+  const [bebida, setBebida] = useState("Coca-Cola");
+  const [precioBebida, setPrecioBebida] = useState<number>(0); // Estado para almacenar el precio de la bebida
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -26,6 +28,33 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
 
     fetchProduct();
   }, [params.productId]);
+
+  useEffect(() => {
+    const fetchBebidaPrice = async () => {
+      try {
+        const bebidas = await getProductsByCategory("Bebidas");
+        const bebidaSeleccionada = bebidas.find(
+          (b: IProduct) => b.name === bebida
+        );
+        if (bebidaSeleccionada) {
+          setPrecioBebida(bebidaSeleccionada.price);
+        }
+      } catch (error) {
+        console.error("Error fetching bebidas:", error);
+      }
+    };
+
+    fetchBebidaPrice();
+  }, [bebida]);
+
+  const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTamaño(e.target.value);
+  };
+
+  const handleDrinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBebida(e.target.value);
+  };
+
   const calculateDiscountedPrice = (price: number, discount: number) => {
     return (price - price * discount).toFixed(2);
   };
@@ -36,18 +65,10 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
         producto.price,
         producto.discount
       );
+
       return precioDescuento;
     }
     return null;
-  };
-
-  //! seteamos el tamaño del producto
-  const handleSizeChange = (e: any) => {
-    setTamaño(e.target.value);
-  };
-  //! seteamos la bebida
-  const handleDrinkChange = (e: any) => {
-    setBebida(e.target.value);
   };
   const handleBuyClickAgregar = () => {
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -65,16 +86,18 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
         cancelButtonText: "Seguir comprando",
       }).then((result) => {
         if (result.isConfirmed) {
-          // Redireccionar al usuario al carrito
           router.push("/cart");
         }
       });
     } else {
-      // Agregar el producto al carrito si no existe
-      currentCart.push({ ...producto, size: tamaño, drink: bebida });
+      currentCart.push({
+        ...producto,
+        size: tamaño,
+        drink: bebida,
+        drinkPrice: precioBebida,
+      }); // Guardar el precio de la bebida en el localStorage
       localStorage.setItem("cart", JSON.stringify(currentCart));
       router.push("/home");
-      console.log(producto);
     }
   };
 
@@ -183,14 +206,14 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
                   <input
                     type="radio"
                     name="drink"
-                    value="Coca Cola"
+                    value="Coca-Cola"
                     className="hidden"
                     onChange={handleDrinkChange}
-                    checked={bebida === "Coca Cola"}
+                    checked={bebida === "Coca-Cola"}
                   />
                   <div
                     className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${
-                      bebida === "Coca Cola"
+                      bebida === "Coca-Cola"
                         ? "bg-orange-400 border-gray-800"
                         : "hover:bg-orange-500 hover:text-white"
                     }`}
@@ -202,14 +225,14 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
                   <input
                     type="radio"
                     name="drink"
-                    value="Inka Kola"
+                    value="Inka Cola"
                     className="hidden"
                     onChange={handleDrinkChange}
-                    checked={bebida === "Inka Kola"}
+                    checked={bebida === "Inka Cola"}
                   />
                   <div
                     className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${
-                      bebida === "Inka Kola"
+                      bebida === "Inka Cola"
                         ? "bg-orange-400 border-gray-800"
                         : "hover:bg-orange-500 hover:text-white"
                     }`}
