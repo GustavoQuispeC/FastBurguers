@@ -1,4 +1,3 @@
-
 export interface LoginProps {
   email: string;
   password: string;
@@ -14,6 +13,7 @@ export interface RegisterProps {
   address: string;
   phone: string;
   password: string;
+  confirmPassword: string;
   country: string;
   city: string;
 }
@@ -24,6 +24,7 @@ export interface RegisterErrorProps {
   address: string;
   phone: string;
   password: string;
+  confirmPassword: string;
   country: string;
   city: string;
 }
@@ -34,7 +35,7 @@ export interface userSession {
     id: number;
     name: string;
     email: string;
-    address: string;                                                                                                                                      
+    address: string;
     phone: string;
     role: string;
     credential: {
@@ -43,5 +44,4 @@ export interface userSession {
     };
     orders: any[]; // Cambia el tipo según la estructura real de "orders"
   };
- 
 }
