@@ -25,3 +25,16 @@ export async function getProductsByCategory(
     throw new Error(`Error fetching products: ${error.message}`);
   }
 }
+
+export async function getCategories(){
+  try {
+    const res = await fetch(`${apiURL}/categories`);
+    const categories = await res.json();
+    return categories;
+    console.log(categories)
+    
+  } catch (error: any) {
+    throw new Error(`Error fetching categories: ${error.message}`);
+    
+  }
+}
