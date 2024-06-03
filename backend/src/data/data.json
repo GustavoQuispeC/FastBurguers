@@ -205,6 +205,276 @@
     "imgUrl": "https://kyotorolls.com/cdn/shop/products/IncaKola.png?v=1674195785",
     "discount": 0.00,
     "category": "Bebidas"
+    },
+    {
+    "name": "Sandwich de Pollo",
+    "description": "Sandwich de pollo con lechuga, tomate y mayonesa.",
+    "price": 5.99,
+    "stock": 20,
+    "imgUrl": "https://www.unileverfoodsolutions.com.mx/dam/global-ufs/mcos/NOLA/calcmenu/recipes/MX-recipes/In-Development/FULL-SAND.png",
+    "discount": 0.10,
+    "category": "Sandwiches"
+    },
+    {
+    "name": "Sandwich de Jamón y Queso",
+    "description": "Sandwich de jamón y queso con pan integral.",
+    "price": 4.50,
+    "stock": 15,
+    "imgUrl": "https://hips.hearstapps.com/hmg-prod/images/panini-sandwiches-royalty-free-image-1588773746.jpg",
+    "discount": 0.05,
+    "category": "Sandwiches"
+    },
+    {
+    "name": "Sandwich Vegetariano",
+    "description": "Sandwich con verduras frescas y hummus.",
+    "price": 5.50,
+    "stock": 10,
+    "imgUrl": "https://www.comedera.com/wp-content/uploads/2023/02/sandwich-vegetariano-de-aguacate-con-alfalfa.jpg",
+    "discount": 0.00,
+    "category": "Sandwiches"
+    },
+    {
+        "name": "Sandwich de Atún",
+        "description": "Sandwich de atún con mayonesa y pepinillos.",
+        "price": 6.00,
+        "stock": 8,
+        "imgUrl": "https://cloudfront-us-east-1.images.arcpublishing.com/elespectador/TLTMFMBAZVDXVH5A4U3QVPB5BQ.jpg",
+        "discount": 0.15,
+        "category": "Sandwiches"
+    },
+    {
+        "name": "Sandwich de Pavo",
+        "description": "Sandwich de pavo con lechuga y tomate.",
+        "price": 6.50,
+        "stock": 12,
+        "imgUrl": "https://storage.googleapis.com/avena-recipes/agtzfmF2ZW5hLWJvdHIZCxIMSW50ZXJjb21Vc2VyGICAoILvw_0JDA/30-11-2020/1606709202921.jpeg",
+        "discount": 0.10,
+        "category": "Sandwiches"
+    },
+    {
+        "name": "Sandwich de Huevo",
+        "description": "Sandwich de huevo con mayonesa y cebolla.",
+        "price": 4.00,
+        "stock": 18,
+        "imgUrl": "https://images.ecestaticos.com/zN2HJyAWaMou34TOOmGnBmb69lo=/146x11:2019x1411/1200x899/filters:fill(white):format(jpg)/f.elconfidencial.com%2Foriginal%2Ff34%2F76d%2Fd15%2Ff3476dd15664e8e5024a91578e4f461a.jpg",
+        "discount": 0.00,
+        "category": "Sandwiches"
+    },
+    {
+        "name": "Sandwich de Queso",
+        "description": "Sandwich de queso a la parrilla.",
+        "price": 3.99,
+        "stock": 25,
+        "imgUrl": "https://hips.hearstapps.com/hmg-prod/images/airfryergrilledcheese1-1644940121.jpg?crop=1xw:0.7874231032125769xh;center,top&resize=1200:*",
+        "discount": 0.05,
+        "category": "Sandwiches"
+    },
+    {
+        "name": "Sandwich de Tocino",
+        "description": "Sandwich de tocino con lechuga y tomate.",
+        "price": 6.75,
+        "stock": 14,
+        "imgUrl":"https://previews.123rf.com/images/kiimoshi/kiimoshi2306/kiimoshi230600280/206362738-delicioso-s%C3%A1ndwich-con-tocino-y-queso-sobre-fondo-blanco-primer-plano-con-ai-generativo.jpg",
+        "discount": 0.20,
+        "category": "Sandwiches"
+    },
+    {
+        "name": "Sandwich de Pavo y Queso",
+        "description": "Sandwich de pavo y queso con mostaza.",
+        "price": 6.99,
+        "stock": 11,
+        "imgUrl": "https://d36fw6y2wq3bat.cloudfront.net/recipes/sandwich-de-pavo-y-queso-con-mayonesa-especial/900/sandwich-de-pavo-y-queso-con-mayonesa-especial_version_1653048089.jpg",
+        "discount": 0.10,
+        "category": "Sandwiches"
+    },
+    {
+        "name": "Sandwich de Salami",
+        "description": "Sandwich de salami con pepinillos y mayonesa.",
+        "price": 5.25,
+        "stock": 13,
+        "imgUrl": "https://dylzm7u8zqclv.cloudfront.net/2019/08/05/14/45/13/9f57ddaf-e4fc-4116-87e9-226a0dd9e045/simple-salami-sandwich.jpg",
+        "discount": 0.00,
+        "category": "Sandwiches"
+    },
+    {
+        "name": "Papas Fritas",
+        "description": "Porción de papas fritas crujientes.",
+        "price": 2.99,
+        "stock": 30,
+        "imgUrl": "https://images-gmi-pmc.edge-generalmills.com/476c10e1-c851-4539-8e3b-4b49323927c5.jpg",
+        "discount": 0.00,
+        "category": "Complementos"
+    },
+    {
+        "name": "Aros de Cebolla",
+        "description": "Aros de cebolla empanizados y fritos.",
+        "price": 3.50,
+        "stock": 20,
+        "imgUrl": "https://www.pequerecetas.com/wp-content/uploads/2013/05/aros-de-cebolla-receta.jpeg",
+        "discount": 0.10,
+        "category": "Complementos"
+    },
+    {
+        "name": "Nuggets de Pollo",
+        "description": "Nuggets de pollo empanizados.",
+        "price": 4.99,
+        "stock": 25,
+        "imgUrl": "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/9D900DB3-435D-4AE4-9375-B152D2813750/Derivates/199C60FC-C264-43A3-B822-88AA5E50E954.jpg",
+        "discount": 0.15,
+        "category": "Complementos"
+    },
+    {
+        "name": "Mozzarella Sticks",
+        "description": "Palitos de mozzarella fritos.",
+        "price": 5.50,
+        "stock": 15,
+        "imgUrl":"https://www.pamperedchef.com/iceberg/com/recipe/1975272-lg.jpg",
+        "discount": 0.20,
+        "category": "Complementos"
+    },
+    {
+        "name": "Tater Tots",
+        "description": "Bolitas de papa frita.",
+        "price": 3.99,
+        "stock": 18,
+        "imgUrl": "https://static01.nyt.com/images/2017/05/16/dining/16COOKING-TATERTOTS2/16COOKING-TATERTOTS2-superJumbo.jpg",
+        "discount": 0.00,
+        "category": "Complementos"
+    },
+    {
+        "name": "Alitas de Pollo",
+        "description": "Alitas de pollo con salsa BBQ.",
+        "price": 7.99,
+        "stock": 10,
+        "imgUrl": "https://www.hola.com/imagenes/cocina/recetas/20200205159814/alitas-de-pollo-a-la-americana-buffalo-wings/0-778-671/aitas-de-pollo-a-la-americana-o-buffalo-wings-m.jpg",
+        "discount": 0.10,
+        "category": "Complementos"
+    },
+    {
+        "name": "Jalapeño Poppers",
+        "description": "Jalapeños rellenos de queso y fritos.",
+        "price": 4.75,
+        "stock": 12,
+        "imgUrl": "https://cdn2.cocinadelirante.com/sites/default/files/images/2023/02/jalapeno-poppers-rellenos-tocino-queso.jpg",
+        "discount": 0.00,
+        "category": "Complementos"
+    },
+    {
+        "name": "Batatas Fritas",
+        "description": "Porción de batatas fritas.",
+        "price": 3.75,
+        "stock": 20,
+        "imgUrl": "https://cloudfront-us-east-1.images.arcpublishing.com/metroworldnews/ZTKM7V4CK5A6NNXEAKW67QAC54.jpg",
+        "discount": 0.05,
+        "category": "Complementos"
+    },
+    {
+        "name": "Guacamole con Chips",
+        "description": "Guacamole fresco con chips de tortilla.",
+        "price": 6.00,
+        "stock": 15,
+        "imgUrl": "https://foodhub.scene7.com/is/image/woolworthsltdprod/guacamole-with-tortilla-chips:Mobile-1300x1150",
+        "discount": 0.10,
+        "category": "Complementos"
+    },
+    {
+        "name": "Queso Fundido",
+        "description": "Queso fundido con jalapeños.",
+        "price": 5.25,
+        "stock": 10,
+        "imgUrl": "https://www.daringgourmet.com/wp-content/uploads/2023/08/Queso-Fundido-Recipe-5.jpg",
+        "discount": 0.00,
+        "category": "Complementos"
+    },
+    {
+        "name": "Ensalada César",
+        "description": "Ensalada César con pollo a la parrilla.",
+        "price": 7.99,
+        "stock": 10,
+        "imgUrl": "https://www.gourmet.cl/wp-content/uploads/2016/09/Ensalada_C%C3%A9sar-web-553x458.jpg",
+        "discount": 0.00,
+        "category": "Ensaladas"
+    },
+    {
+        "name": "Ensalada Griega",
+        "description": "Ensalada con queso feta, aceitunas y pepino.",
+        "price": 6.99,
+        "stock": 8,
+        "imgUrl": "https://images.getrecipekit.com/20211227205902-ensalada-20griega.jpg?width=650&quality=90&",
+        "discount": 0.10,
+        "category": "Ensaladas"
+    },
+    {
+        "name": "Ensalada de Atún",
+        "description": "Ensalada con atún, lechuga y tomate.",
+        "price": 7.50,
+        "stock": 15,
+        "imgUrl": "https://cdn7.kiwilimon.com/recetaimagen/21544/10988.jpg",
+        "discount": 0.05,
+        "category": "Ensaladas"
+    },
+    {
+        "name": "Ensalada de Frutas",
+        "description": "Ensalada de frutas frescas.",
+        "price": 5.99,
+        "stock": 20,
+        "imgUrl": "https://cdn.cocineroaficionado.com/wp-content/uploads/2021/01/ensladas-de-frutas.jpg",
+        "discount": 0.00,
+        "category": "Ensaladas"
+    },
+    {
+        "name": "Ensalada de Pollo",
+        "description": "Ensalada de pollo con aderezo ranch.",
+        "price": 8.50,
+        "stock": 12,
+        "imgUrl": "https://resizer.glanacion.com/resizer/v2/salpicon-de-vegetales-pollo-palta-y-SAGP4XE7K5FPDGVCLTIAOTGHV4.jpg?auth=2849adc36501dd89504f65a4590320fcf24d6e273d8a909bd32cb59fe2c3104f&width=768&height=512&quality=70&smart=true",
+        "discount": 0.10,
+        "category": "Ensaladas"
+    },
+    {
+        "name": "Ensalada de Espinacas",
+        "description": "Ensalada de espinacas con fresas y nueces.",
+        "price": 6.75,
+        "stock": 18,
+        "imgUrl": "https://img-global.cpcdn.com/recipes/2347c57efef4e155/1200x630cq70/photo.jpg",
+        "discount": 0.00,
+        "category": "Ensaladas"
+    },
+    {
+        "name": "Ensalada de Quinoa",
+        "description": "Ensalada de quinoa con vegetales.",
+        "price": 7.25,
+        "stock": 14,
+        "imgUrl": "https://recetasdecocina.elmundo.es/wp-content/uploads/2021/03/IMG_20200321_150823.jpg",
+        "discount": 0.10,
+        "category": "Ensaladas"
+    },
+    {
+        "name": "Ensalada Caprese",
+        "description": "Ensalada con tomate, mozzarella y albahaca.",
+        "price": 6.50,
+        "stock": 16,
+        "imgUrl": "https://fresasyaceite.es/wp-content/uploads/2022/06/Ensalada-caprese-2-1024x616.jpg",
+        "discount": 0.00,
+        "category": "Ensaladas"
+    },
+    {
+        "name": "Ensalada Cobb",
+        "description": "Ensalada con pollo, tocino y huevo.",
+        "price": 8.75,
+        "stock": 9,
+        "imgUrl": "https://www.lavanguardia.com/files/og_thumbnail/files/fp/uploads/2022/08/30/630e2397794bd.r_d.3207-1925-1960.jpeg",
+        "discount": 0.15,
+        "category": "Ensaladas"
+    },
+    {
+        "name": "Ensalada de Garbanzos",
+        "description": "Ensalada de garbanzos con verduras frescas.",
+        "price": 6.00,
+        "stock": 11,
+        "imgUrl": "https://www.paulinacocina.net/wp-content/uploads/2022/05/ensalada-de-garbanzos-receta.jpg",
+        "discount": 0.00,
+        "category": "Ensaladas"
     }
 
 ]
