@@ -1,23 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 import FiltroProductos from "../../components/filtroProductos/FiltroProductos";
 
 const Product = () => {
   const [selectedCategory, setSelectedCategory] = useState<number>(1);
-  const [minPrice, setMinPrice] = useState<string>("1");
-  const [maxPrice, setMaxPrice] = useState<string>(String(Infinity));
+  const [minPrice, setMinPrice] = useState<number>(1);
+  const [maxPrice, setMaxPrice] = useState<number>(Infinity);
+  const [tempRange, setTempRange] = useState<[number, number]>([1, 20]); // Default range for slider
+  const [filterApplied, setFilterApplied] = useState<boolean>(false);
 
   const handleCategoryClick = (categoryId: number) => {
     setSelectedCategory(categoryId);
   };
 
-  const handleMinPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMinPrice(event.target.value);
-  };
-
-  const handleMaxPriceChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMaxPrice(event.target.value);
+  const handleTempRangeChange = (value: number | number[]) => {
+    if (Array.isArray(value)) {
+      setTempRange(value as [number, number]);
+    }
   };
 
   const getButtonClass = (categoryId: number) => {
@@ -28,16 +30,17 @@ const Product = () => {
     }`;
   };
 
-  const handleBlurMinPrice = () => {
-    if (minPrice === "" || Number(minPrice) < 1) {
-      setMinPrice("1");
-    }
+  const applyFilter = () => {
+    setMinPrice(tempRange[0]);
+    setMaxPrice(tempRange[1]);
+    setFilterApplied(true);
   };
 
-  const handleBlurMaxPrice = () => {
-    if (maxPrice === "" || Number(maxPrice) < 1) {
-      setMaxPrice(String(Infinity));
-    }
+  const clearFilter = () => {
+    setMinPrice(1);
+    setMaxPrice(Infinity);
+    setTempRange([1, 20]);
+    setFilterApplied(false);
   };
 
   return (
@@ -94,34 +97,45 @@ const Product = () => {
       </ul>
 
       <div className="flex flex-wrap gap-3 bg-slate-700 mt-5 p-3 justify-around font-bold text-white w-11/12 rounded-lg items-center m-auto">
-        <div>
-          <label>Precio Mínimo:</label>
-          <input
-            type="number"
-            value={minPrice}
-            onChange={handleMinPriceChange}
-            onBlur={handleBlurMinPrice}
+        <div className="w-full sm:w-auto text-center">
+          <label>Rango de Precios:</label>
+          <Slider
+            range
             min={1}
-            className="p-2 rounded-xl text-black"
+            max={20}
+            defaultValue={[1, 20]}
+            value={tempRange}
+            onChange={handleTempRangeChange}
+            className="w-10/12 m-auto"
           />
+          <div>
+            <span>Min: {tempRange[0]}</span> - <span>Max: {tempRange[1]}</span>
+          </div>
         </div>
         <div>
-          <label>Precio Máximo:</label>
-          <input
-            type="number"
-            value={maxPrice}
-            onChange={handleMaxPriceChange}
-            onBlur={handleBlurMaxPrice}
-            min={1}
-            className="p-2 rounded-xl text-black"
-          />
+          <button
+            onClick={applyFilter}
+            className="p-2 rounded-xl bg-orange-400 text-white"
+          >
+            Aplicar Filtro
+          </button>
         </div>
+        {filterApplied && (
+          <div>
+            <button
+              onClick={clearFilter}
+              className="p-2 rounded-xl bg-red-400 text-white"
+            >
+              Eliminar Filtro
+            </button>
+          </div>
+        )}
       </div>
 
       <FiltroProductos
         categoryId={selectedCategory}
-        minPrice={Number(minPrice)}
-        maxPrice={Number(maxPrice)}
+        minPrice={minPrice}
+        maxPrice={maxPrice}
       />
     </>
   );

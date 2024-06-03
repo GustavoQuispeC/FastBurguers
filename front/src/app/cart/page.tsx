@@ -171,12 +171,6 @@ const Cart = () => {
               <span className="ml-auto font-bold">${subtotal.toFixed(2)}</span>
             </li>
 
-            {cart.map((item: any) => (
-              <li key={item.id} className="flex flex-wrap gap-4 text-sm">
-                {item.drink}
-                <span className="ml-auto font-bold">${item.drinkPrice}</span>
-              </li>
-            ))}
             <li className="flex flex-wrap gap-4 text-sm">
               Descuento{" "}
               <span className="ml-auto font-bold">
