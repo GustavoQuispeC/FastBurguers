@@ -1,110 +1,64 @@
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import React from "react";
+import { FaStar } from "react-icons/fa";
+import { getProducts } from "@/helpers/products.helper";
+import { IProduct } from "@/interfaces/IProduct";
 
-import { FaStar } from "react-icons/fa6";
-
-const ProductsData = [
-  {
-    id: 1,
-    img: "/classic.jpg",
-    title: "Classic Burger",
-    rating: 4.9,
-    color: "Beef Patty",
-    aosDelay: "0",
-    description:
-      "A classic beef burger with lettuce, tomato, and our signature sauce.",
-  },
-  {
-    id: 2,
-    img: "/refresco.jpg",
-    title: "Cheese Burger",
-    rating: 4.8,
-    color: "Cheese",
-    aosDelay: "200",
-    description:
-      "Juicy burger topped with melted cheese, pickles, onions, and ketchup.",
-  },
-  {
-    id: 3,
-    img: "/chicken.jpg",
-    title: "Chicken Burger",
-    rating: 4.7,
-    color: "Chicken",
-    aosDelay: "400",
-    description:
-      "Crispy chicken fillet with spicy mayo and crisp lettuce on a toasted bun.",
-  },
-  {
-    id: 4,
-    img: "/veggie.jpg",
-    title: "Veggie Burger",
-    rating: 4.5,
-    color: "Veggie",
-    aosDelay: "600",
-    description:
-      "A delicious and hearty vegetable patty served with vegan mayo and fresh greens.",
-  },
-  {
-    id: 5,
-    img: "/bacon.jpg",
-    title: "Bacon Burger",
-    rating: 4.8,
-    color: "Bacon",
-    aosDelay: "800",
-    description:
-      "Burger with crispy bacon, smoky barbecue sauce, and onion rings.",
-  },
-];
 const Products = () => {
+  const [products, setProducts] = useState<IProduct[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const loadedProducts = await getProducts();
+        setProducts(loadedProducts.slice(0, 10)); // Cargamos solo los primeros 10 productos
+      } catch (error) {
+        console.error("Error al cargar los productos:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <div className="mt-14 mb-12 bg-orange-100 m-1">
-      {/* Header section */}
       <div className="text-center mb-10 max-w-[600px] mx-auto pt-6">
-        <p data-aos="fade-up" className="text-sm text-primary ">
-          Top Selling Products for you
+        <p className="text-sm text-primary">
+          Productos más vendidos para ti
         </p>
-        <h1 data-aos="fade-up" className="text-3xl font-bold">
-          Products
+        <h1 className="text-3xl font-bold">
+          Productos
         </h1>
-        <p data-aos="fade-up" className="text-xs text-orange-400">
-          Discover our top-selling burgers, each crafted with fresh ingredients
-          and an irresistible taste. From the classic cheeseburger to our unique
-          veggie options, find your perfect match and indulge in the flavors
-          that make us a favorite.
+        <p className="text-xs text-orange-400">
+          Descubre nuestras hamburguesas más vendidas, cada una elaborada con ingredientes frescos
+          y un sabor irresistible. Desde la hamburguesa clásica con queso hasta nuestras opciones
+          vegetarianas únicas, encuentra tu combinación perfecta y disfruta de los sabores
+          que nos hacen favoritos.
         </p>
       </div>
-      {/* Body section */}
       <div>
         <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 place-items-center gap-5">
-          {/* card section */}
-          {ProductsData.map((data) => (
-            <div
-              data-aos="fade-up"
-              data-aos-delay={data.aosDelay}
-              key={data.id}
-              className="space-y-3"
-            >
+          {products.map((product: IProduct) => (
+            <div key={product.id}>
               <img
-                src={data.img}
-                alt=""
+                src={product.imgUrl} 
+                alt={product.name}  
                 className="h-[220px] w-[150px] object-cover rounded-md"
               />
               <div>
-                <h3 className="font-semibold">{data.title}</h3>
-                <p className="text-sm text-gray-600">{data.color}</p>
+                <h3 className="font-semibold text-center">{product.name}</h3>  
+                <p className="text-sm text-center text-gray-600">{product.price}</p> 
                 <div className="flex items-center gap-1">
-                  <FaStar className="text-yellow-400" />
-                  <span>{data.rating}</span>
+                  {/* Aquí puedes agregar estrellas de calificación si lo deseas */}
                 </div>
               </div>
             </div>
           ))}
         </div>
-        {/* view all button */}
         <Link href="/home">
           <div className="flex justify-center pb-10">
-            <p className="text-center mt-10 cursor-pointer bg-orange-400 text-white py-1 px-5 rounded-2xl focus:outline-none focus:ring-0">
-              View All
+            <p className="text-center mt-10 cursor-pointer bg-orange-400  hover:bg-orange-700 text-white py-1 px-5 rounded-2xl focus:outline-none focus:ring-0">
+              Ver Todos
             </p>
           </div>
         </Link>

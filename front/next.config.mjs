@@ -1,6 +1,9 @@
-/** @type {import('next').NextConfig} */
 
+
+
+/** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Mantenemos tu configuración de imágenes existente
   images: {
     domains: ["images.pexels.com"],
     remotePatterns: [
@@ -12,9 +15,9 @@ const nextConfig = {
       },
     ],
   },
-};
-export default nextConfig;
+}
 
+export default nextConfig; 
 // const nextConfig = {
 //   images: {
 //     remotePatterns: [
