@@ -1,30 +1,49 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Carrusel from "../../components/carrusel/Carrusel";
 import GridProducts from "../../components/gridProducts/GridProducts";
-import productosPreload from "../../helpers/productos";
+import { getProducts } from "@/helpers/products.helper";
+import { IProduct } from "@/interfaces/IProduct";
+import { getProductsByCategory } from "@/helpers/categories.helper";
 
 const Home = () => {
-  // Filtrar productos de la categoría de promociones
-  const promocionesProducts = productosPreload.filter((product) =>
-    product.categoryId.includes(7)
+  const [promocionesProducts, setPromocionesProducts] = useState<IProduct[]>(
+    []
   );
+  const [menuHamburguesas, setMenuHamburguesas] = useState<IProduct[]>([]);
 
-  const MenuHamburguesas = productosPreload.filter((product) =>
-    product.categoryId.includes(1)
-  );
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const products = await getProducts();
+
+        // Filtrar productos promocionales
+
+        const promociones = products.filter((product) => product.discount > 0);
+
+        setPromocionesProducts(promociones);
+
+        const hamburguesas = await getProductsByCategory("Hamburguesas");
+
+        setMenuHamburguesas(hamburguesas);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
-    <div className=" dark:bg-gray-800 my-10">
+    <div className="dark:bg-gray-800 my-10">
       <Carrusel />
 
-      <h1 className="font-bold mt-10 ml-5">
-        PROMOCIONES DE HAMBURGUESAS ONLINE
-      </h1>
-
+      <h1 className="font-bold mt-10 ml-5 text-2xl">NUESTRAS PROMOCIONES</h1>
       <GridProducts products={promocionesProducts} />
 
-      <h1 className="font-bold mt-10 ml-5">MENU DE HAMBURGUESAS</h1>
-
-      <GridProducts products={MenuHamburguesas} />
+      <h1 className="font-bold mt-10 ml-5 text-2xl">MENU DE HAMBURGUESAS</h1>
+      <GridProducts products={menuHamburguesas} />
     </div>
   );
 };

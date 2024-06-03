@@ -1,10 +1,38 @@
 export interface IProduct {
-  id: number;
+  //id: number;
   name: string;
   description: string;
   price: number;
   stock: number;
   imgUrl: string;
+  size: string;
   discount: number;
-  categoryId: number[];
+  category: string;
+}
+
+export interface IProductCart extends IProduct {
+  quantity: number;
+  drink?: string;
+}
+
+export interface InsertProductProps {
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  imgUrl: string;
+  size: string;
+  discount: number;
+  category: string;
+}
+
+export interface InsertErrorProductProps {
+  name: string;
+  description: string;
+  price: string;
+  stock: string;
+  imgUrl: string;
+  size: string;
+  discount: string;
+  category: string;
 }

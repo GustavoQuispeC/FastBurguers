@@ -47,42 +47,44 @@ const Footer: React.FC = (): React.ReactElement => {
         <div className="flex flex-col md:flex-row justify-between pt-16 pb-8">
           <FooterList>
             <h3 className=" text-base text-orange-500 font-bold mb-2">
-              Menu Categories
+              Categorías del Menú
             </h3>
 
-            <div>Classic Burgers</div>
-            <div>Cheeseburgers</div>
-            <div>Veggie Burgers</div>
-            <div>Speciality Burguers</div>
+            <div>Hamburguesas Clásicas</div>
+            <div>Hamburguesas con Queso</div>
+            <div>Hamburguesas Vegetarianas</div>
+            <div>Hamburguesas Especiales</div>
           </FooterList>
           <FooterList>
             <h3 className=" text-base text-orange-500 font-bold mb-2">
-              Customer Service
+              Servicio al Cliente
             </h3>
 
-            <div>Contact Us</div>
-            <div>Delivery Policy</div>
-            <div>Returns & Exchanges</div>
-            <div>FAQs</div>
+            <div>Contáctanos</div>
+            <div>Política de Entrega</div>
+            <div>Devoluciones y Cambios</div>
+            <div>Preguntas Frecuentes</div>
           </FooterList>
 
           <div className=" w-full md:w-1/3 mb-6 md:mb-0">
             <h3 className="text-base font-bold mb-2 text-orange-500">
-              About Us
+              Sobre Nosotros
             </h3>
             <p className="mb-2">
               {" "}
-              Welcome to Fast Burgers—your spot for quick, delicious burgers and
-              more! We focus on fresh ingredients and speedy service to deliver
-              a top-notch dining experience. Enjoy our range of burgers, sides,
-              and drinks today. ©2024 Fast Burgers. All Rights Reserved.
+              ¡Bienvenido a Fast Burgers, tu lugar para hamburguesas rápidas y
+              deliciosas y más! Nos enfocamos en ingredientes frescos y un
+              servicio rápido para ofrecer una experiencia gastronómica de
+              primera clase. Disfruta de nuestra variedad de hamburguesas,
+              acompañamientos y bebidas hoy. ©2024  Fast Burgers. Todos los
+              Derechos Reservados.
             </p>
-            <p>&copy;{new Date().getFullYear()} E-Shop. All Rights reserved </p>
+            <p>&copy;{new Date().getFullYear()} Fast Burger. Todos los derechos reservados </p>
           </div>
           <FooterList>
             <h3 className="text-base text-orange-500 font bold mb-2">
               {" "}
-              Follow Us
+              Síguenos
             </h3>
             <div className="flex gap-2">
               <Link href={"https://www.facebook.com/"}>

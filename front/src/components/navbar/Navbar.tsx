@@ -11,13 +11,13 @@ import {
 import { MdHelp } from "react-icons/md";
 import { FaHome, FaCartPlus } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Nota: el correcto es 'next/router', no 'next/navigation'
-import productosPreload from "@/helpers/productos";
 import { IProduct } from "@/interfaces/IProduct";
 import Link from "next/link";
-import { Avatar, Dropdown } from "flowbite-react";
+import {Dropdown } from "flowbite-react";
 import { DarkThemeToggle } from "flowbite-react";
+import { getProducts } from "@/helpers/products.helper";
 
 const Navbar = () => {
   const router = useRouter();
@@ -25,24 +25,39 @@ const Navbar = () => {
 
   const [nav, setNav] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [allProducts, setAllProducts] = useState<IProduct[]>([]);
   const [searchResults, setSearchResults] = useState<IProduct[]>([]);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const products = await getProducts();
+        setAllProducts(products);
+        setSearchResults(products);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    }
+
+    fetchProducts();
+  }, []);
 
   const handleSearch = (event: { target: { value: string } }) => {
     const value = event.target.value.toLowerCase();
     setSearchTerm(value);
     if (value.length > 0) {
-      const results = productosPreload.filter((product) =>
+      const results = allProducts.filter((product) =>
         product.name.toLowerCase().includes(value)
       );
       setSearchResults(results);
     } else {
-      setSearchResults([]);
+      setSearchResults(allProducts);
     }
   };
 
   const handleProductClick = () => {
     setSearchTerm("");
-    setSearchResults([]);
+    setSearchResults(allProducts);
   };
 
   return (
@@ -57,12 +72,13 @@ const Navbar = () => {
               Fast<span className="font-bold">Burger</span>
             </h1>
           </Link>
-          <div className="hidden lg:flex items-center bg-gray-200 rounded-full p-1 text-[14px]">
+          {/* <div className="hidden lg:flex items-center bg-gray-200 rounded-full p-1 text-[14px]">
             <p className="bg-black text-orange-400 rounded-full p-2">
               Delivery
             </p>
             <p className="p-2">Pickup</p>
-          </div>
+          </div> */}
+           <DarkThemeToggle className="bg-gray-200 rounded-full" />
         </div>
 
         <div className="bg-gray-200 rounded-full flex items-center px-2 w-[200px] sm:w-[400px] lg:w-[500px]">
@@ -76,7 +92,7 @@ const Navbar = () => {
           />
         </div>
 
-        {searchResults.length > 0 && (
+        {searchResults.length > 0 && searchTerm && (
           <div className="absolute top-16 left-0 right-0 z-50 bg-white shadow-md">
             {searchResults.map((product) => (
               <Link
@@ -96,12 +112,18 @@ const Navbar = () => {
             ))}
           </div>
         )}
-        <DarkThemeToggle />
+       
         <button
           onClick={() => router.push("/cart")}
           className="text-orange-400 hidden md:flex items-center p-2 rounded-full"
         >
-          <FaCartPlus size={20} />
+          <FaCartPlus size={30} />
+        </button>
+        <button
+          onClick={() => router.push("/login")}
+          className="text-gray-900 font-bold"
+        >Iniciar Sesion
+          
         </button>
         <div className="flex md:order-2">
           <Dropdown
@@ -124,8 +146,6 @@ const Navbar = () => {
               </span>
             </Dropdown.Header>
             <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
-            <Dropdown.Item>Settings</Dropdown.Item>
-            <Dropdown.Item>Earnings</Dropdown.Item>
             <button onClick={() => signOut()}>
               <Dropdown.Item>Salir</Dropdown.Item>
             </button>
@@ -159,13 +179,13 @@ const Navbar = () => {
               <li className="text-xl py-4 flex">
                 <TbTruckDelivery size={25} className="mr-4" />
                 <Link href="#" className="hover:text-orange-400">
-                  Delivery
+                  Envios
                 </Link>
               </li>
               <li className="text-xl py-4 flex">
                 <FaHome size={25} className="mr-4" />
                 <Link href="/" className="hover:text-orange-400">
-                  Home
+                  Inicio
                 </Link>
               </li>
               <li className="text-xl py-4 flex">
