@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Delete, Get, Inject, Param, ParseUUIDPipe, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpStatus, Inject, Param, ParseFilePipeBuilder, ParseUUIDPipe, Post, Put, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
@@ -57,8 +57,21 @@ export class ProductsController {
     })
     async createProduct(
         @Body() product:CreateProductdto,
-        @UploadedFile() file: Express.Multer.File
+        @UploadedFile(
+            new ParseFilePipeBuilder()
+        .addMaxSizeValidator({
+            maxSize: 500000,
+            message: 'El archivo es muy largo, el tamaño maximo es de 500KB',
+        })
+        .build({
+            errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        })
+        ) file: Express.Multer.File
     ){
+        console.log(product);
+
+
+        
         return this.productService.createProduct(product, file)
     }
 
