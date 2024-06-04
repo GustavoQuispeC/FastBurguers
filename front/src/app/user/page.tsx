@@ -84,7 +84,7 @@ const Register = () => {
       };
       await RegisterUser(userToRegister);
       notify();
-      Router.push("/home"); // Redirige al usuario después del registro
+      Router.push("/login"); // Redirige al usuario después del registro
     } catch (error: any) {
       toast.error(`Error registrando usuario: ${error.message}`, {
         theme: "colored",

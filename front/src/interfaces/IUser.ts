@@ -8,3 +8,10 @@ export interface IUser {
   country: string;
   city: string;
 }
+export interface IUserSession {
+  userData: {
+    data: IUser;
+    message: string;
+    token: string;
+  };
+}
