@@ -4,11 +4,11 @@ import { MatchPassword } from "src/decorators/matchPassword.decorator"
 
 export class CreateUserDto{
     /**
-    *Must be a String of between 3 and 40 characters, mandatory data
+    *Must be a String of between 3 and 50 characters, mandatory data
     *@example 'Test User01'
     */
     @IsString()
-    @Length(3,40)
+    @Length(3,50)
     @IsNotEmpty()
     name:string
 
@@ -22,13 +22,13 @@ export class CreateUserDto{
     email:string
 
     /**
-    Must be a valid password of 6 to 20 characters with at least one lower case letter, one upper case letter, one number and one symbol.
+    Must be a valid password of 6 to 50 characters with at least one lower case letter, one upper case letter, one number and one symbol.
     Mandatory data
     @example '1234aA#abc'
     */
     @IsNotEmpty()
     @IsString()
-    @Length(6,20)
+    @Length(6,50)
     @Matches(/^[a-zA-Z0-9!@#$%^&*]+$/)
     password:string
 
@@ -49,25 +49,24 @@ export class CreateUserDto{
     address:string
 
     /**
-    Must be a number in 9-digit.
+    Must be a number.
     @example '987258443'
     */
     @IsNumber()
-    @IsInt()
     phone: number;
 
     /**
-    Must be a string of 4 to 20 characters.
+    Must be a string of 4 to 50 characters.
     @example Peru
     */
-    @Length(4,20)
+    @Length(4,50)
     country:string
 
     /**
-    Must be a string of 5 to 20 characters
+    Must be a string of 5 to 50 characters
     @example 'Lima'
     */
-    @Length(4,20)
+    @Length(4,50)
     city:string
 
     @ApiHideProperty()
@@ -85,13 +84,13 @@ export class CreateUserDto{
 export class UpdateUserDto{
 
     /**
-    *Must be a String of between 3 and 40 characters
+    *Must be a String of between 3 and 50 characters
     *@example 'Test_Update'
     */
     @IsOptional()
     @IsString()
     @IsNotEmpty()
-    @Length(3,40)
+    @Length(3,50)
     name?:string
 
     /**
@@ -103,13 +102,13 @@ export class UpdateUserDto{
     email?:string
 
     /**
-    Must be a valid password of 6 to 20 characters with at least one lower case letter, one upper case letter, one number and one symbol.
+    Must be a valid password of 6 to 50 characters with at least one lower case letter, one upper case letter, one number and one symbol.
     @example '1234aA#abc'
     */
     @IsOptional()
     @IsNotEmpty()
     @IsString()
-    @Length(6,20)
+    @Length(6,50)
     @Matches(/^[a-zA-Z0-9!@#$%^&*]+$/)
     password:string
 
@@ -122,25 +121,24 @@ export class UpdateUserDto{
     address?:string
 
     /**
-    Must be a number in 9-digit string format.
+    Must be a number .
     @example '999999999'
     */
     @IsOptional()
     @IsNumber()
-    @IsInt()
     phone?: number;
 
     /**
-    Must be a string of 4 to 20 characters.
+    Must be a string of 4 to 50 characters.
     @example 'Uruguay'
     */
     @IsOptional()
     @IsString()
-    @Length(4,20)
+    @Length(4,50)
     country?:string
 
     /**
-    Must be a string of 5 to 20 characters
+    Must be a string of 5 to 50 characters
     @example 'Arequipa'
     */
     @IsOptional()
