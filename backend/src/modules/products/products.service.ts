@@ -78,7 +78,7 @@ export class ProductsService {
     }
 
     async createProduct(product:CreateProductdto
-        // , file: Express.Multer.File
+        , file?: Express.Multer.File
     ){
         const foundProduct = await this.productsRepository.findOneBy({name:product.name})
         if(foundProduct) throw new BadRequestException(`ya existe un producto con name: ${product.name}`)
@@ -87,15 +87,15 @@ export class ProductsService {
         const foundCategory = await this.categoriesRepository.findOneBy({id:categoryID})
         if(!foundCategory) throw new BadRequestException(`Categoria:${product.categoryID}  no existe en base de datos. Debera crea la categoria`)
         
-        // const uploadImage = await this.fileUploadRepository.uploadImage(file);
-        // if(!uploadImage) throw new BadRequestException('Hubo un error al subir la imagen')
+        const uploadImage = await this.fileUploadRepository.uploadImage(file);
+        if(!uploadImage) throw new BadRequestException('Hubo un error al subir la imagen')
 
         const objectProduct  = new Products();
         objectProduct.category = foundCategory;
         objectProduct.name = product.name
         objectProduct.description = product.description
         objectProduct.price = product.price
-        objectProduct.imgUrl = product.imgUrl
+        objectProduct.imgUrl = uploadImage?.url
         objectProduct.stock = product.stock
         objectProduct.discount = product.discount
         objectProduct.size = product.size
