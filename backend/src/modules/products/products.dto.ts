@@ -55,6 +55,7 @@ export class CreateProductdto{
      * @example '908a59d6-a87f-4ea1-a89b-23747a668cf8'
      */
     @IsUUID()
+    @IsString()
     categoryID:string
 
     /**
@@ -125,6 +126,7 @@ export class UpdatedProductdto {
      */
     @IsOptional()
     @IsUUID()
+    @IsString()
     categoryID:string
 
     /**

@@ -78,7 +78,8 @@ export class ProductsController {
                 price: { type: 'number', example: 12.34 },
                 stock: { type: 'number', example: 10 },
                 discount: { type: 'number', example: 0.1 },
-                category: { type: 'string', example: 'Hamburguesas' },
+                categoryID: { type: 'string', example: '908a59d6-a87f-4ea1-a89b-23747a668cf8' },
+                size:{type:'string', example:'personal'}
             },
         },
     })
