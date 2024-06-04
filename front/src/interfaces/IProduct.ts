@@ -23,7 +23,7 @@ export interface InsertProductProps {
   imgUrl: string;
   size: string;
   discount: number;
-  category: string;
+  categoryID: string;
 }
 
 export interface InsertErrorProductProps {
@@ -34,5 +34,5 @@ export interface InsertErrorProductProps {
   imgUrl: string;
   size: string;
   discount: string;
-  category: string;
+  categoryID: string;
 }

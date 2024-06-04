@@ -1,11 +1,9 @@
 "use client";
-
 import { insertProduct } from "@/helpers/products.helper";
 import { getCategories } from "@/helpers/categories.helper";
 import {
   InsertProductProps,
   InsertErrorProductProps,
-  IProduct,
 } from "@/interfaces/IProduct";
 import { insertProductValidation } from "@/utils/insertProductValidation";
 import Link from "next/link";
@@ -13,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoCloudUploadOutline } from "react-icons/io5";
+import axios from "axios";
 
 const InsertProduct = () => {
   const router = useRouter();
@@ -23,31 +22,42 @@ const InsertProduct = () => {
     description: "",
     price: 0,
     stock: 0,
-    imgUrl: "",
+    imgUrl: "", // Add the missing imgUrl property
     size: "",
     discount: 0,
-    category: "",
+    categoryID: "",
   });
 
   //! Estado para guardar la imagen del producto
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   //! Estado para guardar las categorías
-  const [categories, setCategories] = useState<any[]>([]);
-
-  //! Estado para guardar los errores
   const [errors, setErrors] = useState<InsertErrorProductProps>({
     name: "",
     description: "",
     price: "",
     stock: "",
-    imgUrl: "",
+    imgUrl: "", // Add the missing imgUrl property
     size: "",
     discount: "",
-    category: "",
+    categoryID: "",
   });
 
-  //! useEffect para obtener las categorías
+  //! Estado para guardar el token del usuario
+  const [token, setToken] = useState<string | null>(null);
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      const userSession = localStorage.getItem("userSession");
+      if (userSession) {
+        const parsedSession = JSON.parse(userSession);
+        console.log("userToken", parsedSession.userData.token);
+        setToken(parsedSession.userData.token);
+      }
+    }
+  }, [router]);
+
+  //! UseEffect para obtener las categorías
+  const [categories, setCategories] = useState<any[]>([]);
   useEffect(() => {
     const fetchCategories = async () => {
       const categories = await getCategories();
@@ -58,45 +68,56 @@ const InsertProduct = () => {
   }, []);
 
   //! Función para manejar los cambios en los inputs
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
+  const handleChange = (e: any) => {
     e.preventDefault();
     setDataProduct({
       ...dataProduct,
       [e.target.name]: e.target.value,
     });
   };
-
   //! Función para manejar los cambios en la imagen
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+ 
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setImageFile(file);
-      setDataProduct({ ...dataProduct, imgUrl: URL.createObjectURL(file) });
     }
   };
 
-  //! Función para manejar el envío del formulario
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //Validar formulario
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
-    const validationErrors = insertProductValidation(dataProduct);
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-    } else {
-      // Aquí estamos preparando el objeto IProduct
-      const product: IProduct = {
-        ...dataProduct,
-        imgUrl: imageFile ? URL.createObjectURL(imageFile) : dataProduct.imgUrl,
-      };
-      console.log(product);
-      //! Llamamos a insertProduct con el objeto IProduct
-      await insertProduct(product);
-      router.push("/productList");
-    }
+    console.log("Submit form");
+    insertProduct(dataProduct, token!);
+    console.log(dataProduct);
   };
+
+  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   console.log("Submit form");
+
+  //   const formData = new FormData();
+  //   formData.append("name", dataProduct.name);
+  //   formData.append("description", dataProduct.description);
+  //   formData.append("price", dataProduct.price.toString());
+  //   formData.append("stock", dataProduct.stock.toString());
+  //   formData.append("size", dataProduct.size);
+  //   formData.append("discount", dataProduct.discount.toString());
+  //   formData.append("categoryID", dataProduct.categoryID);
+  //   if (imageFile) {
+  //     formData.append("imgUrl", imageFile);
+  //   }
+
+  //   try {
+  //     const response = await insertProduct(formData, token!);
+  //     console.log(dataProduct);
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.error("Error submitting form:", error);
+  //   }
+  // };
+
+  
 
   return (
     <div className="min-h-screen flex flex-col justify-start items-center p-10 dark:bg-gray-700">
@@ -134,24 +155,24 @@ const InsertProduct = () => {
                 htmlFor="category"
                 className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
               >
-                Categorias
+                Categorías
               </label>
               <select
                 id="category"
-                name="category"
+                name="categoryID" // Cambia el nombre del atributo name a "categoryID"
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                value={dataProduct.category}
+                value={dataProduct.categoryID} // Cambia el valor a dataProduct.categoryID
                 onChange={handleChange}
               >
                 <option value="">--Seleccione--</option>
                 {categories.map((category: any) => (
-                  <option key={category.id} value={category.name}>
+                  <option key={category.id} value={category.id}>
                     {category.name}
                   </option>
                 ))}
               </select>
-              {errors.category && (
-                <span className="text-red-500">{errors.category}</span>
+              {errors.categoryID && (
+                <span className="text-red-500">{errors.categoryID}</span>
               )}
             </div>
 
@@ -216,6 +237,26 @@ const InsertProduct = () => {
                   <span className="text-red-500">{errors.stock}</span>
                 )}
               </div>
+              <div>
+                <label
+                  htmlFor="size"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Talla
+                </label>
+                <input
+                  type="text"
+                  name="size"
+                  id="size"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Talla"
+                  value={dataProduct.size}
+                  onChange={handleChange}
+                />
+                {errors.size && (
+                  <span className="text-red-500">{errors.size}</span>
+                )}
+              </div>
             </div>
             <div className="sm:col-span-2">
               <label
@@ -267,17 +308,18 @@ const InsertProduct = () => {
                 />
               </label>
             </div>
-            {dataProduct.imgUrl && (
+            {/* {imageFile && (
               <div className="mt-4 flex justify-center">
                 <img
-                  src={dataProduct.imgUrl}
+                  src={URL.createObjectURL(imageFile)}
                   alt="Imagen del producto"
                   className="max-w-44 h-auto"
                 />
               </div>
-            )}
+            )} */}
           </div>
-
+  
+        {/* <input type='file' name='imgUrl' onChange={handleImageChange} /> */}
           <div className="items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
             <button
               type="submit"

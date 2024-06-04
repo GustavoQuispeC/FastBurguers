@@ -157,7 +157,7 @@ const ProductList = () => {
     <tbody>
       {getCurrentPageProducts().map((product: IProduct) => (
         <tr
-          key={product.id}
+          key={product.name}
           className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
         >
           <th

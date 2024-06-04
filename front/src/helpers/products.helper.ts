@@ -1,4 +1,4 @@
-import { IProduct } from "@/interfaces/IProduct";
+import { IProduct, InsertProductProps } from "@/interfaces/IProduct";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -18,6 +18,7 @@ export async function getProducts() {
 export async function getProductsById(id: number): Promise<IProduct> {
   try {
     const res = await fetch(`${apiURL}/products/${id}`);
+
     const productData: any = await res.json();
 
     const product: IProduct = {
@@ -32,19 +33,46 @@ export async function getProductsById(id: number): Promise<IProduct> {
   }
 }
 //! Insert product
-export async function insertProduct(product: IProduct) {
+export const insertProduct = async (product: InsertProductProps, token: string) => {
   try {
-    const res = await fetch(`${apiURL}/products`, {
+    const response = await fetch(`${apiURL}/products`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(product),
     });
 
-    const data = await res.json();
-    return data;
-  } catch (error: any) {
-    throw new Error(error);
+    if (!response.ok) {
+      throw new Error("Failed to insert product");
+    }
+
+    console.log(response); // Logging before returning response data
+    return await response.json();
+  } catch (error) {
+    console.error("Error in insertProduct:", error);
+    throw error;
   }
-}
+};
+
+// export const insertProduct = async (formData: FormData, token: string) => {
+//   try {
+//     const response = await fetch(`${apiURL}/products`, {
+//       method: "POST",
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//       },
+//       body: formData,
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Failed to insert product");
+//     }
+
+//     console.log(response);
+//     return await response.json();
+//   } catch (error) {
+//     console.error("Error in insertProduct:", error);
+//     throw error;
+//   }
+// };
