@@ -1,5 +1,7 @@
-import { IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUrl, Length, MaxLength, isArray } from "class-validator";
+import { Type } from "class-transformer";
+import { IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUUID, IsUrl, Length, MaxLength, isArray } from "class-validator";
 import { SizeProduct } from "src/enum/sizeProduct.enum";
+import { UUID } from "typeorm/driver/mongodb/bson.typings";
 
 export class CreateProductdto{
 
@@ -24,6 +26,7 @@ export class CreateProductdto{
      * @example 32.3
      */
     @IsNumber()
+    @Type(()=> Number)
     @IsPositive()
     price:number
 
@@ -33,6 +36,7 @@ export class CreateProductdto{
      * @example 10  
      */
     @IsNumber()
+    @Type(()=> Number)
     @IsPositive()
     @IsInt()
     stock:number
@@ -42,16 +46,18 @@ export class CreateProductdto{
      * Example 0.50
      */
     @IsNumber()
+    @Type(()=> Number)
     @IsPositive()
     discount: number
 
     /**
-     *  Must be a string
-     * @example 'Hamburguesas'
+     *  Must be a UUID id string of a category
+     * @example '908a59d6-a87f-4ea1-a89b-23747a668cf8'
      */
+    @IsUUID()
     @IsString()
-    category:string
-
+    categoryID:string
+    
     /**
      *  Must be : personal, regular or extrema
      * @example 'personal'
@@ -89,6 +95,7 @@ export class UpdatedProductdto {
      */
     @IsOptional()
     @IsNumber()
+    @Type(()=> Number)
     @IsPositive()
     price?:number
 
@@ -99,6 +106,7 @@ export class UpdatedProductdto {
      */
     @IsOptional()
     @IsNumber()
+    @Type(()=> Number)
     @IsPositive()
     @IsInt()
     stock?:number
@@ -108,11 +116,18 @@ export class UpdatedProductdto {
      * @Example 0.1
      */
     @IsOptional()
+    @Type(()=> Number)
     discount?: number
 
 
+    /**
+     *  Must be a UUID id string of a category
+     * @example '908a59d6-a87f-4ea1-a89b-23747a668cf8'
+     */
     @IsOptional()
-    category?:string
+    @IsUUID()
+    @IsString()
+    categoryID:string
 
     /**
      *  Must be : personal, regular or extrema
