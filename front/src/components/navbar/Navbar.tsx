@@ -30,6 +30,7 @@ const Navbar = () => {
   const [allProducts, setAllProducts] = useState<IProduct[]>([]);
   const [searchResults, setSearchResults] = useState<IProduct[]>([]);
   const [userSesion, setUserSesion] = useState<IUserSession>();
+  const [cartItemCount, setCartItemCount] = useState<number>(0);
 
   useEffect(() => {
     async function fetchProducts() {
@@ -41,6 +42,17 @@ const Navbar = () => {
         const userSession = localStorage.getItem("userSession");
         if (userSession !== null) {
           setUserSesion(JSON.parse(userSession));
+        }
+
+        // Obtener la cantidad de productos del carrito desde el localStorage
+        const cart = localStorage.getItem("cart");
+        if (cart !== null) {
+          const cartItems = JSON.parse(cart);
+          const itemCount = cartItems.reduce(
+            (acc: number, item: any) => acc + item.quantity,
+            0
+          );
+          setCartItemCount(itemCount);
         }
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -123,9 +135,14 @@ const Navbar = () => {
         <div className="flex items-center justify-around w-2/5">
           <button
             onClick={() => router.push("/cart")}
-            className="text-orange-400 flex items-center p-2 rounded-full"
+            className="text-orange-400 flex items-center p-2 rounded-full relative"
           >
             <FaCartPlus size={30} />
+            {cartItemCount > 0 && (
+              <span className="bg-red-500 rounded-full w-6 h-6 flex items-center justify-center text-white absolute -top-1 -right-1">
+                {cartItemCount}
+              </span>
+            )}
           </button>
           {!sesion && !userSesion && (
             <Link href="/login">
@@ -156,9 +173,11 @@ const Navbar = () => {
               }
             >
               <Dropdown.Header>
-                <span className="block text-sm">{sesion?.user?.name}</span>
+                <span className="block text-sm">
+                  {sesion?.user?.name || userSesion?.userData.data.name}
+                </span>
                 <span className="block truncate text-sm font-medium">
-                  {sesion?.user?.email}
+                  {sesion?.user?.email || userSesion?.userData.data.email}
                 </span>
               </Dropdown.Header>
               <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
