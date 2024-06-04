@@ -16,6 +16,8 @@ import { Categories } from './entities/categories.entity';
 import { Users } from './entities/users.entity';
 import { OrdersModule } from './modules/orders/orders.module';
 import { MorganMiddleware } from './middlewares/morgan.middleware';
+import { TestimonyController } from './modules/testimony/testimony.controller';
+import { TestimonyModule } from './modules/testimony/testimony.module';
 
 @Module({
   imports: [
@@ -39,9 +41,10 @@ import { MorganMiddleware } from './middlewares/morgan.middleware';
     AuthModule,
     FilesModule,
     OrdersModule,
-    TypeOrmModule.forFeature([Products,Categories,Users])
+    TypeOrmModule.forFeature([Products,Categories,Users]),
+    TestimonyModule
   ],
-  controllers: [AppController],
+  controllers: [AppController, TestimonyController],
   providers: [AppService, PreloadService],
 })
 export class AppModule implements NestModule{
