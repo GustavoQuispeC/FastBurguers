@@ -21,7 +21,7 @@ export class Products {
     stock: number;
 
     @Column({type: 'text',default: 'https://www.pngitem.com/pimgs/m/407-4074353_defectos-criticos-de-un-producto-hd-png-download.png'})
-    imgUrl: string;
+    imgUrl?: string;
 
     @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
     discount: number;
