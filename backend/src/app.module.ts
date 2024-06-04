@@ -16,6 +16,7 @@ import { Categories } from './entities/categories.entity';
 import { Users } from './entities/users.entity';
 import { OrdersModule } from './modules/orders/orders.module';
 import { MorganMiddleware } from './middlewares/morgan.middleware';
+import { PaymentsModule } from './paypal/payments.module';
 import { StatusHistoriesModule } from './modules/status-histories/status-histories.module';
 
 @Module({
@@ -41,7 +42,8 @@ import { StatusHistoriesModule } from './modules/status-histories/status-histori
     FilesModule,
     OrdersModule,
     TypeOrmModule.forFeature([Products,Categories,Users]),
-    StatusHistoriesModule
+    StatusHistoriesModule,
+    PaymentsModule
   ],
   controllers: [AppController],
   providers: [AppService, PreloadService],
