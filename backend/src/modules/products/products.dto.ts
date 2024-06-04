@@ -59,6 +59,12 @@ export class CreateProductdto{
     categoryID:string
 
     /**
+     * @example 'https://www.pngitem.com/pimgs/m/407-4074353_defectos-criticos-de-un-producto-hd-png-download.png'
+     */
+    @IsString()
+    imgUrl: string;
+
+    /**
      *  Must be : personal, regular or extrema
      * @example 'personal'
      */
