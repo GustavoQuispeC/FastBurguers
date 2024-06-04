@@ -54,8 +54,8 @@ export class CreateProductdto{
      *  Must be a UUID id string of a category
      * @example '908a59d6-a87f-4ea1-a89b-23747a668cf8'
      */
-    //@IsUUID()
-    //@IsString()
+    @IsUUID()
+    @IsString()
     categoryID:string
     
     /**
