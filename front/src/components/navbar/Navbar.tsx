@@ -81,14 +81,14 @@ const Navbar = () => {
             <AiOutlineMenu size={30} />
           </div>
           <Link href="/home">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl px-2">
+            <h1 className="text-xl sm:text-3xl lg:text-4xl px-2">
               Fast<span className="font-bold">Burger</span>
             </h1>
           </Link>
           <DarkThemeToggle className="bg-gray-200 rounded-full ml-2" />
         </div>
 
-        <div className="bg-gray-200 rounded-full flex items-center px-2 w-[200px] sm:w-[400px] lg:w-[500px] mx-2">
+        <div className="bg-gray-200 rounded-full flex items-center px-2 w-[100px] sm:w-[400px] lg:w-[500px] mx-2">
           <AiOutlineSearch size={20} />
           <input
             className="bg-transparent w-full border-none rounded-full focus:ring-0"
@@ -137,7 +137,7 @@ const Navbar = () => {
 
           {(sesion || userSesion) && (
             <p className="text-gray-900 font-bold hidden md:block">
-              ¡Bienvenido,{" "}
+              ¡Bienvenido,
               {sesion?.user?.name || userSesion?.userData.data.name}!
             </p>
           )}
@@ -151,7 +151,7 @@ const Navbar = () => {
                   alt="imagen"
                   width={30}
                   height={30}
-                  className="rounded-full"
+                  className="rounded-full "
                 />
               }
             >
