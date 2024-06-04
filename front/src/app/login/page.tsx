@@ -89,7 +89,6 @@ const Login = () => {
   return (
     <div className="font-[sans-serif] text-gray-900 flex items-center justify-center md:h-screen p-4 dark:bg-gray-800">
       <div className="shadow-2xl max-w-6xl rounded-md p-6 bg-white dark:text-white dark:bg-gray-600">
-        <h3 className="font-serif font-bold">www.fastburgers.com</h3>
         <div className="grid md:grid-cols-2 items-center gap-8">
           <div className="max-md:order-1">
             <img

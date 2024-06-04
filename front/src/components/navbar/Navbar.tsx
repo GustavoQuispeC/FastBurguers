@@ -76,6 +76,7 @@ const Navbar = () => {
   const CerrarSesion = () => {
     signOut();
     localStorage.removeItem("userSession");
+    localStorage.removeItem("cart");
   };
 
   const handleProductClick = () => {
