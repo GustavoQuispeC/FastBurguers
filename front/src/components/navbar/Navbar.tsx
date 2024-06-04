@@ -86,7 +86,7 @@ const Navbar = () => {
           <input
             className="bg-transparent w-full border-none rounded-full focus:ring-0"
             type="text"
-            placeholder="Search food"
+            placeholder="Buscar productos..."
             value={searchTerm}
             onChange={handleSearch}
           />
