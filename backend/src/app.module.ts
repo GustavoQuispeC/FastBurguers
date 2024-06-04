@@ -16,6 +16,7 @@ import { Categories } from './entities/categories.entity';
 import { Users } from './entities/users.entity';
 import { OrdersModule } from './modules/orders/orders.module';
 import { MorganMiddleware } from './middlewares/morgan.middleware';
+import { PaymentsModule } from './paypal/payments.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { MorganMiddleware } from './middlewares/morgan.middleware';
     AuthModule,
     FilesModule,
     OrdersModule,
+    PaymentsModule,
     TypeOrmModule.forFeature([Products,Categories,Users])
   ],
   controllers: [AppController],
