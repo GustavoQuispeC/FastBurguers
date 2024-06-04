@@ -156,9 +156,11 @@ const Navbar = () => {
               }
             >
               <Dropdown.Header>
-                <span className="block text-sm">{sesion?.user?.name}</span>
+                <span className="block text-sm">
+                  {sesion?.user?.name || userSesion?.userData.data.name}
+                </span>
                 <span className="block truncate text-sm font-medium">
-                  {sesion?.user?.email}
+                  {sesion?.user?.email || userSesion?.userData.data.email}
                 </span>
               </Dropdown.Header>
               <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
