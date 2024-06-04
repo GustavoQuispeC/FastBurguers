@@ -86,14 +86,14 @@ export class ProductsController {
     async createProduct(
         @Body() product:CreateProductdto,
         @UploadedFile(
-            new ParseFilePipeBuilder()
-        .addMaxSizeValidator({
-            maxSize: 500000,
-            message: 'El archivo es muy largo, el tamaño maximo es de 500KB',
-        })
-        .build({
-            errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        })
+        //     new ParseFilePipeBuilder()
+        // .addMaxSizeValidator({
+        //     maxSize: 500000,
+        //     message: 'El archivo es muy largo, el tamaño maximo es de 500KB',
+        // })
+        // .build({
+        //     errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        // })
         ) file?: Express.Multer.File
     ){
         console.log(product);
