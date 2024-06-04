@@ -58,13 +58,13 @@ export class ProductsController {
 
     @ApiBearerAuth()
     @Post()
-    @Roles(Role.SUPERADMIN)
-    @UseGuards(AuthGuards,RolesGuard)
+    // @Roles(Role.SUPERADMIN)
+    // @UseGuards(AuthGuards,RolesGuard)
     @UseInterceptors(FileInterceptor('file'))
     @ApiConsumes('multipart/form-data')
     @ApiBody({
         description: 'create product with image',
-        required: true,
+        required: false,
         type: 'multipart/form-data',
         schema: {
             type:'object',
@@ -78,22 +78,23 @@ export class ProductsController {
                 price: { type: 'number', example: 12.34 },
                 stock: { type: 'number', example: 10 },
                 discount: { type: 'number', example: 0.1 },
-                category: { type: 'string', example: 'Hamburguesas' },
+                categoryID: { type: 'string', example: '908a59d6-a87f-4ea1-a89b-23747a668cf8' },
+                size:{type:'string', example:'personal'}
             },
         },
     })
     async createProduct(
         @Body() product:CreateProductdto,
         @UploadedFile(
-            new ParseFilePipeBuilder()
-        .addMaxSizeValidator({
-            maxSize: 500000,
-            message: 'El archivo es muy largo, el tamaño maximo es de 500KB',
-        })
-        .build({
-            errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        })
-        ) file: Express.Multer.File
+        //     new ParseFilePipeBuilder()
+        // .addMaxSizeValidator({
+        //     maxSize: 500000,
+        //     message: 'El archivo es muy largo, el tamaño maximo es de 500KB',
+        // })
+        // .build({
+        //     errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        // })
+        ) file?: Express.Multer.File
     ){
         console.log(product);
 

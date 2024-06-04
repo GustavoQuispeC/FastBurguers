@@ -102,7 +102,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
   };
 
   return (
-    <div className="font-sans my-10 h-screen dark:bg-gray-700">
+    <div className="font-sans my-10  dark:bg-gray-700">
       <div className="p-4 max-w-6xl max-md:max-w-xl mx-auto">
         <div className="grid items-start grid-cols-1 md:grid-cols-2 gap-6">
           <div className="w-full h-5/6 lg:sticky top-0 flex justify-center items-center  ">

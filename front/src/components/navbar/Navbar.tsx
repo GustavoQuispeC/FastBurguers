@@ -12,35 +12,53 @@ import { MdHelp } from "react-icons/md";
 import { FaHome, FaCartPlus } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Nota: el correcto es 'next/router', no 'next/navigation'
+import { usePathname, useRouter } from "next/navigation";
 import { IProduct } from "@/interfaces/IProduct";
 import Link from "next/link";
-import {Dropdown } from "flowbite-react";
+import { Dropdown } from "flowbite-react";
 import { DarkThemeToggle } from "flowbite-react";
 import { getProducts } from "@/helpers/products.helper";
+import { IUserSession } from "@/interfaces/IUser";
 
 const Navbar = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const { data: sesion } = useSession();
 
   const [nav, setNav] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [allProducts, setAllProducts] = useState<IProduct[]>([]);
   const [searchResults, setSearchResults] = useState<IProduct[]>([]);
+  const [userSesion, setUserSesion] = useState<IUserSession>();
+  const [cartItemCount, setCartItemCount] = useState(0);
 
   useEffect(() => {
-    async function fetchProducts() {
+    async function fetchData() {
       try {
         const products = await getProducts();
         setAllProducts(products);
         setSearchResults(products);
+
+        const userSession = localStorage.getItem("userSession");
+        if (userSession !== null) {
+          setUserSesion(JSON.parse(userSession));
+        }
+
+        const cart = localStorage.getItem("cart");
+        if (cart !== null) {
+          const parsedCart = JSON.parse(cart);
+
+          const totalCount = parsedCart.length;
+
+          setCartItemCount(totalCount);
+        }
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching data:", error);
       }
     }
 
-    fetchProducts();
-  }, []);
+    fetchData();
+  }, [pathname]);
 
   const handleSearch = (event: { target: { value: string } }) => {
     const value = event.target.value.toLowerCase();
@@ -55,11 +73,15 @@ const Navbar = () => {
     }
   };
 
+  const CerrarSesion = () => {
+    signOut();
+    localStorage.removeItem("userSession");
+  };
+
   const handleProductClick = () => {
     setSearchTerm("");
     setSearchResults(allProducts);
   };
-
   return (
     <>
       <div className="max-w-[1640px] dark:bg-gray-600 mx-auto flex dark:text-white justify-between items-center p-4">
@@ -68,20 +90,14 @@ const Navbar = () => {
             <AiOutlineMenu size={30} />
           </div>
           <Link href="/home">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl px-2">
+            <h1 className="text-xl sm:text-3xl lg:text-4xl px-2">
               Fast<span className="font-bold">Burger</span>
             </h1>
           </Link>
-          {/* <div className="hidden lg:flex items-center bg-gray-200 rounded-full p-1 text-[14px]">
-            <p className="bg-black text-orange-400 rounded-full p-2">
-              Delivery
-            </p>
-            <p className="p-2">Pickup</p>
-          </div> */}
-           <DarkThemeToggle className="bg-gray-200 rounded-full" />
+          <DarkThemeToggle className="bg-gray-200 rounded-full ml-2" />
         </div>
 
-        <div className="bg-gray-200 rounded-full flex items-center px-2 w-[200px] sm:w-[400px] lg:w-[500px]">
+        <div className="bg-gray-200 rounded-full flex items-center px-2 w-[100px] sm:w-[400px] lg:w-[500px] mx-2">
           <AiOutlineSearch size={20} />
           <input
             className="bg-transparent w-full border-none rounded-full focus:ring-0"
@@ -112,44 +128,61 @@ const Navbar = () => {
             ))}
           </div>
         )}
-       
-        <button
-          onClick={() => router.push("/cart")}
-          className="text-orange-400 hidden md:flex items-center p-2 rounded-full"
-        >
-          <FaCartPlus size={30} />
-        </button>
-        <button
-          onClick={() => router.push("/login")}
-          className="text-gray-900 font-bold"
-        >Iniciar Sesion
-          
-        </button>
-        <div className="flex md:order-2">
-          <Dropdown
-            arrowIcon={false}
-            inline
-            label={
-              <Image
-                src={sesion?.user?.image || "/perfil.png"}
-                alt="imagen"
-                width={30}
-                height={30}
-                className="rounded-full"
-              />
-            }
+
+        <div className="flex items-center justify-around w-2/5">
+          <button
+            onClick={() => router.push("/cart")}
+            className="text-orange-400 flex items-center p-2 rounded-full relative"
           >
-            <Dropdown.Header>
-              <span className="block text-sm">{sesion?.user?.name}</span>
-              <span className="block truncate text-sm font-medium">
-                {sesion?.user?.email}
+            <FaCartPlus size={30} />
+            {cartItemCount > 0 && (
+              <span className="bg-red-500 rounded-full w-6 h-6 flex items-center justify-center text-white absolute -top-1 -right-1">
+                {cartItemCount}
               </span>
-            </Dropdown.Header>
-            <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
-            <button onClick={() => signOut()}>
-              <Dropdown.Item>Salir</Dropdown.Item>
-            </button>
-          </Dropdown>
+            )}
+          </button>
+          {!sesion && !userSesion && (
+            <Link href="/login">
+              <button className="text-gray-900 font-bold">
+                Iniciar Sesion
+              </button>
+            </Link>
+          )}
+
+          {(sesion || userSesion) && (
+            <p className="text-gray-900 font-bold hidden md:block">
+              ¡Bienvenido,
+              {sesion?.user?.name || userSesion?.userData.data.name}!
+            </p>
+          )}
+          {(sesion || userSesion) && (
+            <Dropdown
+              arrowIcon={false}
+              inline
+              label={
+                <Image
+                  src={sesion?.user?.image || "/perfil.png"}
+                  alt="imagen"
+                  width={30}
+                  height={30}
+                  className="rounded-full "
+                />
+              }
+            >
+              <Dropdown.Header>
+                <span className="block text-sm">
+                  {sesion?.user?.name || userSesion?.userData.data.name}
+                </span>
+                <span className="block truncate text-sm font-medium">
+                  {sesion?.user?.email || userSesion?.userData.data.email}
+                </span>
+              </Dropdown.Header>
+              <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
+              <button onClick={CerrarSesion}>
+                <Dropdown.Item>Salir</Dropdown.Item>
+              </button>
+            </Dropdown>
+          )}
         </div>
 
         {nav && (
