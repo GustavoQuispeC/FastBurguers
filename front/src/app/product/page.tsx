@@ -59,7 +59,7 @@ const Product = () => {
             onClick={() => handleCategoryClick(2)}
             className={getButtonClass(2)}
           >
-            Sandwich de pollo
+            Sandwiches
           </button>
         </li>
         <li className="w-full sm:w-auto text-center">
@@ -67,7 +67,7 @@ const Product = () => {
             onClick={() => handleCategoryClick(3)}
             className={getButtonClass(3)}
           >
-            Papas y complementos
+            Complementos
           </button>
         </li>
         <li className="w-full sm:w-auto text-center">

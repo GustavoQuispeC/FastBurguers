@@ -6,6 +6,7 @@ import { Users } from './entities/users.entity';
 import { Products } from './entities/products.entity';
 import { Categories } from './entities/categories.entity';
 import * as data from './data/data.json'
+import { SizeProduct } from './enum/sizeProduct.enum';
 
 
 @Injectable()

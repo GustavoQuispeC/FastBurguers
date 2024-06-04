@@ -43,9 +43,9 @@ const FiltroProductos: React.FC<GridProductsProps> = ({
       case 1:
         return "Hamburguesas";
       case 2:
-        return "Sandwich de pollo";
+        return "Sandwiches";
       case 3:
-        return "Papas y complementos";
+        return "Complementos";
       case 4:
         return "Bebidas";
       case 5:
