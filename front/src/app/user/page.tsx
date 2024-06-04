@@ -17,11 +17,11 @@ import { FaTreeCity } from "react-icons/fa6";
 
 import { ToastContainer, toast, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { RegisterUser } from "@/helpers/Autenticacion.helper";
 
 const Register = () => {
   const Router = useRouter();
 
-  //const [showAlert, setShowAlert] = useState(false);
   const notify = () =>
     toast.success("Usuario registrado exitosamente", {
       theme: "colored",
@@ -33,6 +33,7 @@ const Register = () => {
     address: "",
     phone: "",
     password: "",
+    confirmPassword: "",
     country: "",
     city: "",
   });
@@ -43,11 +44,11 @@ const Register = () => {
     address: "",
     phone: "",
     password: "",
+    confirmPassword: "",
     country: "",
     city: "",
   });
 
-  //! Mostrar u ocultar contraseña
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -55,20 +56,42 @@ const Register = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setDataUser({
-      ...dataUser,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setDataUser((prevDataUser) => ({
+      ...prevDataUser,
+      [name]: value,
+    }));
+  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const errors = validateRegisterForm(dataUser);
+    setError(errors);
+    console.log(dataUser);
+
+    if (Object.values(errors).some((err) => err)) {
+      toast.error("Por favor, corrige los errores en el formulario.", {
+        theme: "colored",
+      });
+      return;
+    }
+
+    try {
+      // Convertir phone a número antes de enviar los datos
+      const userToRegister = {
+        ...dataUser,
+        phone: parseInt(dataUser.phone, 10),
+      };
+      await RegisterUser(userToRegister);
+      notify();
+      Router.push("/login"); // Redirige al usuario después del registro
+    } catch (error: any) {
+      toast.error(`Error registrando usuario: ${error.message}`, {
+        theme: "colored",
+      });
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault(); // Prevent default form submission
-
-    notify();
-    // Add form submission logic here if needed
-  };
-
-  //Validar formulario
   useEffect(() => {
     const errors = validateRegisterForm(dataUser);
     setError(errors);
@@ -93,7 +116,7 @@ const Register = () => {
       <div className="min-h-screen dark:bg-gray-800 flex justify-center py-10 md:pt-0 md:items-center">
         <div className="w-11/12 sm:w-2/3 md:w-1/2 lg:w-2/5">
           <form
-            onClick={handleSubmit}
+            onSubmit={handleSubmit}
             className="bg-white dark:bg-gray-800 p-6 md:p-10 rounded-lg shadow-lg w-full"
           >
             <div className="flex justify-center mb-6">
@@ -103,7 +126,7 @@ const Register = () => {
                   width="28"
                   height="28"
                   viewBox="0 0 24 24"
-                > 
+                >
                   <path
                     fill="currentColor"
                     d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"
@@ -149,6 +172,7 @@ const Register = () => {
               </div>
               {error.email && <p style={{ color: "red" }}>{error.email}</p>}
             </div>
+
             <div className="pb-4">
               <div className="relative flex items-center">
                 <TextInput
@@ -177,11 +201,11 @@ const Register = () => {
             <div className="pb-4">
               <div className="relative flex items-center">
                 <TextInput
-                  id="Rpassword"
-                  name="Rpassword"
+                  id="confirmPassword"
+                  name="confirmPassword"
                   type={showPassword ? "text" : "password"}
-                  //   value={dataUser.password}
-                  //   onChange={handleChange}
+                  value={dataUser.confirmPassword}
+                  onChange={handleChange}
                   required
                   className="w-full pr-10"
                   placeholder="Repetir su contraseña"
@@ -194,9 +218,9 @@ const Register = () => {
                   {showPassword ? <FaEye /> : <FaEyeSlash />}
                 </button>
               </div>
-              {/* {error.password && (
-                <p className="text-red-500 text-sm">{error.password}</p>
-              )} */}
+              {error.confirmPassword && (
+                <p className="text-red-500 text-sm">{error.confirmPassword}</p>
+              )}
             </div>
 
             <div className="pb-4">
@@ -232,6 +256,7 @@ const Register = () => {
               </div>
               {error.country && <p style={{ color: "red" }}>{error.country}</p>}
             </div>
+
             <div className="pb-4">
               <div className="relative flex items-center">
                 <TextInput
@@ -240,7 +265,7 @@ const Register = () => {
                   type="city"
                   value={dataUser.city}
                   onChange={handleChange}
-                  placeholder="Ingrese su city"
+                  placeholder="Ingrese su ciudad"
                   required
                   className="w-full pr-10"
                 />{" "}
@@ -254,13 +279,13 @@ const Register = () => {
                 <TextInput
                   id="phone"
                   name="phone"
-                  type="phone"
+                  type="text"
                   value={dataUser.phone}
                   onChange={handleChange}
                   placeholder="Ingrese su teléfono"
                   required
                   className="w-full pr-10"
-                />{" "}
+                />
                 <FaPhoneSquare className="text-gray-900 dark:text-gray-200 absolute right-2" />
               </div>
               {error.phone && <p style={{ color: "red" }}>{error.phone}</p>}

@@ -13,6 +13,7 @@ import { FaEyeSlash } from "react-icons/fa6";
 
 import Image from "next/image";
 import { signIn } from "next-auth/react";
+import { LoginUser } from "@/helpers/Autenticacion.helper";
 
 const Login = () => {
   const Router = useRouter();
@@ -56,42 +57,26 @@ const Login = () => {
   };
 
   //? Manejar submit del formulario
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      fetch("http://localhost:3001/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataUser),
-      })
-        .then((res) => res.json())
-        .then((json) => {
-          const { token, user } = json;
-          if (token) {
-            localStorage.setItem(
-              "userSession",
-              JSON.stringify({ token: token, userData: user })
-            );
-            Swal.fire({
-              icon: "success",
-              title: "¡Bienvenido a FastBurgers!",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-            Router.push("/");
-          } else {
-            Swal.fire({
-              icon: "error",
-              title: "Usuario o contraseña incorrecta",
-              showConfirmButton: false,
-              timer: 1500,
-            });
-          }
-        });
+      const user = await LoginUser(dataUser);
+
+      localStorage.setItem("userSession", JSON.stringify({ userData: user }));
+      Swal.fire({
+        icon: "success",
+        title: "¡Bienvenido a FastBurgers!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      Router.push("/home");
     } catch (error: any) {
-      throw new Error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Usuario o contraseña incorrecta",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   };
 
@@ -100,7 +85,6 @@ const Login = () => {
     const errors = validateLoginForm(dataUser);
     setError(errors);
   }, [dataUser]);
-  console.log(dataUser);
 
   return (
     <div className="font-[sans-serif] text-gray-900 flex items-center justify-center md:h-screen p-4 dark:bg-gray-800">

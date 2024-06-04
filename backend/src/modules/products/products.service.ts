@@ -81,9 +81,9 @@ export class ProductsService {
         const foundProduct = await this.productsRepository.findOneBy({name:product.name})
         if(foundProduct) throw new BadRequestException(`ya existe un producto con name: ${product.name}`)
         
-        const category = product.category;
-        const foundCategory = await this.categoriesRepository.findOneBy({name:category})
-        if(!foundCategory) throw new BadRequestException(`Categoria:${product.category}  no existe en base de datos. Debera crea la categoria`)
+        const categoryID = product.categoryID;
+        const foundCategory = await this.categoriesRepository.findOneBy({id:categoryID})
+        if(!foundCategory) throw new BadRequestException(`Categoria:${product.categoryID}  no existe en base de datos. Debera crea la categoria`)
         
         const uploadImage = await this.fileUploadRepository.uploadImage(file);
         if(!uploadImage) throw new BadRequestException('Hubo un error al subir la imagen')
@@ -131,10 +131,10 @@ export class ProductsService {
             ...(imgUrl && { imgUrl })
         };
 
-        if (product.category) {
-            const foundCategory = await this.categoriesRepository.findOneBy({ name: product.category });
+        if (product.categoryID) {
+            const foundCategory = await this.categoriesRepository.findOneBy({ id: product.categoryID });
             if (!foundCategory) {
-                throw new BadRequestException(`Categoria: ${product.category} no existe en base de datos. Debe crear la categoría primero.`);
+                throw new BadRequestException(`Categoria: ${product.categoryID} no existe en base de datos. Debe crear la categoría primero.`);
             }
             updateData.category = foundCategory;
         }
