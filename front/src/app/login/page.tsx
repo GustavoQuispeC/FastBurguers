@@ -7,16 +7,19 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LoginErrorProps, LoginProps } from "../../types";
+import { LoginErrorProps, LoginProps, LoginTerceros } from "../../types";
 import { validateLoginForm } from "../../utils/loginFormValidation";
 import { FaEyeSlash } from "react-icons/fa6";
 
 import Image from "next/image";
-import { signIn } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import { LoginUser } from "@/helpers/Autenticacion.helper";
+import { LoginUserTerceros } from "@/helpers/AutenticacionTerceros.helper";
 
 const Login = () => {
   const Router = useRouter();
+  const [redirected, setRedirected] = useState(false);
+  const { data: session } = useSession();
 
   const [dataUser, setDataUser] = useState<LoginProps>({
     email: "",
@@ -30,17 +33,34 @@ const Login = () => {
 
   const GoogleOnClick = async () => {
     await signIn("google", {
-      callbackUrl: "/home",
-      redirect: true,
+      redirect: false,
     });
   };
   const FacebookOnClick = async () => {
     await signIn("facebook", {
-      callbackUrl: "/home",
-      redirect: true,
+      redirect: false,
     });
   };
 
+  useEffect(() => {
+    if (session?.user?.email) {
+      const email = session.user.email;
+
+      LoginUserTerceros(email)
+        .then((user) => {
+          localStorage.setItem(
+            "userSession",
+            JSON.stringify({ userData: user })
+          );
+
+          setRedirected(true);
+          Router.push("/home");
+        })
+        .catch((error) => {
+          console.error("Error al obtener los datos del usuario:", error);
+        });
+    }
+  }, [session, redirected]);
   //! Mostrar u ocultar contraseña
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleTogglePassword = () => {

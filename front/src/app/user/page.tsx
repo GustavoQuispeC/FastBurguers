@@ -52,13 +52,12 @@ const Register = () => {
       const name = session.user.name ?? undefined;
       const email = session.user.email ?? undefined;
 
-      // Register user after successful login
       RegisterUserTerceros({
         name,
         email,
       } as Partial<IUserTerceros>).then(() => {
         setRedirected(true);
-        Router.push("/home");
+        Router.push("/login");
       });
     }
   }, [session, redirected]);
