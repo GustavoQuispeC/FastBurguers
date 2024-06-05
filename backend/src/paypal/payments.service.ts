@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Redirect } from "@nestjs/common";
 import * as paypal from "@paypal/checkout-server-sdk";
 
 @Injectable()
@@ -21,13 +21,14 @@ export class PaymentsService {
                     value: amount.toString(),
                 },
             }],
-            // application_context:{
-            //     brand_name:"fastburguers.com",
-            //     user_action:"PAY_NOW",
-            //     return_url: "http://localhost:3001/capture-order",
-            //     cancel_url: "http://localhost:3001/cancel-order"
+            application_context:{
+                brand_name:"fastburguers.com",
+                user_action:"PAY_NOW",
+                landing_page: 'NO_PREFERENCE',
+                return_url: "http://localhost:3001/capture-order",
+                cancel_url: "http://localhost:3000/home"
 
-            // }
+            }
         });
     
         const response = await this.client.execute(request);
@@ -38,10 +39,11 @@ export class PaymentsService {
 
     async captureOrder(orderId: string): Promise<any> {
         try {
-            const request = new paypal.orders.OrdersCaptureRequest(orderId);
+            const request = new paypal.orders.OrdersCancelRequest(orderId)
             request.requestBody({});
             const response = await this.client.execute(request);
-            return response.result;
+            console.log(response.result);            
+            return response.result
         } catch (error) {
             console.error('Error capturing order:', error);
             throw error;
