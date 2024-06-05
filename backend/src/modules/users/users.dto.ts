@@ -158,3 +158,7 @@ export class UpdateUserDto{
 export class LoginUserDto extends PickType(CreateUserDto,[
     'email', 'password'
 ]){}
+
+export class LoginThirdUserDto extends PickType(LoginUserDto,['email']) {}
+
+export class CreateThirdUserDto extends PickType(CreateUserDto,['email','name']) {}

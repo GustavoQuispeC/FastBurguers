@@ -8,11 +8,13 @@ export interface IProduct {
   size: string;
   discount: number;
   category: string;
+  valune?: number;
 }
 
 export interface IProductCart extends IProduct {
   quantity: number;
   drink?: string;
+  drinkPrice?: string;
 }
 
 export interface InsertProductProps {
