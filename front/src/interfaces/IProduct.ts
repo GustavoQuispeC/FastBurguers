@@ -25,8 +25,30 @@ export interface InsertProductProps {
   discount: number;
   categoryID: string;
 }
-
 export interface InsertErrorProductProps {
+  name: string;
+  description: string;
+  price: string;
+  stock: string;
+  imgUrl: string;
+  size: string;
+  discount: string;
+  categoryID: string;
+}
+
+export interface UpdateProductProps {
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  imgUrl: string;
+  size: string;
+  discount: number;
+  categoryID: string;
+}
+
+export interface UpdateErrorProductProps {
+  id: string;
   name: string;
   description: string;
   price: string;
