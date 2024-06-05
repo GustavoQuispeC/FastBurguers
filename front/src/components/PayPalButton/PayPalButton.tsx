@@ -1,7 +1,8 @@
+"use client";
+
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { useState } from "react";
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
-
 function Message({ content }: any) {
   return <p>{content}</p>;
 }
@@ -16,20 +17,12 @@ const PayPalButton: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ amount: 10 }),
+        body: JSON.stringify({ amount: 30 }),
       });
 
-      const orderId = await response.text(); // Solo esperamos el ID de la orden como texto
+      const orderId = await response.text();
 
-      if (orderId) {
-        // Aquí puedes hacer lo que necesites con el ID de la orden
-        console.log("Order ID:", orderId);
-        // Redirigir al usuario a la página de aprobación de PayPal (opcional)
-        window.location.href = `https://www.sandbox.paypal.com/checkoutnow?token=${orderId}`;
-        return orderId; // Devuelve el ID de la orden
-      } else {
-        throw new Error("Could not retrieve order ID from server");
-      }
+      return orderId;
     } catch (error: any) {
       console.error(error);
       setMessage(`Could not initiate PayPal Checkout...${error}`);
@@ -39,16 +32,35 @@ const PayPalButton: React.FC = () => {
 
   const handleApprove = async (data: any, actions: any) => {
     try {
-      const response = await fetch(`/api/orders/${data.orderID}/capture`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${apiURL}/payments/capture-order/${data.orderID}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const orderData = await response.json();
 
-      // Handle the approval response as before
+      const errorDetail = orderData?.details?.[0];
+
+      if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
+        return actions.restart();
+      } else if (errorDetail) {
+        throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
+      } else {
+        const transaction = orderData.purchase_units[0].payments.captures[0];
+        setMessage(
+          `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
+        );
+        console.log(
+          "Capture result",
+          orderData,
+          JSON.stringify(orderData, null, 2)
+        );
+      }
     } catch (error) {
       console.error(error);
       setMessage(`Sorry, your transaction could not be processed...${error}`);
