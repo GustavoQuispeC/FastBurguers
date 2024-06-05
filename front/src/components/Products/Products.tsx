@@ -3,6 +3,7 @@ import Link from "next/link";
 import { FaStar } from "react-icons/fa";
 import { getProducts } from "@/helpers/products.helper";
 import { IProduct } from "@/interfaces/IProduct";
+import {Rating} from "@mui/material"
 
 const Products = () => {
   const [products, setProducts] = useState<IProduct[]>([]);
@@ -11,7 +12,7 @@ const Products = () => {
     const fetchProducts = async () => {
       try {
         const loadedProducts = await getProducts();
-        setProducts(loadedProducts.slice(0, 10)); // Cargamos solo los primeros 10 productos
+        setProducts(loadedProducts.slice(0, 7)); 
       } catch (error) {
         console.error("Error al cargar los productos:", error);
       }
@@ -37,19 +38,21 @@ const Products = () => {
         </p>
       </div>
       <div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 place-items-center gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 place-items-center gap-5">
           {products.map((product: IProduct) => (
             <div key={product.id}>
               <img
                 src={product.imgUrl} 
                 alt={product.name}  
-                className="h-[220px] w-[150px] object-cover rounded-md"
+                className="h-[300px] w-[200px] object-cover rounded-md"
               />
-              <div>
-                <h3 className="font-semibold text-center">{product.name}</h3>  
-                <p className="text-sm text-center text-gray-600">{product.price}</p> 
+           <div className="product-item text-center">
+  <Rating name="read-only" value={5} readOnly />
+  <h3 className="font-bold">{product.name}</h3>
+  <p className="text-sm text-gray-600">{product.price}</p>
+               
                 <div className="flex items-center gap-1">
-                  {/* Aquí puedes agregar estrellas de calificación si lo deseas */}
+                 
                 </div>
               </div>
             </div>

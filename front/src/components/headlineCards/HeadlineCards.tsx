@@ -22,7 +22,7 @@ function HeadlineCards() {
         <div className='absolute w-full h-full bg-black/50 rounded-xl text-white flex flex-col justify-center items-center p-4'>
           <p className='font-bold text-xl sm:text-2xl px-2'>Nuevos Restaurantes</p>
           <p className='px-2 text-center'>Nos estamos expandiendo!</p>
-          <Link href='/map'>
+          <Link href='/contact'>
             <button type="button" className="focus:outline-none text-white bg-orange-500 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm sm:text-base px-5 py-2.5 mt-4">Descúbrelos</button>
           </Link>
         </div>

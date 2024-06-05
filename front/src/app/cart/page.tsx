@@ -2,6 +2,7 @@
 
 import { IProductCart } from "@/interfaces/IProduct";
 import Link from "next/link";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -52,9 +53,7 @@ const Cart = () => {
       subtotal += item.quantity * item.price;
       totalWithDrink +=
         item.quantity * (item.price + parseFloat(item.drinkPrice));
-      if (item.discount) {
-        descuento = Math.max(descuento, item.discount);
-      }
+     
     });
 
     const total = totalWithDrink - totalWithDrink * descuento; // Aplicar descuento al total con la bebida
@@ -107,8 +106,9 @@ const Cart = () => {
                     />
                   </div>
                   <div>
+                    
                     <h3 className="text-base font-bold text-gray-800">
-                      {item.name} + {item.drink} (${item.drinkPrice})
+                    - {item.name} + {item.drink} -(${item.price} + ${item.drinkPrice} )*{item.quantity}
                     </h3>
                     <h6
                       onClick={() => removeFromCart(index)}
@@ -140,7 +140,7 @@ const Cart = () => {
                   {item.discount && item.discount > 0 ? (
                     <div>
                       <h4 className="text-lg font-bold text-gray-800">
-                        ${total.toFixed(2)}
+                        ${(((item.price * item.quantity)*item.discount) + parseFloat(item.drinkPrice)).toFixed(2) }
                       </h4>
                       <h4 className="text-gray-500 line-through">
                         $
@@ -169,7 +169,7 @@ const Cart = () => {
           <ul className="text-gray-800 mt-8 space-y-4">
             <li className="flex flex-wrap gap-4 text-sm">
               Subtotal{" "}
-              <span className="ml-auto font-bold">${subtotal.toFixed(2)}</span>
+              <span className="ml-auto font-bold">${total.toFixed(2)}</span>
             </li>
 
             <li className="flex flex-wrap gap-4 text-sm">
@@ -187,14 +187,15 @@ const Cart = () => {
           </ul>
 
           <div className="mt-8 space-y-2">
-            <Link href="/checkout">
-              <button
-                type="button"
-                className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-gray-900 hover:bg-gray-700 text-orange-400 rounded-md"
-              >
-                Ir a pagar
-              </button>
+          <Link href="/checkout">
+            <button
+              type="button"
+              className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-gray-900 hover:bg-gray-700 text-orange-400 rounded-md"
+            >
+            Ir a pagar
+            </button>
             </Link>
+
             <button
               type="button"
               onClick={() => router.push("/home")}
