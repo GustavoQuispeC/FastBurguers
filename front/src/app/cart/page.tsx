@@ -2,6 +2,7 @@
 
 import { IProductCart } from "@/interfaces/IProduct";
 import Link from "next/link";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -191,8 +192,7 @@ const Cart = () => {
               type="button"
               className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-gray-900 hover:bg-gray-700 text-orange-400 rounded-md"
             >
-              
-              Ir a pagar
+            Ir a pagar
             </button>
             </Link>
 

@@ -14,6 +14,7 @@ export interface IProduct {
 export interface IProductCart extends IProduct {
   quantity: number;
   drink?: string;
+  drinkPrice?: string;
 }
 
 export interface InsertProductProps {

@@ -1,3 +1,4 @@
+import React from "react";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -5,7 +6,7 @@ import Navbar from "../components/navbar/Navbar";
 import { ThemeModeScript } from "flowbite-react";
 import Provider from "@/context/Provider";
 import Footer from "@/components/footer/Footer";
-
+import { PayPalContext } from "@/context/PayPalContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,11 +26,13 @@ export default function RootLayout({
         <ThemeModeScript />
       </head>
       <body className={inter.className}>
-        <Provider>
-          <Navbar />
-          {children}
-          <Footer />
-        </Provider>
+        <PayPalContext>
+          <Provider>
+            <Navbar />
+            {children}
+            <Footer />
+          </Provider>
+        </PayPalContext>
       </body>
     </html>
   );

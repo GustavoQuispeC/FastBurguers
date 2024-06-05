@@ -30,10 +30,10 @@ const Navbar = () => {
   const [allProducts, setAllProducts] = useState<IProduct[]>([]);
   const [searchResults, setSearchResults] = useState<IProduct[]>([]);
   const [userSesion, setUserSesion] = useState<IUserSession>();
-  const [cartItemCount, setCartItemCount] = useState<number>(0);
+  const [cartItemCount, setCartItemCount] = useState(0);
 
   useEffect(() => {
-    async function fetchProducts() {
+    async function fetchData() {
       try {
         const products = await getProducts();
         setAllProducts(products);
@@ -44,22 +44,20 @@ const Navbar = () => {
           setUserSesion(JSON.parse(userSession));
         }
 
-        // Obtener la cantidad de productos del carrito desde el localStorage
         const cart = localStorage.getItem("cart");
         if (cart !== null) {
-          const cartItems = JSON.parse(cart);
-          const itemCount = cartItems.reduce(
-            (acc: number, item: any) => acc + item.quantity,
-            0
-          );
-          setCartItemCount(itemCount);
+          const parsedCart = JSON.parse(cart);
+
+          const totalCount = parsedCart.length;
+
+          setCartItemCount(totalCount);
         }
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Error fetching data:", error);
       }
     }
 
-    fetchProducts();
+    fetchData();
   }, [pathname]);
 
   const handleSearch = (event: { target: { value: string } }) => {
@@ -78,13 +76,13 @@ const Navbar = () => {
   const CerrarSesion = () => {
     signOut();
     localStorage.removeItem("userSession");
+    localStorage.removeItem("cart");
   };
 
   const handleProductClick = () => {
     setSearchTerm("");
     setSearchResults(allProducts);
   };
-
   return (
     <>
       <div className="max-w-[1640px] dark:bg-gray-600 mx-auto flex dark:text-white justify-between items-center p-4">
