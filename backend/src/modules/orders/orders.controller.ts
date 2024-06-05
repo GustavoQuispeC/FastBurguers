@@ -23,8 +23,7 @@ export class OrdersController {
 
     @ApiBearerAuth()
     @Post()
-    @Roles(Role.ADMIN)
-    @UseGuards(AuthGuards, RolesGuard)
+    @UseGuards(AuthGuards)
     addOrder(@Body() orders: OrdersDto){  
         const {userId, products} = orders
         return this.ordersService.addOrder(userId, products)

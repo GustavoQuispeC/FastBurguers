@@ -26,7 +26,8 @@ export class AuthService {
         return {
             message: 'Usuario logueado',
             token,
-            data: infoPublicUser,
+            data: {...infoPublicUser,userid:user.id},
+            
         }
     }
 
