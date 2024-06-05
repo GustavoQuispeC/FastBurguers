@@ -17,15 +17,51 @@ import { FaTreeCity } from "react-icons/fa6";
 
 import { ToastContainer, toast, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import { signIn, signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import { RegisterUserTerceros } from "@/helpers/AutenticacionTerceros.helper";
 import { RegisterUser } from "@/helpers/Autenticacion.helper";
+import { IUserTerceros } from "@/interfaces/IUserTerceros";
 
 const Register = () => {
   const Router = useRouter();
+
+  const [redirected, setRedirected] = useState(false);
+  const { data: session } = useSession();
 
   const notify = () =>
     toast.success("Usuario registrado exitosamente", {
       theme: "colored",
     });
+
+  const GoogleOnClick = async () => {
+    await signIn("google", {
+      redirect: false,
+    });
+  };
+
+  const FacebookOnClick = async () => {
+    await signIn("facebook", {
+      redirect: false,
+    });
+  };
+
+  useEffect(() => {
+    if (session?.user) {
+      const name = session.user.name ?? undefined;
+      const email = session.user.email ?? undefined;
+
+      // Register user after successful login
+      RegisterUserTerceros({
+        name,
+        email,
+      } as Partial<IUserTerceros>).then(() => {
+        setRedirected(true);
+        Router.push("/home");
+      });
+    }
+  }, [session, redirected]);
 
   const [dataUser, setDataUser] = useState<RegisterProps>({
     name: "",
@@ -63,6 +99,7 @@ const Register = () => {
       [name]: value,
     }));
   };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const errors = validateRegisterForm(dataUser);
@@ -120,6 +157,25 @@ const Register = () => {
             className="bg-white dark:bg-gray-800 p-6 md:p-10 rounded-lg shadow-lg w-full"
           >
             <div className="flex justify-center mb-6">
+              <div className="flex justify-evenly items-center  w-32 ">
+                <button onClick={GoogleOnClick}>
+                  <Image
+                    src="/google.png"
+                    alt="google"
+                    width={35}
+                    height={35}
+                  />
+                </button>
+
+                <button onClick={FacebookOnClick}>
+                  <Image
+                    src="/facebook.png"
+                    alt="facebook"
+                    width={38}
+                    height={38}
+                  />
+                </button>
+              </div>
               <span className="inline-block  bg-gray-200 rounded-full p-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
