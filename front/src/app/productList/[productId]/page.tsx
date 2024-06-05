@@ -195,7 +195,7 @@ const ProductEdit = ({ params }: { params: { productId: string } }) => {
               onChange={handleChange}
             />
           </div>
-          {/* <div>
+          <div>
             <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Categoria
             </label>
@@ -213,7 +213,7 @@ const ProductEdit = ({ params }: { params: { productId: string } }) => {
                 </option>
               ))}
             </select>
-          </div> */}
+          </div>
 
           <div>
             <label htmlFor="discount" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -263,7 +263,7 @@ const ProductEdit = ({ params }: { params: { productId: string } }) => {
             />
           </div>
 
-          <div>
+          {/* <div>
             <label htmlFor="stock" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               categoria
             </label>
@@ -278,7 +278,7 @@ const ProductEdit = ({ params }: { params: { productId: string } }) => {
               
             />
           </div>
-
+ */}
 
 
 
