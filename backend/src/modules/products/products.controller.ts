@@ -58,8 +58,8 @@ export class ProductsController {
 
     @ApiBearerAuth()
     @Post()
-    // @Roles(Role.SUPERADMIN)
-    // @UseGuards(AuthGuards,RolesGuard)
+    @Roles(Role.ADMIN)
+    @UseGuards(AuthGuards,RolesGuard)
     @UseInterceptors(FileInterceptor('file'))
     @ApiConsumes('multipart/form-data')
     @ApiBody({
@@ -105,8 +105,8 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @Put(':id')
-  @Roles(Role.SUPERADMIN)
-  @UseGuards(AuthGuards, RolesGuard)
+  // @Roles(Role.ADMIN)
+  // @UseGuards(AuthGuards, RolesGuard)
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({

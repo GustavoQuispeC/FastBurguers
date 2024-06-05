@@ -21,9 +21,18 @@ export class PaymentsService {
                     value: amount.toString(),
                 },
             }],
+            // application_context:{
+            //     brand_name:"fastburguers.com",
+            //     user_action:"PAY_NOW",
+            //     return_url: "http:localhost:4000/capture-order",
+            //     cancel_url: "http:localhost:4000/cancel-order"
+
+            // }
         });
     
         const response = await this.client.execute(request);
+        console.log(response.result);
+        
         return response.result.id;
     }
 
