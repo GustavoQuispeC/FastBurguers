@@ -10,42 +10,37 @@ function Message({ content }: any) {
 const PayPalButton: React.FC = () => {
   const [message, setMessage] = useState("");
 
-  const handlecreateOrder = async () => {
+  const handlecreateOrder = async (): Promise<string> => {
     try {
       const response = await fetch(`${apiURL}/payments/create-order`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ amount: 10 }),
+        body: JSON.stringify({ amount: 30 }),
       });
 
-      const orderData = await response.json();
+      const orderId = await response.text();
 
-      if (orderData.id) {
-        return orderData.id;
-      } else {
-        const errorDetail = orderData?.details?.[0];
-        const errorMessage = errorDetail
-          ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
-          : JSON.stringify(orderData);
-
-        throw new Error(errorMessage);
-      }
+      return orderId;
     } catch (error: any) {
       console.error(error);
       setMessage(`Could not initiate PayPal Checkout...${error}`);
+      throw error;
     }
   };
 
   const handleApprove = async (data: any, actions: any) => {
     try {
-      const response = await fetch(`/api/orders/${data.orderID}/capture`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await fetch(
+        `${apiURL}/payments/capture-order/${data.orderID}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       const orderData = await response.json();
 
@@ -56,8 +51,6 @@ const PayPalButton: React.FC = () => {
       } else if (errorDetail) {
         throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
       } else {
-        // (3) Successful transaction -> Show confirmation or thank you message
-        // Or go to another URL:  actions.redirect('thank_you.html');
         const transaction = orderData.purchase_units[0].payments.captures[0];
         setMessage(
           `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`

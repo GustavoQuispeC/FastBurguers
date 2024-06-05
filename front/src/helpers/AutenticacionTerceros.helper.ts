@@ -18,8 +18,8 @@ export async function RegisterUserTerceros(
 
     const newUser = await res.json();
 
-    signOut();
-
+    await signOut();
+    window.location.href = "/login";
     return newUser;
   } catch (error: any) {
     throw new Error(`Error creando usuario: ${error.message}`);

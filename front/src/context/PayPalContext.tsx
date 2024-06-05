@@ -3,8 +3,16 @@
 import React from "react";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
+const clientId = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+
+if (!clientId) {
+  throw new Error(
+    "NEXT_PUBLIC_PAYPAL_CLIENT_ID no está definido en el archivo .env.local"
+  );
+}
+
 const initialOptions = {
-  clientId: "test",
+  clientId: clientId,
   currency: "USD",
   components: "buttons",
 };

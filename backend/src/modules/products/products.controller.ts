@@ -3,9 +3,11 @@ import {
   Body,
   Controller,
   Delete,
-  Get, HttpStatus,
+  Get,
+  HttpStatus,
   Inject,
-  Param, ParseFilePipeBuilder,
+  Param,
+  ParseFilePipeBuilder,
   ParseUUIDPipe,
   Post,
   Put,
@@ -58,8 +60,8 @@ export class ProductsController {
 
     @ApiBearerAuth()
     @Post()
-    // @Roles(Role.SUPERADMIN)
-    // @UseGuards(AuthGuards,RolesGuard)
+    @Roles(Role.ADMIN)
+    @UseGuards(AuthGuards,RolesGuard)
     @UseInterceptors(FileInterceptor('file'))
     @ApiConsumes('multipart/form-data')
     @ApiBody({
@@ -98,15 +100,13 @@ export class ProductsController {
     ){
         console.log(product);
 
-
-        
-        return this.productService.createProduct(product, file)
-    }
+    return this.productService.createProduct(product, file);
+  }
 
   @ApiBearerAuth()
   @Put(':id')
-  @Roles(Role.SUPERADMIN)
-  @UseGuards(AuthGuards, RolesGuard)
+  // @Roles(Role.ADMIN)
+  // @UseGuards(AuthGuards, RolesGuard)
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({

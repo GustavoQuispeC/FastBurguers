@@ -1,4 +1,4 @@
-import { IProduct } from "@/interfaces/IProduct";
+import { IProduct, InsertProductProps } from "@/interfaces/IProduct";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -18,6 +18,7 @@ export async function getProducts() {
 export async function getProductsById(id: number): Promise<IProduct> {
   try {
     const res = await fetch(`${apiURL}/products/${id}`);
+
     const productData: any = await res.json();
 
     const product: IProduct = {
@@ -31,20 +32,95 @@ export async function getProductsById(id: number): Promise<IProduct> {
     throw new Error(error);
   }
 }
+
+//! obtener productos desde productlist
+export const getProductListById = async (productId: string) => {
+  console.log("getProductListById called with:", productId); // Log the productId
+  if (!productId) {
+    throw new Error("Product ID is undefined");
+  }
+  const response = await fetch(`http://localhost:3001/product/${productId}`);
+  if (!response.ok) {
+    throw new Error(`Error fetching product list: ${response.statusText}`);
+  }
+  return await response.json();
+};
+
 //! Insert product
-export async function insertProduct(product: IProduct) {
+export const insertProduct = async (
+  product: InsertProductProps,
+  imageFile: File | null,
+  token: string
+) => {
   try {
-    const res = await fetch(`${apiURL}/products`, {
+    const formData = new FormData();
+
+    formData.append("name", product.name);
+    formData.append("description", product.description);
+    formData.append("price", product.price.toString());
+    formData.append("stock", product.stock.toString());
+    formData.append("discount", product.discount.toString());
+    formData.append("categoryID", product.categoryID);
+    formData.append("size", product.size);
+
+    if (imageFile) {
+      formData.append("file", imageFile);
+    }
+    const response = await fetch(`${apiURL}/products`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(product),
+      body: formData,
     });
 
-    const data = await res.json();
-    return data;
-  } catch (error: any) {
-    throw new Error(error);
+    if (!response.ok) {
+      throw new Error("Failed to insert product");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error in insertProduct:", error);
+    throw error;
   }
-}
+};
+
+//! Update product
+export const updateProduct = async (
+  product: InsertProductProps,
+  imageFile: File | null,
+  token: string
+) => {
+  try {
+    const formData = new FormData();
+
+    formData.append("name", product.name);
+    formData.append("description", product.description);
+    formData.append("price", product.price.toString());
+    formData.append("stock", product.stock.toString());
+    formData.append("discount", product.discount.toString());
+    formData.append("categoryID", product.categoryID);
+    formData.append("size", product.size);
+
+    if (imageFile) {
+      formData.append("file", imageFile);
+    }
+
+    const response = await fetch(`${apiURL}/products/${product.categoryID}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update product");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error in updateProduct:", error);
+    throw error;
+  }
+};

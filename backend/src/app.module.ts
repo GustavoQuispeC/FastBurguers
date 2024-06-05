@@ -48,6 +48,7 @@ import { StatusHistoriesModule } from './modules/status-histories/status-histori
     OrdersModule,
     TestimonyModule,
     StatusHistoriesModule,
+    PaymentsModule,
     TypeOrmModule.forFeature([Products,Categories,Users])
   ],
   controllers: [AppController],
