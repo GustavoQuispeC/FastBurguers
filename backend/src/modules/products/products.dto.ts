@@ -62,6 +62,7 @@ export class CreateProductdto{
      *  Must be : personal, regular or extrema
      * @example 'personal'
      */
+    @IsOptional()
     @IsEnum(SizeProduct,
         {message: 'Size take only : personal | regular | extrema values'})
     size: SizeProduct
