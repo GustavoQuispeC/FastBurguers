@@ -1,16 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import FiltroProductos from "../../components/filtroProductos/FiltroProductos";
 
 const Product = () => {
+  const router = useRouter();
+  const { category } = router.query;
+
   const [selectedCategory, setSelectedCategory] = useState<number>(1);
   const [minPrice, setMinPrice] = useState<number>(1);
   const [maxPrice, setMaxPrice] = useState<number>(Infinity);
   const [tempRange, setTempRange] = useState<[number, number]>([1, 20]); // Default range for slider
   const [filterApplied, setFilterApplied] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (category) {
+      setSelectedCategory(Number(category));
+    }
+  }, [category]);
 
   const handleCategoryClick = (categoryId: number) => {
     setSelectedCategory(categoryId);
