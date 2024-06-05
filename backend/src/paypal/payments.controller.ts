@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Redirect,
+  Request,
+} from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { CreateOrderDto } from './dto/payments.dto';
 
@@ -16,8 +25,10 @@ export class PaymentsController {
     return await this.paymentsService.captureOrder(orderId);
   }
 
-  @Post('cancel-order/:orderId')
-  async cancelOrder(@Param('orderId') orderId: string) {
-    return await this.paymentsService.cancelOrder(orderId);
-  }
+  @Get('cancel-order')
+  @Redirect('/home')
+  cancelOrder() //     @Param('orderId') orderId: string
+  {}
+  //     return await this.paymentsService.cancelOrder(orderId);
+  // }
 }
