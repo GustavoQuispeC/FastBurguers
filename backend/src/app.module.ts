@@ -46,10 +46,11 @@ import { StatusHistoriesModule } from './modules/status-histories/status-histori
     AuthModule,
     FilesModule,
     OrdersModule,
+    TestimonyModule,
     TypeOrmModule.forFeature([Products,Categories,Users])
   ],
-  controllers: [AppController, TestimonyController],
-  providers: [AppService, PreloadService, TestimonyService],
+  controllers: [AppController],
+  providers: [AppService, PreloadService],
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
