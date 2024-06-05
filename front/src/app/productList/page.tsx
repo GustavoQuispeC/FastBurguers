@@ -130,94 +130,76 @@ const ProductList = () => {
             </div>
           </div>
           <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-    <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-      <tr>
-        <th scope="col" className="p-4">
-          Producto
-        </th>
-        <th scope="col" className="p-4">
-          Tamaño
-        </th>
-        <th scope="col" className="p-4">
-          Stock
-        </th>
-        <th scope="col" className="p-4">
-          Precio
-        </th>
-        <th scope="col" className="p-4">
-          Descuento
-        </th>
-        <th scope="col" className="p-4">
-          Acciones
-        </th>
-      </tr>
-    </thead>
+            <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                  <th scope="col" className="p-4">Producto</th>
+                  <th scope="col" className="p-4">Tamaño</th>
+                  <th scope="col" className="p-4">Stock</th>
+                  <th scope="col" className="p-4">Precio</th>
+                  <th scope="col" className="p-4">Descuento</th>
+                  <th scope="col" className="p-4">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getCurrentPageProducts().map((product: IProduct) => (
+                  <tr key={product.id} className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <th scope="row" className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      <div className="flex items-center">
+                        <img
+                          src={product.imgUrl}
+                          alt={product.name}
+                          className="h-8 w-auto mr-3"
+                        />
+                        {product.name}
+                      </div>
+                    </th>
+                    <td className="px-4 py-3">
+                      <span className="bg-gray-900 text-orange-400 text-xs font-medium px-2 py-0.5 rounded">
+                        {product.size}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      <div className="flex justify-center items-center">
+                        {product.stock}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      {product.price}
+                    </td>
+                    <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      {product.discount}
+                    </td>
+                    <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      <div className="flex items-center space-x-4">
+                        <Link
+                          type="button"
+                          data-drawer-target="drawer-update-product"
+                          data-drawer-show="drawer-update-product"
+                          aria-controls="drawer-update-product"
+                          className="py-2 px-3 flex items-center text-sm font-medium text-center text-orange-400 bg-gray-900 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
 
-    <tbody>
-      {getCurrentPageProducts().map((product: IProduct) => (
-        <tr
-          key={product.id}
-          className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
-        >
-          <th
-            scope="row"
-            className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-          >
-            <div className="flex items-center">
-              <img
-                src={product.imgUrl}
-                alt={product.name}
-                className="h-8 w-auto mr-3"
-              />
-              {product.name}
-            </div>
-          </th>
-          <td className="px-4 py-3">
-            <span className="bg-gray-900 text-orange-400 text-xs font-medium px-2 py-0.5 rounded">
-              {product.size}
-            </span>
-          </td>
-          <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            <div className="flex justify-center items-center">
-              {product.stock}
-            </div>
-          </td>
-          <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {product.price}
-          </td>
-          <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            {product.discount}
-          </td>
-          <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            <div className="flex items-center space-x-4">
-              <Link
-                type="button"
-                data-drawer-target="drawer-update-product"
-                data-drawer-show="drawer-update-product"
-                aria-controls="drawer-update-product"
-                className="py-2 px-3 flex items-center text-sm font-medium text-center text-orange-400 bg-gray-900 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                href="/productEdit"
-              >
-                <MdEdit />
-                Editar
-              </Link>
-              <button
-                type="button"
-                onClick={() => handleDeleteProduct("")}
-                className="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
-              >
-                <RiDeleteBin6Fill />
-                Eliminar
-              </button>
-            </div>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
+
+                          href={`/productList/${product.id}`}
+                        >
+                          <MdEdit />
+                          Editar
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteProduct("")}
+                          className="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+                        >
+                          <RiDeleteBin6Fill />
+                          Eliminar
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-
           <div className="flex overflow-x-auto sm:justify-center py-5 bg-gray-900">
             <Pagination
               layout="pagination"

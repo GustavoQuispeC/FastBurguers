@@ -3,9 +3,11 @@ import {
   Body,
   Controller,
   Delete,
-  Get, HttpStatus,
+  Get,
+  HttpStatus,
   Inject,
-  Param, ParseFilePipeBuilder,
+  Param,
+  ParseFilePipeBuilder,
   ParseUUIDPipe,
   Post,
   Put,
@@ -98,10 +100,8 @@ export class ProductsController {
     ){
         console.log(product);
 
-
-        
-        return this.productService.createProduct(product, file)
-    }
+    return this.productService.createProduct(product, file);
+  }
 
   @ApiBearerAuth()
   @Put(':id')

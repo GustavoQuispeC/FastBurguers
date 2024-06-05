@@ -16,6 +16,11 @@ import { Categories } from './entities/categories.entity';
 import { Users } from './entities/users.entity';
 import { OrdersModule } from './modules/orders/orders.module';
 import { MorganMiddleware } from './middlewares/morgan.middleware';
+import { TestimonyController } from './modules/testimony/testimony.controller';
+import { TestimonyModule } from './modules/testimony/testimony.module';
+import { Orders } from './entities/orders.entity';
+import { Testimony } from './entities/testimony.entity';
+import { TestimonyService } from './modules/testimony/testimony.service';
 import { PaymentsModule } from './paypal/payments.module';
 import { StatusHistoriesModule } from './modules/status-histories/status-histories.module';
 
@@ -41,9 +46,9 @@ import { StatusHistoriesModule } from './modules/status-histories/status-histori
     AuthModule,
     FilesModule,
     OrdersModule,
-    TypeOrmModule.forFeature([Products,Categories,Users]),
+    TestimonyModule,
     StatusHistoriesModule,
-    PaymentsModule
+    TypeOrmModule.forFeature([Products,Categories,Users])
   ],
   controllers: [AppController],
   providers: [AppService, PreloadService],

@@ -27,7 +27,6 @@ export class OrdersController {
     @UseGuards(AuthGuards, RolesGuard)
     addOrder(@Body() orders: OrdersDto){  
         const {userId, products} = orders
-        console.log(orders)
         return this.ordersService.addOrder(userId, products)
     }
 
