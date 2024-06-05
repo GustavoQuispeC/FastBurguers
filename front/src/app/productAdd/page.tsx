@@ -27,6 +27,8 @@ const InsertProduct = () => {
     categoryID: "",
   });
 
+  console.log("dataProduct", dataProduct)
+  
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [errors, setErrors] = useState<InsertErrorProductProps>({
@@ -208,7 +210,7 @@ const InsertProduct = () => {
                   <span className="text-red-500">{errors.stock}</span>
                 )}
               </div>
-              <div>
+              {/* <div>
                 <label
                   htmlFor="size"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -228,7 +230,7 @@ const InsertProduct = () => {
                 {errors.size && (
                   <span className="text-red-500">{errors.size}</span>
                 )}
-              </div>
+              </div> */}
             </div>
 
             <div className="sm:col-span-2">

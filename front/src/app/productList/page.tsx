@@ -1,3 +1,4 @@
+
 "use client";
 import { MdEdit } from "react-icons/md";
 import { IoSearchSharp } from "react-icons/io5";
@@ -16,9 +17,9 @@ const ProductList = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const PRODUCTS_PER_PAGE = 10; //? Cantidad de productos por página
+  const PRODUCTS_PER_PAGE = 10; // Cantidad de productos por página
 
-//! Obtener los productos
+  //! Obtener los productos
   useEffect(() => {
     async function fetchProducts() {
       try {
@@ -58,8 +59,10 @@ const ProductList = () => {
     setCurrentPage(1); // Reiniciar la página actual al cambiar el término de búsqueda
   };
   const onPageChange = (page: number) => setCurrentPage(page);
+  console.log("products", products)
 
-  const handleDeleteProduct = async (id: string) => {
+  //! Función para manejar la eliminación de un producto
+  const handleDeleteProduct = async (id: number) => {
     const { isConfirmed } = await Swal.fire({
       title: "¿Estás seguro?",
       text: "No podrás revertir esta acción",
@@ -73,14 +76,19 @@ const ProductList = () => {
 
     if (isConfirmed) {
       try {
-        //! pendiente Lógica para eliminar el producto
+        await fetch(`/api/products/${id}`, {
+          method: "DELETE",
+        });
         Swal.fire("¡Eliminado!", "El producto ha sido eliminado", "success");
+        // Actualiza la lista de productos después de eliminar
+        setProducts(products.filter(product => product.id !== id));
       } catch (error) {
         console.error("Error deleting product:", error);
         Swal.fire("¡Error!", "Ha ocurrido un error al eliminar el producto", "error");
       }
     }
-  }
+  };
+
   return (
     <section className="p-3 sm:p-5 antialiased h-screen dark:bg-gray-700">
       <div className="mx-auto max-w-screen-2xl px-4 lg:px-12 ">
@@ -187,7 +195,7 @@ const ProductList = () => {
                         </Link>
                         <button
                           type="button"
-                          onClick={() => handleDeleteProduct("")}
+                          onClick={() => handleDeleteProduct(product.id)}
                           className="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
                         >
                           <RiDeleteBin6Fill />
@@ -216,5 +224,6 @@ const ProductList = () => {
     </section>
   );
 };
+
 
 export default ProductList;
