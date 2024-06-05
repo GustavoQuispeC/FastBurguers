@@ -24,8 +24,8 @@ export class PaymentsService {
             // application_context:{
             //     brand_name:"fastburguers.com",
             //     user_action:"PAY_NOW",
-            //     return_url: "http:localhost:4000/capture-order",
-            //     cancel_url: "http:localhost:4000/cancel-order"
+            //     return_url: "http://localhost:3001/capture-order",
+            //     cancel_url: "http://localhost:3001/cancel-order"
 
             // }
         });
@@ -35,5 +35,29 @@ export class PaymentsService {
         
         return response.result.id;
     }
+
+    async captureOrder(orderId: string): Promise<any> {
+        try {
+            const request = new paypal.orders.OrdersCaptureRequest(orderId);
+            request.requestBody({});
+            const response = await this.client.execute(request);
+            return response.result;
+        } catch (error) {
+            console.error('Error capturing order:', error);
+            throw error;
+        }
+    }
+
+    async cancelOrder(orderId: string): Promise<any> {
+        try {
+            const request = new paypal.orders.OrdersCancelRequest(orderId);
+            const response = await this.client.execute(request);
+            return response.result;
+        } catch (error) {
+            console.error('Error cancelling order:', error);
+            throw error;
+        }
+    }
+    
 
 }
