@@ -40,7 +40,7 @@ export class PaymentsService {
 
   async captureOrder(orderId: string): Promise<any> {
     try {
-      const request = new paypal.orders.OrdersCancelRequest(orderId);
+      const request = new paypal.orders.OrdersCaptureRequest(orderId);
       request.requestBody({});
       const response = await this.client.execute(request);
       console.log(response.result);

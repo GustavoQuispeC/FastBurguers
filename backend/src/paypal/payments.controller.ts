@@ -27,8 +27,7 @@ export class PaymentsController {
 
   @Get('cancel-order')
   @Redirect('/home')
-  cancelOrder() //     @Param('orderId') orderId: string
-  {}
+  cancelOrder() {} //     @Param('orderId') orderId: string
   //     return await this.paymentsService.cancelOrder(orderId);
   // }
 }
