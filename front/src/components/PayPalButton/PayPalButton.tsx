@@ -1,8 +1,7 @@
-"use client";
-
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { useState } from "react";
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
+
 function Message({ content }: any) {
   return <p>{content}</p>;
 }
@@ -10,7 +9,7 @@ function Message({ content }: any) {
 const PayPalButton: React.FC = () => {
   const [message, setMessage] = useState("");
 
-  const handlecreateOrder = async () => {
+  const handlecreateOrder = async (): Promise<string> => {
     try {
       const response = await fetch(`${apiURL}/payments/create-order`, {
         method: "POST",
@@ -20,21 +19,21 @@ const PayPalButton: React.FC = () => {
         body: JSON.stringify({ amount: 10 }),
       });
 
-      const orderData = await response.json();
+      const orderId = await response.text(); // Solo esperamos el ID de la orden como texto
 
-      if (orderData.id) {
-        return orderData.id;
+      if (orderId) {
+        // Aquí puedes hacer lo que necesites con el ID de la orden
+        console.log("Order ID:", orderId);
+        // Redirigir al usuario a la página de aprobación de PayPal (opcional)
+        window.location.href = `https://www.sandbox.paypal.com/checkoutnow?token=${orderId}`;
+        return orderId; // Devuelve el ID de la orden
       } else {
-        const errorDetail = orderData?.details?.[0];
-        const errorMessage = errorDetail
-          ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
-          : JSON.stringify(orderData);
-
-        throw new Error(errorMessage);
+        throw new Error("Could not retrieve order ID from server");
       }
     } catch (error: any) {
       console.error(error);
       setMessage(`Could not initiate PayPal Checkout...${error}`);
+      throw error;
     }
   };
 
@@ -49,25 +48,7 @@ const PayPalButton: React.FC = () => {
 
       const orderData = await response.json();
 
-      const errorDetail = orderData?.details?.[0];
-
-      if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
-        return actions.restart();
-      } else if (errorDetail) {
-        throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
-      } else {
-        // (3) Successful transaction -> Show confirmation or thank you message
-        // Or go to another URL:  actions.redirect('thank_you.html');
-        const transaction = orderData.purchase_units[0].payments.captures[0];
-        setMessage(
-          `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
-        );
-        console.log(
-          "Capture result",
-          orderData,
-          JSON.stringify(orderData, null, 2)
-        );
-      }
+      // Handle the approval response as before
     } catch (error) {
       console.error(error);
       setMessage(`Sorry, your transaction could not be processed...${error}`);
