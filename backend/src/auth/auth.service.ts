@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { UsersService } from "src/modules/users/users.service";
 import * as bcrypt from 'bcrypt'
 import { CreateUserDto} from "src/modules/users/users.dto";
@@ -6,7 +6,10 @@ import { JwtService } from "@nestjs/jwt";
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly usersService: UsersService, private readonly jwtService: JwtService){}
+    constructor(
+        private readonly usersService: UsersService,
+        private readonly jwtService: JwtService
+    ){}
 
     async signIn(email: string, password: string){ // iniciar sesion
         // verificar si existe el usuario
@@ -26,7 +29,8 @@ export class AuthService {
         return {
             message: 'Usuario logueado',
             token,
-            data: infoPublicUser,
+            data: {...infoPublicUser,userid:user.id},
+            
         }
     }
 
@@ -41,8 +45,9 @@ export class AuthService {
         if(!hashedPassword){
             throw new BadRequestException('Error al hashear constraseña')
         }
-        const newUser = this.usersService.createUser({...user, password: hashedPassword}) 
+        const newUser = await this.usersService.createUser({...user, password: hashedPassword}) 
         return newUser
     }
+
 
 }

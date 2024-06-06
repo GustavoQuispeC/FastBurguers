@@ -155,9 +155,7 @@ export class UpdateUserDto{
     isSuperAdmin?:boolean
 }
 
-export class LoginUserDto extends PickType(CreateUserDto,[
-    'email', 'password'
-]){}
+export class LoginUserDto extends PickType(CreateUserDto,['email', 'password']){}
 
 export class LoginThirdUserDto extends PickType(LoginUserDto,['email']) {}
 

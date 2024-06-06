@@ -15,16 +15,15 @@ export class OrdersController {
 
     @ApiBearerAuth()
     @Get(':id')
-    @Roles(Role.ADMIN)
-    @UseGuards(AuthGuards, RolesGuard)
+    // @Roles(Role.ADMIN)
+    // @UseGuards(AuthGuards, RolesGuard)
     getOrder(@Param('id') id: string){
         return this.ordersService.getOrder(id)
     }
 
     @ApiBearerAuth()
     @Post()
-    @Roles(Role.ADMIN)
-    @UseGuards(AuthGuards, RolesGuard)
+    // @UseGuards(AuthGuards)
     addOrder(@Body() orders: OrdersDto){  
         const {userId, products} = orders
         return this.ordersService.addOrder(userId, products)
@@ -32,16 +31,16 @@ export class OrdersController {
 
     @ApiBearerAuth()
     @Put(':id')
-    @Roles(Role.ADMIN)
-    @UseGuards(AuthGuards, RolesGuard)
+    // @Roles(Role.ADMIN)
+    // @UseGuards(AuthGuards, RolesGuard)
     update(@Body() orders: dateOrdersDto, @Param('id') id: string){
         return this.ordersService.updateOrders(orders, id)
     }
 
     @ApiBearerAuth()
     @Delete(':id')
-    @Roles(Role.SUPERADMIN)
-    @UseGuards(AuthGuards,RolesGuard)
+    // @Roles(Role.SUPERADMIN)
+    // @UseGuards(AuthGuards,RolesGuard)
     deleteOrders(@Param('id',ParseUUIDPipe) id:string) {
         return this.ordersService.deleteOrders(id)
     }

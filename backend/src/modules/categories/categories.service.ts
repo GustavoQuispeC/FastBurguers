@@ -7,7 +7,7 @@ import { Repository } from 'typeorm';
 export class CategoriesService {
 
     constructor(
-        @InjectRepository(Categories) private categoryRepository: Repository<Categories>
+        @InjectRepository(Categories) private readonly categoryRepository: Repository<Categories>
     ){}
 
     async getAll(page:string, limit:string){
@@ -51,7 +51,7 @@ export class CategoriesService {
     async deleteCategory(id:string){
         const foundCategory = await this.categoryRepository.findOneBy({id})
         if(!foundCategory) throw new BadRequestException(`No se encontro categorie con ${id}`)
-        this.categoryRepository.remove(foundCategory)       
+        await this.categoryRepository.remove(foundCategory)       
         return foundCategory;
     }
 
