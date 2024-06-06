@@ -23,6 +23,7 @@ import { Testimony } from './entities/testimony.entity';
 import { TestimonyService } from './modules/testimony/testimony.service';
 import { PaymentsModule } from './paypal/payments.module';
 import { StatusHistoriesModule } from './modules/status-histories/status-histories.module';
+import { AuthGuards } from './guards/auth.guard';
 
 @Module({
   imports: [
