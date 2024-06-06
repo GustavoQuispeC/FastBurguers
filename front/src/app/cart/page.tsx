@@ -43,35 +43,36 @@ const Cart = () => {
     localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
-  const calcularCompra = () => {
-    let subtotal = 0;
-
-    cart.forEach((item: any) => {
-      subtotal += item.quantity * (item.price + parseFloat(item.drinkPrice));
-    });
-
-    return { subtotal };
-  };
-
-  const calcularTotalConDescuento = () => {
+  const calcularSubtotal = () => {
     return cart.reduce((acc, item) => {
-      const itemTotal = item.quantity * (item.price + parseFloat(item.drinkPrice ?? "0"));
-      const itemTotalConDescuento = itemTotal * (1 - (item.discount || 0));
-      return acc + itemTotalConDescuento;
+      return acc + item.quantity * item.price;
     }, 0);
   };
 
-  const calcularAhorro = () => {
+  const calcularBebida = () => {
     return cart.reduce((acc, item) => {
-      const itemTotal = item.quantity * (item.price + parseFloat(item.drinkPrice ?? "0"));
-      const itemAhorro = item.discount ? itemTotal * item.discount : 0;
-      return acc + itemAhorro;
+      return acc + item.quantity * parseFloat(item.drinkPrice || "0");
     }, 0);
   };
 
-  const { subtotal } = calcularCompra();
-  const totalConDescuento = calcularTotalConDescuento();
-  const totalAhorro = calcularAhorro();
+  const calcularDescuento = () => {
+    return cart.reduce((acc, item) => {
+      return acc + item.quantity * (item.price * (item.discount || 0));
+    }, 0);
+  };
+
+  const calcularTotal = () => {
+    const subtotal = calcularSubtotal();
+    const bebida = calcularBebida();
+    const descuento = calcularDescuento();
+
+    return subtotal - descuento + bebida;
+  };
+
+  const subtotal = calcularSubtotal();
+  const bebida = calcularBebida();
+  const descuento = calcularDescuento();
+  const total = calcularTotal();
 
   const removeFromCart = (index: any) => {
     Swal.fire({
@@ -118,7 +119,7 @@ const Cart = () => {
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-gray-800">
-                      - {item.name} + {item.drink}
+                      {item.name} + {item.drink}
                     </h3>
                     <h6
                       onClick={() => removeFromCart(index)}
@@ -150,15 +151,27 @@ const Cart = () => {
                   {item.discount && item.discount > 0 ? (
                     <div>
                       <h4 className="text-lg font-bold text-gray-800">
-                        ${(((item.price + parseFloat(item.drinkPrice)) * item.quantity) * (1 - item.discount)).toFixed(2)}
+                        $
+                        {(
+                          item.price * item.quantity * (1 - item.discount) +
+                          parseFloat(item.drinkPrice)
+                        ).toFixed(2)}
                       </h4>
                       <h4 className="text-gray-500 line-through">
-                        ${((item.price + parseFloat(item.drinkPrice)) * item.quantity).toFixed(2)}
+                        $
+                        {(
+                          (item.price + parseFloat(item.drinkPrice)) *
+                          item.quantity
+                        ).toFixed(2)}
                       </h4>
                     </div>
                   ) : (
                     <h4 className="text-lg font-bold text-gray-800">
-                      ${((item.price + parseFloat(item.drinkPrice)) * item.quantity).toFixed(2)}
+                      $
+                      {(
+                        (item.price + parseFloat(item.drinkPrice)) *
+                        item.quantity
+                      ).toFixed(2)}
                     </h4>
                   )}
                 </div>
@@ -168,25 +181,28 @@ const Cart = () => {
         </div>
 
         <div className="bg-gray-100 rounded-md p-4 md:sticky top-0">
-          <h2 className="text-base font-bold text-gray-800">Resúmen de compra</h2>
+          <h2 className="text-base font-bold text-gray-800">
+            Resúmen de compra
+          </h2>
 
           <ul className="text-gray-800 mt-8 space-y-4">
             <li className="flex flex-wrap gap-4 text-sm">
               Subtotal{" "}
               <span className="ml-auto font-bold">${subtotal.toFixed(2)}</span>
             </li>
-
+            <li className="flex flex-wrap gap-4 text-sm">
+              Bebida{" "}
+              <span className="ml-auto font-bold">${bebida.toFixed(2)}</span>
+            </li>
             <li className="flex flex-wrap gap-4 text-sm">
               Descuento{" "}
               <span className="ml-auto font-bold">
-                -${totalAhorro.toFixed(2)}
+                -${descuento.toFixed(2)}
               </span>
             </li>
-            <li className="flex flex-wrap gap-4 text-sm">
-              Envío <span className="ml-auto font-bold">$0.00</span>
-            </li>
+
             <li className="flex flex-wrap gap-4 text-sm font-bold">
-              Total <span className="ml-auto">${totalConDescuento.toFixed(2)}</span>
+              Total <span className="ml-auto">${total.toFixed(2)}</span>
             </li>
           </ul>
 
@@ -200,13 +216,15 @@ const Cart = () => {
               </button>
             </Link>
 
-            <button
-              type="button"
-              onClick={() => router.push("/home")}
-              className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent text-gray-800 hover:text-white hover:bg-orange-500 border border-gray-300 rounded-md"
-            >
-              Continuar comprando{" "}
-            </button>
+            <Link href="/home">
+              <button
+                type="button"
+                onClick={() => router.push("/home")}
+                className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-transparent text-gray-800 hover:text-white hover:bg-orange-500 border border-gray-300 rounded-md"
+              >
+                Continuar comprando
+              </button>
+            </Link>
           </div>
         </div>
       </div>
