@@ -2,7 +2,6 @@
 
 import { IProductCart } from "@/interfaces/IProduct";
 import Link from "next/link";
-
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
@@ -46,21 +45,33 @@ const Cart = () => {
 
   const calcularCompra = () => {
     let subtotal = 0;
-    let descuento = 0;
-    let totalWithDrink = 0; // Total incluyendo el precio de la bebida
 
     cart.forEach((item: any) => {
-      subtotal += item.quantity * item.price;
-      totalWithDrink +=
-        item.quantity * (item.price + parseFloat(item.drinkPrice));
-     
+      subtotal += item.quantity * (item.price + parseFloat(item.drinkPrice));
     });
 
-    const total = totalWithDrink - totalWithDrink * descuento; // Aplicar descuento al total con la bebida
-    return { subtotal, descuento, total };
+    return { subtotal };
   };
 
-  const { subtotal, descuento, total } = calcularCompra();
+  const calcularTotalConDescuento = () => {
+    return cart.reduce((acc, item) => {
+      const itemTotal = item.quantity * (item.price + parseFloat(item.drinkPrice ?? "0"));
+      const itemTotalConDescuento = itemTotal * (1 - (item.discount || 0));
+      return acc + itemTotalConDescuento;
+    }, 0);
+  };
+
+  const calcularAhorro = () => {
+    return cart.reduce((acc, item) => {
+      const itemTotal = item.quantity * (item.price + parseFloat(item.drinkPrice ?? "0"));
+      const itemAhorro = item.discount ? itemTotal * item.discount : 0;
+      return acc + itemAhorro;
+    }, 0);
+  };
+
+  const { subtotal } = calcularCompra();
+  const totalConDescuento = calcularTotalConDescuento();
+  const totalAhorro = calcularAhorro();
 
   const removeFromCart = (index: any) => {
     Swal.fire({
@@ -106,9 +117,8 @@ const Cart = () => {
                     />
                   </div>
                   <div>
-                    
                     <h3 className="text-base font-bold text-gray-800">
-                    - {item.name} + {item.drink} -(${item.price} + ${item.drinkPrice} )*{item.quantity}
+                      - {item.name} + {item.drink}
                     </h3>
                     <h6
                       onClick={() => removeFromCart(index)}
@@ -140,19 +150,15 @@ const Cart = () => {
                   {item.discount && item.discount > 0 ? (
                     <div>
                       <h4 className="text-lg font-bold text-gray-800">
-                        ${(((item.price * item.quantity)*item.discount) + parseFloat(item.drinkPrice)).toFixed(2) }
+                        ${(((item.price + parseFloat(item.drinkPrice)) * item.quantity) * (1 - item.discount)).toFixed(2)}
                       </h4>
                       <h4 className="text-gray-500 line-through">
-                        $
-                        {(
-                          item.price +
-                          parseFloat(item.drinkPrice) * item.quantity
-                        ).toFixed(2)}
+                        ${((item.price + parseFloat(item.drinkPrice)) * item.quantity).toFixed(2)}
                       </h4>
                     </div>
                   ) : (
                     <h4 className="text-lg font-bold text-gray-800">
-                      ${total.toFixed(2)}
+                      ${((item.price + parseFloat(item.drinkPrice)) * item.quantity).toFixed(2)}
                     </h4>
                   )}
                 </div>
@@ -162,38 +168,36 @@ const Cart = () => {
         </div>
 
         <div className="bg-gray-100 rounded-md p-4 md:sticky top-0">
-          <h2 className="text-base font-bold text-gray-800">
-            Resúmen de compra
-          </h2>
+          <h2 className="text-base font-bold text-gray-800">Resúmen de compra</h2>
 
           <ul className="text-gray-800 mt-8 space-y-4">
             <li className="flex flex-wrap gap-4 text-sm">
               Subtotal{" "}
-              <span className="ml-auto font-bold">${total.toFixed(2)}</span>
+              <span className="ml-auto font-bold">${subtotal.toFixed(2)}</span>
             </li>
 
             <li className="flex flex-wrap gap-4 text-sm">
               Descuento{" "}
               <span className="ml-auto font-bold">
-                -{(descuento * 100).toFixed(0)}%
+                -${totalAhorro.toFixed(2)}
               </span>
             </li>
             <li className="flex flex-wrap gap-4 text-sm">
               Envío <span className="ml-auto font-bold">$0.00</span>
             </li>
             <li className="flex flex-wrap gap-4 text-sm font-bold">
-              Total <span className="ml-auto">${total.toFixed(2)}</span>
+              Total <span className="ml-auto">${totalConDescuento.toFixed(2)}</span>
             </li>
           </ul>
 
           <div className="mt-8 space-y-2">
-          <Link href="/checkout">
-            <button
-              type="button"
-              className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-gray-900 hover:bg-gray-700 text-orange-400 rounded-md"
-            >
-            Ir a pagar
-            </button>
+            <Link href="/checkout">
+              <button
+                type="button"
+                className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-gray-900 hover:bg-gray-700 text-orange-400 rounded-md"
+              >
+                Ir a pagar
+              </button>
             </Link>
 
             <button

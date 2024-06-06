@@ -10,7 +10,8 @@ export function validateLoginForm(values: LoginProps): LoginErrorProps {
     errors.email = "El campo email es requerido";
   } else if (!/\S+@\S+\.\S+/.test(values.email)) {
     errors.email = "El email es invalido";
-  } else if (!values.password.trim()) {
+  }
+  if (!values.password.trim()) {
     errors.password = "El campo password es requerido";
   }
 

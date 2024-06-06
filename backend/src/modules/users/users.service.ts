@@ -17,12 +17,11 @@ export class UsersService {
             const npage = Number(page)  
             const nlimit = Number(limit)
             if(npage<=0 || nlimit<=0) throw new Error();
-            const users = await this.userRepository.find({
+
+            return await this.userRepository.find({
                 take: nlimit,
                 skip: (npage-1)*nlimit
-            })
-            return users
-
+            });
         } catch (error) {
             throw new BadRequestException('Page and limit must be positive integers')
         }

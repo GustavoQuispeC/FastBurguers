@@ -16,11 +16,7 @@ import { Categories } from './entities/categories.entity';
 import { Users } from './entities/users.entity';
 import { OrdersModule } from './modules/orders/orders.module';
 import { MorganMiddleware } from './middlewares/morgan.middleware';
-import { TestimonyController } from './modules/testimony/testimony.controller';
 import { TestimonyModule } from './modules/testimony/testimony.module';
-import { Orders } from './entities/orders.entity';
-import { Testimony } from './entities/testimony.entity';
-import { TestimonyService } from './modules/testimony/testimony.service';
 import { PaymentsModule } from './paypal/payments.module';
 import { StatusHistoriesModule } from './modules/status-histories/status-histories.module';
 
@@ -35,12 +31,13 @@ import { StatusHistoriesModule } from './modules/status-histories/status-histori
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => configService.get('typeorm')
     }),
-    UsersModule, AuthModule,
     JwtModule.register({
       global:true,
       secret: process.env.JWT_SECRET,
       signOptions:{expiresIn:'60m'},
     }),
+    TypeOrmModule.forFeature([Products,Categories,Users]),
+    UsersModule,
     CategoriesModule,
     ProductsModule,
     AuthModule,
@@ -48,8 +45,7 @@ import { StatusHistoriesModule } from './modules/status-histories/status-histori
     OrdersModule,
     TestimonyModule,
     StatusHistoriesModule,
-    PaymentsModule,
-    TypeOrmModule.forFeature([Products,Categories,Users])
+    PaymentsModule
   ],
   controllers: [AppController],
   providers: [AppService, PreloadService],
