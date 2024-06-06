@@ -5,19 +5,20 @@ import PayPalButton from "@/components/PayPalButton/PayPalButton";
 import { TextInput } from "flowbite-react";
 import { IProductCart } from "@/interfaces/IProduct";
 import { createOrder } from "@/helpers/orders.helper";
-import { useRouter } from "next/navigation";
 
 const Checkout = () => {
   const [cart, setCart] = useState<IProductCart[]>([]);
+  const [userId, setUserId] = useState<string>("");
   const [userToken, setUserToken] = useState<string>("");
-  const router = useRouter();
+
 
   useEffect(() => {
     const cartData = JSON.parse(localStorage.getItem("cart") || "[]") as IProductCart[];
     setCart(cartData);
 
     const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
-    setUserToken(userSession?.userData?.token || "");
+    setUserId(userSession?.userData?.data?.userid || "");
+    setUserToken(userSession?.userData?.data?.token || "");
   }, []);
 
   const calculateTotal = (price: number, drinkPrice: number, discount: number, quantity: number) => {
@@ -33,17 +34,15 @@ const Checkout = () => {
   const handleSubmit = async () => {
     try {
       const order = {
-        userId: userToken,
-        products: cart.map(item => ({ id: String(item.id) })), 
+        userId,
+        products: cart.map(item => ({ id: String(item.id) })), // Asegurar que el ID se envía como string
       };
 
       const response = await createOrder(order, userToken);
-      alert("Order created successfully");
       console.log('Order created successfully:', response);
-      router.push("/home");
+     
     } catch (error) {
       console.error('Error creating order:', error);
-      alert("Error creating order");
     }
   };
 
