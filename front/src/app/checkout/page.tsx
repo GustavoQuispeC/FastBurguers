@@ -73,6 +73,7 @@ const Checkout = () => {
     <div className="font-[sans-serif] bg-white pt-6">
       <div className="max-lg:max-w-xl mx-auto w-full">
         <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 max-lg:order-1 p-6 max-w-4xl mx-auto w-full">
             <div className="text-center max-lg:hidden">
               <h2 className="text-3xl font-extrabold text-[#333] inline-block border-b-4 border-[#333] pb-1">
@@ -119,7 +120,7 @@ const Checkout = () => {
                     <span className="ml-auto font-bold">${totalConDescuento.toFixed(2)}</span>
                   </li>
                   <li className="flex flex-wrap gap-4 text-sm">
-                    Envio <span className="ml-auto font-bold">$200.00</span>
+                    Envio <span className="ml-auto font-bold">$20.00</span>
                   </li>
                   <li className="flex flex-wrap gap-4 text-sm font-bold border-t-2 pt-4">
                     Total a Pagar{" "}
@@ -201,7 +202,9 @@ const Checkout = () => {
         </div>
       </div>
     </div>
+  </div>
   );
 };
 
 export default Checkout;
+ 

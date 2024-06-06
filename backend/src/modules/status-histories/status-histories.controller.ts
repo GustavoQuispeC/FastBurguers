@@ -1,4 +1,4 @@
-import { Controller, Param, ParseUUIDPipe, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post, UseGuards } from '@nestjs/common';
 import { StatusHistoriesService } from './status-histories.service';
 import { CreateStatusDto } from './status-histories.dto';
 import { Roles } from 'src/decorators/roles.decorator';
@@ -15,11 +15,19 @@ export class StatusHistoriesController {
     ){}
 
     @ApiBearerAuth()
-    @Post()
-    @Roles(Role.SUPERADMIN)
+    @Post(':id')
+    @Roles(Role.ADMIN)
     @UseGuards(AuthGuards,RolesGuard)
-    addStatusHistory(@Param('id',ParseUUIDPipe) id_order:string, statusData: CreateStatusDto ){
-        return this.statusHistoriesService.addStatus(statusData,id_order)
+    registerStatusHistory(@Param('id',ParseUUIDPipe) id_order:string, @Body() statusData: CreateStatusDto ){
+        return this.statusHistoriesService.registerStatus(id_order,statusData)
     }
 
+    @ApiBearerAuth()
+    @Get(':id')
+    @Roles(Role.ADMIN)
+    @UseGuards(AuthGuards,RolesGuard)
+    findStatus(@Param('id',ParseUUIDPipe) id_order:string){
+        return this.statusHistoriesService.getStatus(id_order)
+    }
+        
 }
