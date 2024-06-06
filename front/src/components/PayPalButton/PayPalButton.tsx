@@ -1,14 +1,18 @@
 "use client";
 
 import { PayPalButtons } from "@paypal/react-paypal-js";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 function Message({ content }: any) {
   return <p>{content}</p>;
 }
+const totalAmount = localStorage.getItem("totalAmount") || "0";
+const amount = parseFloat(totalAmount).toFixed(2);
 
 const PayPalButton: React.FC = () => {
   const [message, setMessage] = useState("");
+  const Router = useRouter();
 
   const handlecreateOrder = async (): Promise<string> => {
     try {
@@ -17,7 +21,7 @@ const PayPalButton: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ amount: 30 }),
+        body: JSON.stringify({ amount: amount }),
       });
 
       const orderId = await response.text();
@@ -60,6 +64,10 @@ const PayPalButton: React.FC = () => {
           orderData,
           JSON.stringify(orderData, null, 2)
         );
+      }
+      const transaction = orderData.purchase_units[0].payments.captures[0];
+      if (transaction.status === "COMPLETED") {
+        Router.push("/tracking");
       }
     } catch (error) {
       console.error(error);
