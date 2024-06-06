@@ -17,7 +17,7 @@ export interface IProductCart extends IProduct {
   drinkPrice?: string;
 }
 
-export interface IProductList{
+export interface IProductList {
   id: string;
   name: string;
   description: string;
@@ -35,7 +35,6 @@ export interface InsertProductProps {
   price: number;
   stock: number;
   imgUrl: string;
-  size: string;
   discount: number;
   categoryID: string;
 }
@@ -45,7 +44,6 @@ export interface InsertErrorProductProps {
   price: string;
   stock: string;
   imgUrl: string;
-  size: string;
   discount: string;
   categoryID: string;
 }
@@ -59,14 +57,13 @@ export interface UpdateProductProps {
   discount: number;
   categoryID: string;
 }
+
 export interface UpdateErrorProductProps {
-  
   name: string;
   description: string;
   price: string;
   stock: string;
   imgUrl: string;
-  size: string;
   discount: string;
   categoryID: string;
 }

@@ -7,17 +7,18 @@ import axios from "axios";
 import Link from "next/link";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import Image from "next/image";
+import { InsertProductProps } from "@/interfaces/IProduct";
 
 const InsertProduct = () => {
   const router = useRouter();
 
-  const [dataProduct, setDataProduct] = useState({
+  const [dataProduct, setDataProduct] = useState<InsertProductProps>({
     name: "",
     description: "",
     price: 0,
     stock: 0,
-    size: "",
     discount: 0,
+    imgUrl: "",
     categoryID: "",
   });
 
@@ -28,7 +29,6 @@ const InsertProduct = () => {
     description: "",
     price: "",
     stock: "",
-    size: "",
     discount: "",
     categoryID: "",
   });
@@ -88,7 +88,6 @@ const InsertProduct = () => {
     formData.append("description", dataProduct.description);
     formData.append("price", dataProduct.price.toString());
     formData.append("stock", dataProduct.stock.toString());
-    formData.append("size", dataProduct.size);
     formData.append("discount", dataProduct.discount.toString());
     formData.append("categoryID", dataProduct.categoryID);
     if (imageFile) {
@@ -229,26 +228,6 @@ const InsertProduct = () => {
                 />
                 {errors.stock && (
                   <span className="text-red-500">{errors.stock}</span>
-                )}
-              </div>
-              <div>
-                <label
-                  htmlFor="size"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Talla
-                </label>
-                <input
-                  type="text"
-                  name="size"
-                  id="size"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="Talla"
-                  value={dataProduct.size}
-                  onChange={handleChange}
-                />
-                {errors.size && (
-                  <span className="text-red-500">{errors.size}</span>
                 )}
               </div>
             </div>
