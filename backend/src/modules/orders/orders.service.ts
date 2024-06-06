@@ -6,6 +6,9 @@ import { Products } from "src/entities/products.entity";
 import { Users } from "src/entities/users.entity";
 import { Repository } from "typeorm";
 import { dateOrdersDto } from "./orders.dto";
+import { StatusHistoriesService } from "../status-histories/status-histories.service";
+import { CreateStatusDto } from "../status-histories/status-histories.dto";
+import { OrderStatus } from "src/enum/orderstatus.enum";
 
 
 @Injectable()
@@ -15,7 +18,8 @@ export class OrdersService {
         @InjectRepository(Orders) private ordersRepository: Repository<Orders>,
         @InjectRepository(OrderDetails) private orderDetailsRepository: Repository<OrderDetails>,
         @InjectRepository(Users) private usersRepository: Repository<Users>,
-        @InjectRepository(Products) private productsRepository: Repository<Products>
+        @InjectRepository(Products) private productsRepository: Repository<Products>,
+        private readonly statusHistoriService:StatusHistoriesService,
     ){}
 
     async addOrder(userId: string, products: any){
@@ -64,7 +68,16 @@ export class OrdersService {
         orderDetails.order = newOrder
         await this.orderDetailsRepository.save(orderDetails)
 
-        // enviamos al cliente la compra con la informacion de productos
+        // registramos status
+        const infoStatus:CreateStatusDto =  {
+            status:OrderStatus.SOLICITUD_RECIBIDA,
+            timestamp:order.date
+        }
+        console.log(newOrder.id)
+        console.log(infoStatus)
+        const status = await this.statusHistoriService.registerStatus(newOrder.id,infoStatus)
+        
+        console.log(status)
         return await this.ordersRepository.find({
             where: {id: newOrder.id},
             relations: {orderDetails: true}
