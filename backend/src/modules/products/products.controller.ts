@@ -58,47 +58,51 @@ export class ProductsController {
     return this.productService.getProductByCategory(arrayCategories);
   }
 
-    @ApiBearerAuth()
-    @Post()
-    @Roles(Role.ADMIN)
-    @UseGuards(AuthGuards,RolesGuard)
-    @UseInterceptors(FileInterceptor('file'))
-    @ApiConsumes('multipart/form-data')
-    @ApiBody({
-        description: 'create product with image',
-        required: false,
-        type: 'multipart/form-data',
-        schema: {
-            type:'object',
-            properties: {
-                file: {
-                    type:'string',
-                    format: 'binary',
-                },
-                name: { type: 'string', example: 'La churrita' },
-                description: { type: 'string', example: 'La atora venas'},
-                price: { type: 'number', example: 12.34 },
-                stock: { type: 'number', example: 10 },
-                discount: { type: 'number', example: 0.1 },
-                categoryID: { type: 'string', example: '908a59d6-a87f-4ea1-a89b-23747a668cf8' },
-                size:{type:'string', example:'personal'}
-            },
+  @ApiBearerAuth()
+  @Post()
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuards, RolesGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'create product with image',
+    required: false,
+    type: 'multipart/form-data',
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
         },
-    })
-    async createProduct(
-        @Body() product:CreateProductdto,
-        @UploadedFile(
-        //     new ParseFilePipeBuilder()
-        // .addMaxSizeValidator({
-        //     maxSize: 500000,
-        //     message: 'El archivo es muy largo, el tamaño maximo es de 500KB',
-        // })
-        // .build({
-        //     errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        // })
-        ) file?: Express.Multer.File
-    ){
-        console.log(product);
+        name: { type: 'string', example: 'La churrita' },
+        description: { type: 'string', example: 'La atora venas' },
+        price: { type: 'number', example: 12.34 },
+        stock: { type: 'number', example: 10 },
+        discount: { type: 'number', example: 0.1 },
+        categoryID: {
+          type: 'string',
+          example: '908a59d6-a87f-4ea1-a89b-23747a668cf8',
+        },
+        size: { type: 'string', example: 'personal' },
+      },
+    },
+  })
+  async createProduct(
+    @Body() product: CreateProductdto,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addMaxSizeValidator({
+          maxSize: 500000,
+          message: 'El archivo es muy largo, el tamaño maximo es de 500KB',
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    file?: Express.Multer.File,
+  ) {
+    console.log(product);
 
     return this.productService.createProduct(product, file);
   }
