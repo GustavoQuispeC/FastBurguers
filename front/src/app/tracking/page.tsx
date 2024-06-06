@@ -19,7 +19,7 @@ const Tracking = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentStep((prevStep) => (prevStep + 1) % steps.length);
-    }, 5000); // Cambia cada 2 segundos
+    }, 5000); // Cambia cada 5 segundos
     return () => clearInterval(interval);
   }, []);
 
