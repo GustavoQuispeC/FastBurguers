@@ -11,6 +11,9 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 const ProductEdit = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
+  const [token, setToken] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [categories, setCategories] = useState<any[]>([]);
 
   const [dataProduct, setDataProduct] = useState<UpdateProductProps>({
     name: "",
@@ -18,11 +21,9 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
     price: 0,
     stock: 0,
     imgUrl: "",
-    size: "",
     discount: 0,
     categoryID: "",
   });
-  const [imageFile, setImageFile] = useState<File | null>(null);
 
   //! Obtener producto por ID
   useEffect(() => {
@@ -30,11 +31,9 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
       const productData = await fetch(`${apiURL}/products/${params.id}`).then(
         (res) => res.json()
       );
-      console.log(productData);
-
       // Desestructurar solo los campos que deseas actualizar
-      const { name, description, price, stock, imgUrl, size, discount, categoryID } = productData;
-
+      const { name, description, price, stock, imgUrl, discount, categoryID } =
+        productData;
       // Establecer solo los campos especificados en dataProduct
       setDataProduct((prevState) => ({
         ...prevState,
@@ -43,27 +42,23 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
         price,
         stock,
         imgUrl,
-        size,
         discount,
         categoryID,
       }));
     };
-
     fetchProduct();
   }, [params.id]);
 
-  const [categories, setCategories] = useState<any[]>([]);
-  
+  //! Obtener categorias
   useEffect(() => {
     const fetchCategories = async () => {
       const categories = await getCategories();
       setCategories(categories);
     };
-
     fetchCategories();
   }, []);
 
-  const [token, setToken] = useState<string | null>(null);
+  //! Obtener token de usuario
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const userSession = localStorage.getItem("userSession");
@@ -75,7 +70,12 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
     }
   }, [router]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  //! Actualizar campos del producto
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     e.preventDefault();
     setDataProduct({
       ...dataProduct,
@@ -83,6 +83,7 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
     });
   };
 
+  //! Actualizar imagen del producto
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -97,6 +98,7 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
 
   console.log(dataProduct);
 
+  //! Actualizar producto
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!token) return;
@@ -109,8 +111,6 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
       formData.append("stock", dataProduct.stock.toString());
       formData.append("discount", dataProduct.discount.toString());
       formData.append("categoryID", dataProduct.categoryID);
-      formData.append("size", dataProduct.size);
-
       if (imageFile) {
         formData.append("file", imageFile);
       }
@@ -135,9 +135,6 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
       console.log("Error updating product:", error);
     }
   };
- 
- 
-
 
   if (!dataProduct) {
     return <div>Loading...</div>;
@@ -248,7 +245,10 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
               />
             </div>
             <div>
-              <label htmlFor="categoryID" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label
+                htmlFor="categoryID"
+                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
                 Categoría
               </label>
               <select
@@ -312,14 +312,14 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
             Actualizar
           </button>
           <Link
-              data-modal-toggle="createProductModal"
-              type="button"
-              className="w-full justify-center sm:w-auto text-orange-500 inline-flex items-center hover:bg-orange-500 bg-white  focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-              href="/productList"
-            >
-              <FaArrowLeft />
-              &nbsp; Volver
-            </Link>
+            data-modal-toggle="createProductModal"
+            type="button"
+            className="w-full justify-center sm:w-auto text-orange-500 inline-flex items-center hover:bg-orange-500 bg-white  focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+            href="/productList"
+          >
+            <FaArrowLeft />
+            &nbsp; Volver
+          </Link>
         </div>
       </form>
     </div>

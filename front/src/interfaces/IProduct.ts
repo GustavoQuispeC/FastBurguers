@@ -51,17 +51,14 @@ export interface InsertErrorProductProps {
 }
 
 export interface UpdateProductProps {
-
   name: string;
   description: string;
   price: number;
   stock: number;
   imgUrl: string;
-  size: string;
   discount: number;
   categoryID: string;
 }
-
 export interface UpdateErrorProductProps {
   
   name: string;
