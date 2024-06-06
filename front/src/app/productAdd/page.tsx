@@ -8,10 +8,15 @@ import Link from "next/link";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import Image from "next/image";
 import { InsertProductProps } from "@/interfaces/IProduct";
+import Swal from "sweetalert2";
 
 const InsertProduct = () => {
   const router = useRouter();
+  const [token, setToken] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [categories, setCategories] = useState<any[]>([]);
 
+  //! Estado para almacenar los datos del producto
   const [dataProduct, setDataProduct] = useState<InsertProductProps>({
     name: "",
     description: "",
@@ -22,8 +27,8 @@ const InsertProduct = () => {
     categoryID: "",
   });
 
-  const [imageFile, setImageFile] = useState<File | null>(null);
-
+  
+//! Estado para almacenar los errores
   const [errors, setErrors] = useState({
     name: "",
     description: "",
@@ -33,7 +38,7 @@ const InsertProduct = () => {
     categoryID: "",
   });
 
-  const [token, setToken] = useState<string | null>(null);
+  //! Obtener el token del usuario
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const userSession = localStorage.getItem("userSession");
@@ -45,7 +50,7 @@ const InsertProduct = () => {
     }
   }, [router]);
 
-  const [categories, setCategories] = useState<any[]>([]);
+  //! Obtener las categorías
   useEffect(() => {
     const fetchCategories = async () => {
       const categories = await getCategories();
@@ -55,6 +60,7 @@ const InsertProduct = () => {
     fetchCategories();
   }, []);
 
+  //! Función para manejar los cambios en los inputs
   const handleChange = (e: any) => {
     e.preventDefault();
     setDataProduct({
@@ -63,6 +69,7 @@ const InsertProduct = () => {
     });
   };
 
+  //! Función para manejar los cambios en la imagen
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -79,10 +86,11 @@ const InsertProduct = () => {
   };
 
   console.log("dataProduct", dataProduct);
+
+  //! Función para enviar los datos del producto al backend
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-   
-
+  
     const formData = new FormData();
     formData.append("name", dataProduct.name);
     formData.append("description", dataProduct.description);
@@ -93,7 +101,17 @@ const InsertProduct = () => {
     if (imageFile) {
       formData.append("file", imageFile);
     }
-
+  
+    // Mostrar alerta de carga mientras se procesa la solicitud
+    Swal.fire({
+      title: 'Agregando producto...',
+      text: 'Por favor espera.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+  
     try {
       const response = await axios.post(
         "http://localhost:3001/products",
@@ -105,13 +123,30 @@ const InsertProduct = () => {
           },
         }
       );
+  
       console.log("Response:", response);
       console.log("Product added successfully");
-      router.push("/productList");
+  
+      // Mostrar alerta de éxito
+      Swal.fire({
+        icon: 'success',
+        title: '¡Agregado!',
+        text: 'El producto ha sido agregado con éxito.',
+      }).then(() => {
+        router.push("/productList");
+      });
     } catch (error) {
       console.error("Error adding product:", error);
+  
+      // Mostrar alerta de error
+      Swal.fire({
+        icon: 'error',
+        title: '¡Error!',
+        text: 'Ha ocurrido un error al agregar el producto.',
+      });
     }
   };
+  
   return (
     <div className="min-h-screen flex flex-col justify-start items-center p-10 dark:bg-gray-700">
       <div className="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">

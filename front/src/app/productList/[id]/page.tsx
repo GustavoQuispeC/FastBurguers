@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { FaArrowLeft } from "react-icons/fa";
 import Link from "next/link";
+import Swal from "sweetalert2";
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 const ProductEdit = ({ params }: { params: { id: string } }) => {
@@ -102,9 +103,19 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!token) return;
+  
+    // Mostrar alerta de carga mientras se procesa la solicitud
+    Swal.fire({
+      title: 'Actualizando producto...',
+      text: 'Por favor espera.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+  
     try {
       const formData = new FormData();
-
       formData.append("name", dataProduct.name);
       formData.append("description", dataProduct.description);
       formData.append("price", dataProduct.price.toString());
@@ -114,7 +125,7 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
       if (imageFile) {
         formData.append("file", imageFile);
       }
-
+  
       const response = await fetch(`${apiURL}/products/${params.id}`, {
         method: "PUT",
         headers: {
@@ -122,17 +133,31 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
         },
         body: formData,
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to update product");
       }
-
+  
       const updatedProduct = await response.json();
       console.log("Product updated successfully:", updatedProduct);
-
-      router.push("/productList");
+  
+      // Mostrar alerta de éxito
+      Swal.fire({
+        icon: 'success',
+        title: '¡Actualizado!',
+        text: 'El producto ha sido actualizado con éxito.',
+      }).then(() => {
+        router.push("/productList");
+      });
     } catch (error) {
-      console.log("Error updating product:", error);
+      console.error("Error updating product:", error);
+      
+      // Mostrar alerta de error
+      Swal.fire({
+        icon: 'error',
+        title: '¡Error!',
+        text: 'Ha ocurrido un error al actualizar el producto.',
+      });
     }
   };
 

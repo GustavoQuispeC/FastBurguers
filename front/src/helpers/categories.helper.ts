@@ -32,7 +32,6 @@ export async function getCategories(){
     const res = await fetch(`${apiURL}/categories`);
     const categories = await res.json();
     return categories;
-    console.log(categories)
     
   } catch (error: any) {
     throw new Error(`Error fetching categories: ${error.message}`);
