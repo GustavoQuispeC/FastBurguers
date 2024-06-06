@@ -10,6 +10,7 @@ import React from "react";
 import { getProducts } from "@/helpers/products.helper";
 import { IProduct } from "@/interfaces/IProduct";
 import Swal from "sweetalert2";
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 const ProductList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,7 +60,7 @@ const ProductList = () => {
     setCurrentPage(1); // Reiniciar la página actual al cambiar el término de búsqueda
   };
   const onPageChange = (page: number) => setCurrentPage(page);
-  console.log("products", products)
+  
 
   //! Función para manejar la eliminación de un producto
   const handleDeleteProduct = async (id: number) => {
@@ -76,8 +77,12 @@ const ProductList = () => {
 
     if (isConfirmed) {
       try {
-        await fetch(`/api/products/${id}`, {
+        const token = localStorage.getItem("token");
+        await fetch(`${apiURL}/products/${id}`, {
           method: "DELETE",
+          headers: {
+        Authorization: `Bearer ${token}`,
+          },
         });
         Swal.fire("¡Eliminado!", "El producto ha sido eliminado", "success");
         // Actualiza la lista de productos después de eliminar

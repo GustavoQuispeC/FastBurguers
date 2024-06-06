@@ -1,42 +1,33 @@
 "use client";
-import { insertProduct } from "@/helpers/products.helper";
 import { getCategories } from "@/helpers/categories.helper";
-import {
-  InsertProductProps,
-  InsertErrorProductProps,
-} from "@/interfaces/IProduct";
-import { insertProductValidation } from "@/utils/insertProductValidation";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import axios from "axios";
+import Link from "next/link";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import Image from "next/image";
 
 const InsertProduct = () => {
   const router = useRouter();
 
-  const [dataProduct, setDataProduct] = useState<InsertProductProps>({
+  const [dataProduct, setDataProduct] = useState({
     name: "",
     description: "",
     price: 0,
     stock: 0,
-    imgUrl: "", // Add the missing imgUrl property
     size: "",
     discount: 0,
     categoryID: "",
   });
 
-  console.log("dataProduct", dataProduct)
-  
   const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const [errors, setErrors] = useState<InsertErrorProductProps>({
+  const [errors, setErrors] = useState({
     name: "",
     description: "",
     price: "",
     stock: "",
-    imgUrl: "", // Add the missing imgUrl property
     size: "",
     discount: "",
     categoryID: "",
@@ -76,22 +67,52 @@ const InsertProduct = () => {
     const file = e.target.files?.[0];
     if (file) {
       setImageFile(file);
+  
+      const imageUrl = URL.createObjectURL(file);
+  
+      // Copiar el estado anterior y actualizar solo imgUrl
+      setDataProduct((prevDataProduct) => ({
+        ...prevDataProduct,
+        imgUrl: imageUrl,
+      }));
     }
   };
 
+  console.log("dataProduct", dataProduct);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!token) return;
+   
+
+    const formData = new FormData();
+    formData.append("name", dataProduct.name);
+    formData.append("description", dataProduct.description);
+    formData.append("price", dataProduct.price.toString());
+    formData.append("stock", dataProduct.stock.toString());
+    formData.append("size", dataProduct.size);
+    formData.append("discount", dataProduct.discount.toString());
+    formData.append("categoryID", dataProduct.categoryID);
+    if (imageFile) {
+      formData.append("file", imageFile);
+    }
 
     try {
-      const response = await insertProduct(dataProduct, imageFile, token);
-      console.log("Product added successfully:", response);
+      const response = await axios.post(
+        "http://localhost:3001/products",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("Response:", response);
+      console.log("Product added successfully");
       router.push("/productList");
     } catch (error) {
       console.error("Error adding product:", error);
     }
   };
-
   return (
     <div className="min-h-screen flex flex-col justify-start items-center p-10 dark:bg-gray-700">
       <div className="relative p-4 bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
@@ -210,7 +231,7 @@ const InsertProduct = () => {
                   <span className="text-red-500">{errors.stock}</span>
                 )}
               </div>
-              {/* <div>
+              <div>
                 <label
                   htmlFor="size"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -221,8 +242,7 @@ const InsertProduct = () => {
                   type="text"
                   name="size"
                   id="size"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-                  dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Talla"
                   value={dataProduct.size}
                   onChange={handleChange}
@@ -230,7 +250,7 @@ const InsertProduct = () => {
                 {errors.size && (
                   <span className="text-red-500">{errors.size}</span>
                 )}
-              </div> */}
+              </div>
             </div>
 
             <div className="sm:col-span-2">
@@ -283,6 +303,7 @@ const InsertProduct = () => {
                 />
               </label>
             </div>
+           
             {imageFile && (
               <div className="mt-4 flex justify-center">
                 <Image
