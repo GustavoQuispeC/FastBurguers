@@ -23,7 +23,6 @@ import { IUserSession } from "@/interfaces/IUser";
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { data: sesion } = useSession();
 
   const [nav, setNav] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -142,7 +141,7 @@ const Navbar = () => {
               </span>
             )}
           </button>
-          {!sesion && !userSesion && (
+          {!userSesion && (
             <Link href="/login">
               <button className="text-gray-900 font-bold">
                 Iniciar Sesion
@@ -150,19 +149,19 @@ const Navbar = () => {
             </Link>
           )}
 
-          {(sesion || userSesion) && (
+          {userSesion && (
             <p className="text-gray-900 font-bold hidden md:block">
               ¡Bienvenido,
-              {sesion?.user?.name || userSesion?.userData.data.name}!
+              {userSesion?.userData.data.name}!
             </p>
           )}
-          {(sesion || userSesion) && (
+          {userSesion && (
             <Dropdown
               arrowIcon={false}
               inline
               label={
                 <Image
-                  src={sesion?.user?.image || "/perfil.png"}
+                  src={"/perfil.png"}
                   alt="imagen"
                   width={30}
                   height={30}
@@ -172,10 +171,10 @@ const Navbar = () => {
             >
               <Dropdown.Header>
                 <span className="block text-sm">
-                  {sesion?.user?.name || userSesion?.userData.data.name}
+                  {userSesion?.userData.data.name}
                 </span>
                 <span className="block truncate text-sm font-medium">
-                  {sesion?.user?.email || userSesion?.userData.data.email}
+                  {userSesion?.userData.data.email}
                 </span>
               </Dropdown.Header>
               <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
