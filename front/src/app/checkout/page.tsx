@@ -11,38 +11,61 @@ const Checkout = () => {
   const [userId, setUserId] = useState<string>("");
   const [userToken, setUserToken] = useState<string>("");
 
-
   useEffect(() => {
     const cartData = JSON.parse(localStorage.getItem("cart") || "[]") as IProductCart[];
     setCart(cartData);
 
     const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
+    console.log('userSession:', userSession); 
     setUserId(userSession?.userData?.data?.userid || "");
-    setUserToken(userSession?.userData?.data?.token || "");
+    setUserToken(userSession?.userData?.token || "");
   }, []);
 
+  useEffect(() => {
+    console.log('cart:', cart);
+    console.log('userId:', userId);
+    console.log('userToken:', userToken);
+  }, [cart, userId, userToken]);
+
   const calculateTotal = (price: number, drinkPrice: number, discount: number, quantity: number) => {
-    const discountedPrice = price - price * discount;
-    return (discountedPrice + drinkPrice) * quantity;
+    const validPrice = price || 0;
+    const validDrinkPrice = parseFloat(String(drinkPrice)) || 0;
+    const validDiscount = discount || 0;
+    const validQuantity = quantity || 1;
+
+    const discountedPrice = validPrice - (validPrice * validDiscount);
+    return (discountedPrice + validDrinkPrice) * validQuantity;
   };
 
-  const totalAmount = cart.reduce((total, item) => {
-    const drinkPrice = parseFloat(item.drinkPrice || "0");
-    return total + calculateTotal(item.price, drinkPrice, item.discount, item.quantity || 1);
-  }, 0);
+  const calcularTotalConDescuento = () => {
+    return cart.reduce((acc, item) => {
+      const validPrice = item.price || 0;
+      const validDrinkPrice = parseFloat(item.drinkPrice ?? "0") || 0;
+      const validDiscount = item.discount || 0;
+      const validQuantity = item.quantity || 1;
+
+      const itemTotal = validQuantity * (validPrice + validDrinkPrice);
+      const itemTotalConDescuento = itemTotal * (1 - validDiscount);
+      return acc + itemTotalConDescuento;
+    }, 0);
+  };
+
+  const totalConDescuento = calcularTotalConDescuento();
 
   const handleSubmit = async () => {
     try {
       const order = {
         userId,
-        products: cart.map(item => ({ id: String(item.id) })), // Asegurar que el ID se envía como string
+        products: cart.map(item => ({ id: String(item.id) })), 
       };
 
       const response = await createOrder(order, userToken);
       console.log('Order created successfully:', response);
+      alert('Order created successfully');
      
     } catch (error) {
       console.error('Error creating order:', error);
+      alert('Error creating order');
     }
   };
 
@@ -93,14 +116,14 @@ const Checkout = () => {
                 <ul className="text-gray-800 mt-8 space-y-4">
                   <li className="flex flex-wrap gap-4 text-sm">
                     SubTotal{" "}
-                    <span className="ml-auto font-bold">${totalAmount.toFixed(2)}</span>
+                    <span className="ml-auto font-bold">${totalConDescuento.toFixed(2)}</span>
                   </li>
                   <li className="flex flex-wrap gap-4 text-sm">
                     Envio <span className="ml-auto font-bold">$200.00</span>
                   </li>
                   <li className="flex flex-wrap gap-4 text-sm font-bold border-t-2 pt-4">
                     Total a Pagar{" "}
-                    <span className="ml-auto">${(totalAmount + 200).toFixed(2)}</span>
+                    <span className="ml-auto">${(totalConDescuento + 200).toFixed(2)}</span>
                   </li>
                 </ul>
               </div>
@@ -159,7 +182,7 @@ const Checkout = () => {
                           <li className="flex flex-wrap gap-4">
                             Total a pagar{" "}
                             <span className="ml-auto">
-                              ${calculateTotal(item.price, parseFloat(item.drinkPrice || "0"), item.discount, item.quantity || 1).toFixed(2)}
+                              ${calculateTotal(item.price, item.drinkPrice ? parseFloat(item.drinkPrice) : 0, item.discount, item.quantity || 1).toFixed(2)}
                             </span>
                           </li>
                         </ul>
@@ -170,7 +193,7 @@ const Checkout = () => {
               </div>
               <div className="absolute left-0 bottom-0 bg-gray-200 w-full p-4">
                 <h4 className="flex flex-wrap gap-4 text-base text-[#333] font-bold">
-                  Total <span className="ml-auto">${totalAmount.toFixed(2)}</span>
+                  Total <span className="ml-auto">${totalConDescuento.toFixed(2)}</span>
                 </h4>
               </div>
             </div>

@@ -7,6 +7,7 @@ import { ThemeModeScript } from "flowbite-react";
 import Provider from "@/context/Provider";
 import Footer from "@/components/footer/Footer";
 import { PayPalContext } from "@/context/PayPalContext";
+import { CategoryProvider } from "@/context/category.context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function RootLayout({
         <ThemeModeScript />
       </head>
       <body className={inter.className}>
+<CategoryProvider>
         <PayPalContext>
           <Provider>
             <Navbar />
@@ -33,6 +35,7 @@ export default function RootLayout({
             <Footer />
           </Provider>
         </PayPalContext>
+</CategoryProvider>
       </body>
     </html>
   );
