@@ -1,15 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import FiltroProductos from "../../components/filtroProductos/FiltroProductos";
+import categories from "@/helpers/categories"; 
+import { useCategory } from "@/context/category.context"; 
 
 const Product = () => {
-  const [selectedCategory, setSelectedCategory] = useState<number>(1);
+  const { selectedCategory, setSelectedCategory } = useCategory();
+
   const [minPrice, setMinPrice] = useState<number>(1);
   const [maxPrice, setMaxPrice] = useState<number>(Infinity);
-  const [tempRange, setTempRange] = useState<[number, number]>([1, 20]); // Default range for slider
+  const [tempRange, setTempRange] = useState<[number, number]>([1, 20]);
   const [filterApplied, setFilterApplied] = useState<boolean>(false);
 
   const handleCategoryClick = (categoryId: number) => {
@@ -46,54 +49,16 @@ const Product = () => {
   return (
     <>
       <ul className="flex flex-wrap gap-3 bg-slate-700 mt-10 p-3 justify-around font-bold text-white w-11/12 rounded-lg items-center m-auto">
-        <li className="w-full sm:w-auto text-center">
-          <button
-            onClick={() => handleCategoryClick(1)}
-            className={getButtonClass(1)}
-          >
-            Hamburguesas
-          </button>
-        </li>
-        <li className="w-full sm:w-auto text-center">
-          <button
-            onClick={() => handleCategoryClick(2)}
-            className={getButtonClass(2)}
-          >
-            Sandwiches
-          </button>
-        </li>
-        <li className="w-full sm:w-auto text-center">
-          <button
-            onClick={() => handleCategoryClick(3)}
-            className={getButtonClass(3)}
-          >
-            Complementos
-          </button>
-        </li>
-        <li className="w-full sm:w-auto text-center">
-          <button
-            onClick={() => handleCategoryClick(4)}
-            className={getButtonClass(4)}
-          >
-            Bebidas
-          </button>
-        </li>
-        <li className="w-full sm:w-auto text-center">
-          <button
-            onClick={() => handleCategoryClick(5)}
-            className={getButtonClass(5)}
-          >
-            Postres
-          </button>
-        </li>
-        <li className="w-full sm:w-auto text-center">
-          <button
-            onClick={() => handleCategoryClick(6)}
-            className={getButtonClass(6)}
-          >
-            Ensaladas
-          </button>
-        </li>
+        {categories.map((category:any) => (
+          <li key={category.id} className="w-full sm:w-auto text-center">
+            <button
+              onClick={() => handleCategoryClick(category.id)}
+              className={getButtonClass(category.id)}
+            >
+              {category.name}
+            </button>
+          </li>
+        ))}
       </ul>
 
       <div className="flex flex-wrap gap-3 bg-slate-700 mt-5 p-3 justify-around font-bold text-white w-11/12 rounded-lg items-center m-auto">
