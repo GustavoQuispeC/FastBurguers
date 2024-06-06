@@ -32,7 +32,7 @@ export class CategoriesController {
 
     @ApiBearerAuth()
     @Put(':id')
-    @Roles(Role.SUPERADMIN)
+    @Roles(Role.ADMIN)
     @UseGuards(AuthGuards,RolesGuard)
     updateName(@Param('id',ParseUUIDPipe) id:string ,@Body() category:UpdateCategoryDto){
         return this.categoryService.updateName(id,category)
@@ -40,16 +40,16 @@ export class CategoriesController {
 
     @ApiBearerAuth()
     @Post()
-    // @Roles(Role.SUPERADMIN)
-    // @UseGuards(AuthGuards,RolesGuard)
+    @Roles(Role.ADMIN)
+    @UseGuards(AuthGuards,RolesGuard)
     createCategory(@Body() category:CreateCategoryDto){
         return this.categoryService.createCategory(category)
     }
 
     @ApiBearerAuth()
     @Delete(':id')
-    // @Roles(Role.SUPERADMIN)
-    // @UseGuards(AuthGuards,RolesGuard)
+    @Roles(Role.ADMIN)
+    @UseGuards(AuthGuards,RolesGuard)
     deleteCategory(@Param('id',ParseUUIDPipe) id:string){
         return this.categoryService.deleteCategory(id)
     }
