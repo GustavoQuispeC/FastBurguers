@@ -14,7 +14,11 @@ async function bootstrap() {
     credentials: true, 
   });
 
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+  }));
 
   const swaggerConfig = new DocumentBuilder()
   .setTitle('FastBurguers')
@@ -25,8 +29,9 @@ async function bootstrap() {
   const documentSwagger = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, documentSwagger);
   
-  await app.listen(3001);
-  console.log(`Server listening on port 3001`);
+  const port = process.env.PORT || 3001
+  await app.listen(port);
+  console.log(`Server listening on port ${port}`);
   
 }
 bootstrap();
