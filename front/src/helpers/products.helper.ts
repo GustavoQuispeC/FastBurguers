@@ -14,6 +14,7 @@ export async function getProducts() {
   }
 }
 
+
 //! Get product by ID
 export async function getProductsById(id: number): Promise<IProduct> {
   try {

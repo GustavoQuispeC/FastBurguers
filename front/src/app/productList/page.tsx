@@ -7,37 +7,52 @@ import { Pagination } from "flowbite-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import React from "react";
-import { getProducts } from "@/helpers/products.helper";
-import { IProduct } from "@/interfaces/IProduct";
+import {IProductList } from "@/interfaces/IProduct";
 import Swal from "sweetalert2";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 const ProductList = () => {
+  const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
-  const [products, setProducts] = useState<IProduct[]>([]);
+  const [products, setProducts] = useState<IProductList[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
-
+  const [token, setToken] = useState<string | null>(null);
   const PRODUCTS_PER_PAGE = 10; // Cantidad de productos por página
+
+   //! Obtener token de usuario
+   useEffect(() => {
+    if (typeof window !== "undefined" && window.localStorage) {
+      const userSession = localStorage.getItem("userSession");
+      if (userSession) {
+        const parsedSession = JSON.parse(userSession);
+        console.log("userToken", parsedSession.userData.token);
+        setToken(parsedSession.userData.token);
+      }
+    }
+  }, [router]);
 
   //! Obtener los productos
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const products = await getProducts();
+        const response = await axios.get(`${apiURL}/products`);
+        const products = response.data;
         setProducts(products);
         setTotalPages(Math.ceil(products.length / PRODUCTS_PER_PAGE));
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     }
-
     fetchProducts();
   }, []);
 
   //! Función para calcular los productos a mostrar en la página actual
   const getCurrentPageProducts = () => {
-    const filteredProducts = filterProducts(); // Obtener los productos filtrados
+    const filteredProducts = filterProducts(); 
     const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
     const endIndex = startIndex + PRODUCTS_PER_PAGE;
     return filteredProducts.slice(startIndex, endIndex);
@@ -63,7 +78,7 @@ const ProductList = () => {
   
 
   //! Función para manejar la eliminación de un producto
-  const handleDeleteProduct = async (id: number) => {
+  const handleDeleteProduct = async (id: string) => {
     const { isConfirmed } = await Swal.fire({
       title: "¿Estás seguro?",
       text: "No podrás revertir esta acción",
@@ -74,19 +89,33 @@ const ProductList = () => {
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
     });
-
+  
     if (isConfirmed) {
       try {
-        const token = localStorage.getItem("token");
-        await fetch(`${apiURL}/products/${id}`, {
+        console.log("Token:", token)
+        if (!token) {
+          Swal.fire("¡Error!", "Token no encontrado. Por favor, inicia sesión.", "error");
+          return;
+        }
+  
+        const response = await fetch(`${apiURL}/products/${id}`, {
           method: "DELETE",
           headers: {
-        Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         });
-        Swal.fire("¡Eliminado!", "El producto ha sido eliminado", "success");
-        // Actualiza la lista de productos después de eliminar
-        setProducts(products.filter(product => product.id !== id));
+  
+        const responseData = await response.json();
+        console.log("Response data:", responseData);
+  
+        if (response.ok) {
+          Swal.fire("¡Eliminado!", "El producto ha sido eliminado", "success");
+          setProducts((prevProducts) => prevProducts.filter(product => product.id !== id));
+          console.log("Producto eliminado:", id);
+        } else {
+          console.error("Error en la respuesta del servidor:", response.status, response.statusText, responseData);
+          Swal.fire("¡Error!", `Error del servidor: ${responseData.message || 'No se pudo eliminar el producto'}`, "error");
+        }
       } catch (error) {
         console.error("Error deleting product:", error);
         Swal.fire("¡Error!", "Ha ocurrido un error al eliminar el producto", "error");
@@ -155,7 +184,7 @@ const ProductList = () => {
                 </tr>
               </thead>
               <tbody>
-                {getCurrentPageProducts().map((product: IProduct) => (
+                {getCurrentPageProducts().map((product: IProductList) => (
                   <tr key={product.id} className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
                     <th scope="row" className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       <div className="flex items-center">
