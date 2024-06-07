@@ -1,6 +1,4 @@
 import { IUserTerceros } from "@/interfaces/IUserTerceros";
-import { LoginTerceros } from "@/types";
-import { signOut } from "next-auth/react";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -18,8 +16,6 @@ export async function RegisterUserTerceros(
 
     const newUser = await res.json();
 
-    await signOut();
-    window.location.href = "/login";
     return newUser;
   } catch (error: any) {
     throw new Error(`Error creando usuario: ${error.message}`);
@@ -34,15 +30,16 @@ export async function LoginUserTerceros(email: string): Promise<IUserTerceros> {
       },
       body: JSON.stringify({ email }),
     });
+
     if (!res.ok) {
-      signOut();
       throw new Error(
         `Error iniciando sesión: ${res.status} - ${res.statusText}`
       );
     }
-    const User = await res.json();
 
-    return User;
+    const user = await res.json();
+
+    return user;
   } catch (error: any) {
     throw new Error(`Error iniciando sesion: ${error.message}`);
   }

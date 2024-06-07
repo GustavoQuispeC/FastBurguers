@@ -128,7 +128,7 @@ export class UpdatedProductdto {
     @IsOptional()
     @IsUUID()
     @IsString()
-    categoryID:string
+    categoryID?:string
 
     /**
      *  Must be : personal, regular or extrema
@@ -137,7 +137,7 @@ export class UpdatedProductdto {
     @IsOptional()
     @IsEnum(SizeProduct,
         {message: 'Size take only : personal | regular | extrema values'})
-    size: SizeProduct
+    size?: SizeProduct
 }
 
 export class GetByCategoriesDto {

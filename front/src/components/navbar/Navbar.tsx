@@ -73,7 +73,10 @@ const Navbar = () => {
   };
 
   const CerrarSesion = () => {
-    signOut();
+    signOut({
+      callbackUrl: "http://localhost:3000/login",
+      redirect: true,
+    });
     localStorage.removeItem("userSession");
     localStorage.removeItem("cart");
   };

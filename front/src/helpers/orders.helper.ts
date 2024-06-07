@@ -1,18 +1,21 @@
-export async function createOrder(order: { userId: string; products: { id: string }[] }, token: string) {
-  const apiURL = process.env.NEXT_PUBLIC_API_URL;
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
+export async function createOrder(
+  order: { userId: string; products: { id: string }[] },
+  token: string
+) {
   try {
     const res = await fetch(`${apiURL}/orders`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(order),
     });
 
     if (!res.ok) {
-      throw new Error('Failed to create order');
+      throw new Error("Failed to create order");
     }
 
     const data = await res.json();
@@ -23,19 +26,17 @@ export async function createOrder(order: { userId: string; products: { id: strin
 }
 
 export async function getOrders(userId: string, token: string) {
-  const apiURL = process.env.NEXT_PUBLIC_API_URL;
-
   try {
     const res = await fetch(`${apiURL}/orders/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
       },
     });
 
     if (!res.ok) {
-      throw new Error('Failed to fetch orders');
+      throw new Error("Failed to fetch orders");
     }
 
     const data = await res.json();

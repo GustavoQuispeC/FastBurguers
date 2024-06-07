@@ -32,7 +32,7 @@ export class CategoriesService {
     }
 
     async updateName(id:string,category:Partial<Categories>){
-        const oldCategorie = this.categoryRepository.findOneBy({id})
+        const oldCategorie = await this.categoryRepository.findOneBy({id})
         if(!oldCategorie) throw new BadRequestException(`No se encontro categorie con ${id}`)
         
         await this.categoryRepository.update(id,category);
@@ -44,7 +44,7 @@ export class CategoriesService {
         
         const foundCategory = await this.categoryRepository.findOneBy({name:category.name})
         if(foundCategory) throw new BadRequestException(`Ya existe la categoria ${category.name}`)
-        const newCategory = this.categoryRepository.save(category);
+        const newCategory = await this.categoryRepository.save(category);
         return newCategory;
     }
 
