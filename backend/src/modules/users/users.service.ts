@@ -29,7 +29,10 @@ export class UsersService {
     }
 
     async getById(id:string){
-        const user = await this.userRepository.findOneBy({id})
+        const user = await this.userRepository.findOne({
+            where:{id},
+            relations:['orders','orders.orderDetails', 'orders.orderDetails.products' , 'orders.orderDetails.statushistory']
+        })
         if(!user) throw new BadRequestException(`No se encontro usario con ${id}`)
         const {password, isAdmin, isSuperAdmin, ...userInfoPublic} = user;
         return userInfoPublic;
