@@ -1,7 +1,6 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { AuthGuards } from 'src/guards/auth.guard';
-import { retry } from 'rxjs';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
@@ -17,7 +16,7 @@ export class CategoriesController {
 
 
     @Get()
-    getCategories(page:string, limit:string){
+    getCategories(@Query('page') page: string, @Query('limit') limit: string){
         if(page&&limit){
             return this.categoryService.getAll(page,limit)
         }
