@@ -41,7 +41,7 @@ export class OrdersService {
             products.map(async (element) => {
                 // validar stock
                 const foundStock = await this.productsRepository.findOne({ where: { name: element.name} })
-                if(foundStock){
+                if(!foundStock){
                     throw new Error(`El producto de ${foundStock}, ya no hay disponibles`)
                 }
                 // validar si existen los productos
