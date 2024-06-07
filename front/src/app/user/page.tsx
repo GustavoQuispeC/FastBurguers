@@ -35,33 +35,6 @@ const Register = () => {
       theme: "colored",
     });
 
-  const GoogleOnClick = async () => {
-    await signIn("google", {
-      redirect: false,
-    });
-  };
-
-  const FacebookOnClick = async () => {
-    await signIn("facebook", {
-      redirect: false,
-    });
-  };
-
-  useEffect(() => {
-    if (session?.user) {
-      const name = session.user.name ?? undefined;
-      const email = session.user.email ?? undefined;
-
-      RegisterUserTerceros({
-        name,
-        email,
-      } as Partial<IUserTerceros>).then(() => {
-        setRedirected(true);
-        Router.push("/login");
-      });
-    }
-  }, [session, redirected]);
-
   const [dataUser, setDataUser] = useState<RegisterProps>({
     name: "",
     email: "",
@@ -175,25 +148,6 @@ const Register = () => {
             className="bg-white dark:bg-gray-800 p-6 md:p-10 rounded-lg shadow-lg w-full"
           >
             <div className="flex justify-center mb-6">
-              <div className="flex justify-evenly items-center  w-32 ">
-                <button onClick={GoogleOnClick}>
-                  <Image
-                    src="/google.png"
-                    alt="google"
-                    width={35}
-                    height={35}
-                  />
-                </button>
-
-                <button onClick={FacebookOnClick}>
-                  <Image
-                    src="/facebook.png"
-                    alt="facebook"
-                    width={38}
-                    height={38}
-                  />
-                </button>
-              </div>
               <span className="inline-block  bg-gray-200 rounded-full p-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
