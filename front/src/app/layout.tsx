@@ -9,6 +9,8 @@ import Footer from "@/components/footer/Footer";
 import { PayPalContext } from "@/context/PayPalContext";
 import { CategoryProvider } from "@/context/category.context";
 
+
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -28,6 +30,7 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
 <CategoryProvider>
+ 
         <PayPalContext>
           <Provider>
             <Navbar />
@@ -35,7 +38,8 @@ export default function RootLayout({
             <Footer />
           </Provider>
         </PayPalContext>
-</CategoryProvider>
+
+  </CategoryProvider>
       </body>
     </html>
   );

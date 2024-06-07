@@ -58,7 +58,7 @@ const Navbar = () => {
     }
 
     fetchData();
-  }, [pathname]);
+  }, [pathname,]);
 
   const handleSearch = (event: { target: { value: string } }) => {
     const value = event.target.value.toLowerCase();

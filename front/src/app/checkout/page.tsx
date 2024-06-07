@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import PayPalButton from "@/components/PayPalButton/PayPalButton";
 import { TextInput } from "flowbite-react";
 import { IProductCart } from "@/interfaces/IProduct";
@@ -10,6 +11,7 @@ const Checkout = () => {
   const [cart, setCart] = useState<IProductCart[]>([]);
   const [userId, setUserId] = useState<string>("");
   const [userToken, setUserToken] = useState<string>("");
+  const router = useRouter();
 
   useEffect(() => {
     const cartData = JSON.parse(localStorage.getItem("cart") || "[]") as IProductCart[];
@@ -62,7 +64,14 @@ const Checkout = () => {
       const response = await createOrder(order, userToken);
       console.log('Order created successfully:', response);
       alert('Order created successfully');
-     
+
+      // Vaciar el carrito
+      localStorage.removeItem("cart");
+      setCart([]);
+
+      // Redirigir a la vista home
+      router.push("/");
+
     } catch (error) {
       console.error('Error creating order:', error);
       alert('Error creating order');
@@ -72,7 +81,6 @@ const Checkout = () => {
   return (
     <div className="font-[sans-serif] bg-white pt-6">
       <div className="max-lg:max-w-xl mx-auto w-full">
-        <div className="grid lg:grid-cols-3 gap-6">
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 max-lg:order-1 p-6 max-w-4xl mx-auto w-full">
             <div className="text-center max-lg:hidden">
@@ -124,7 +132,7 @@ const Checkout = () => {
                   </li>
                   <li className="flex flex-wrap gap-4 text-sm font-bold border-t-2 pt-4">
                     Total a Pagar{" "}
-                    <span className="ml-auto">${(totalConDescuento + 200).toFixed(2)}</span>
+                    <span className="ml-auto">${(totalConDescuento + 20).toFixed(2)}</span>
                   </li>
                 </ul>
               </div>
@@ -202,9 +210,7 @@ const Checkout = () => {
         </div>
       </div>
     </div>
-  </div>
   );
 };
 
 export default Checkout;
- 
