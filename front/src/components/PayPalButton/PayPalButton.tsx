@@ -12,6 +12,13 @@ function Message({ content }: any) {
 const totalAmount = localStorage.getItem("totalAmount") || "0";
 const amount = parseFloat(totalAmount).toFixed(2);
 const PayPalButton: React.FC = () => {
+  const [userId, setUserId] = useState<string>("");
+  const [userToken, setUserToken] = useState<string>("");
+  const [cart, setCart] = useState<IProductCart[]>([]);
+
+  const [message, setMessage] = useState("");
+  const Router = useRouter();
+
   useEffect(() => {
     const cartData = JSON.parse(
       localStorage.getItem("cart") || "[]"
@@ -23,13 +30,6 @@ const PayPalButton: React.FC = () => {
     setUserId(userSession?.userData?.data?.userid || "");
     setUserToken(userSession?.userData?.token || "");
   }, []);
-
-  const [userId, setUserId] = useState<string>("");
-  const [userToken, setUserToken] = useState<string>("");
-  const [cart, setCart] = useState<IProductCart[]>([]);
-
-  const [message, setMessage] = useState("");
-  const Router = useRouter();
 
   const handlecreateOrder = async (): Promise<string> => {
     try {

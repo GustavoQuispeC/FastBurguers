@@ -15,21 +15,6 @@ const Checkout = () => {
     setCart(cartData);
   }, []);
 
-  const calculateTotal = (
-    price: number,
-    drinkPrice: number,
-    discount: number,
-    quantity: number
-  ) => {
-    const validPrice = price || 0;
-    const validDrinkPrice = parseFloat(String(drinkPrice)) || 0;
-    const validDiscount = discount || 0;
-    const validQuantity = quantity || 1;
-
-    const discountedPrice = validPrice - validPrice * validDiscount;
-    return (discountedPrice + validDrinkPrice) * validQuantity;
-  };
-
   const calculateDiscountAmount = (price: number, discount: number) => {
     const validPrice = price || 0;
     const validDiscount = discount || 0;
@@ -53,10 +38,8 @@ const Checkout = () => {
   const shippingCost = 20; // Costo de envío
 
   useEffect(() => {
-    localStorage.setItem(
-      "totalAmount",
-      (totalConDescuento + shippingCost).toString()
-    );
+    const totalAmount = (totalConDescuento + shippingCost).toFixed(2);
+    localStorage.setItem("totalAmount", totalAmount);
   }, [totalConDescuento]);
 
   return (
@@ -108,8 +91,8 @@ const Checkout = () => {
           </div>
 
           {/* Mis pedidos */}
-          <div className="bg-gray-100 lg:h-screen lg:sticky lg:top-0">
-            <div className="relative h-full">
+          <div className="bg-gray-100 lg:h-auto lg:sticky lg:top-0 lg:overflow-y-auto lg:col-span-1 md:col-span-2">
+            <div className="relative">
               <div className="p-8 lg:overflow-auto lg:h-[calc(100vh-60px)] max-lg:mb-8">
                 <h2 className="text-2xl font-extrabold text-[#333]">
                   Mis Pedidos
@@ -127,7 +110,7 @@ const Checkout = () => {
                           alt={item.name}
                         />
                       </div>
-                      <div>
+                      <div className="sm:col-span-1">
                         <h3 className="text-base text-[#333] font-bold">
                           {item.name}
                         </h3>
@@ -169,18 +152,14 @@ const Checkout = () => {
                   ))}
                 </div>
               </div>
-              <div className="absolute left-0 bottom-16 bg-gray-200 w-full p-4">
-                <h4 className="flex flex-wrap gap-4 text-base text-[#333] font-bold ">
-                  Envío{" "}
-                  <span className="ml-auto">${shippingCost.toFixed(2)}</span>
+              <div className="bg-gray-200 p-4">
+                <h4 className="text-base text-[#333] font-bold">
+                  Envío: ${shippingCost.toFixed(2)}
                 </h4>
               </div>
-              <div className="absolute left-0 bottom-0 bg-gray-200 w-full p-4">
-                <h4 className="flex flex-wrap gap-4 text-base text-[#333] font-bold">
-                  Total{" "}
-                  <span className="ml-auto">
-                    ${(totalConDescuento + shippingCost).toFixed(2)}
-                  </span>
+              <div className="bg-gray-200 p-4 mt-2">
+                <h4 className="text-base text-[#333] font-bold">
+                  Total: ${(totalConDescuento + shippingCost).toFixed(2)}
                 </h4>
               </div>
             </div>
