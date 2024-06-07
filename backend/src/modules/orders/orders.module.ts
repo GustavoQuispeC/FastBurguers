@@ -12,6 +12,7 @@ import { StatusHistoriesModule } from '../status-histories/status-histories.modu
 @Module({
   imports: [TypeOrmModule.forFeature([Orders, OrderDetails, Users, Products]),StatusHistoriesModule],
   controllers: [OrdersController],
-  providers: [OrdersService]
+  providers: [OrdersService],
+  exports:[OrdersService]
 })
 export class OrdersModule {}
