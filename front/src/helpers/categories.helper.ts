@@ -19,7 +19,6 @@ export async function getProductsByCategory(
     }
 
     const products: IProduct[] = await res.json();
-    console.log(products);
 
     return products;
   } catch (error: any) {
@@ -27,14 +26,12 @@ export async function getProductsByCategory(
   }
 }
 
-export async function getCategories(){
+export async function getCategories() {
   try {
     const res = await fetch(`${apiURL}/categories`);
     const categories = await res.json();
     return categories;
-    
   } catch (error: any) {
     throw new Error(`Error fetching categories: ${error.message}`);
-    
   }
 }

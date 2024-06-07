@@ -27,15 +27,15 @@ export default function RootLayout({
         <ThemeModeScript />
       </head>
       <body className={inter.className}>
-<CategoryProvider>
-        <PayPalContext>
-          <Provider>
-            <Navbar />
-            {children}
-            <Footer />
-          </Provider>
-        </PayPalContext>
-</CategoryProvider>
+        <CategoryProvider>
+          <PayPalContext>
+            <Provider>
+              <Navbar />
+              {children}
+              <Footer />
+            </Provider>
+          </PayPalContext>
+        </CategoryProvider>
       </body>
     </html>
   );
