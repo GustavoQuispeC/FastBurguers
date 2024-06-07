@@ -1,14 +1,14 @@
 "use client";
 import { getCategories } from "@/helpers/categories.helper";
-import { UpdateProductProps } from "@/interfaces/IProduct";
+import { IProducErrorProps, IProductProps } from "@/interfaces/IProduct";
 import { useEffect, useState } from "react";
-import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useRouter } from "next/navigation";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import { FaArrowLeft } from "react-icons/fa";
 import Link from "next/link";
 import Swal from "sweetalert2";
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
+import { validateProductForm } from "@/utils/formProductValidation";
 
 const ProductEdit = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
@@ -16,13 +16,23 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [categories, setCategories] = useState<any[]>([]);
 
-  const [dataProduct, setDataProduct] = useState<UpdateProductProps>({
+  const [dataProduct, setDataProduct] = useState<IProductProps>({
     name: "",
     description: "",
     price: 0,
     stock: 0,
     imgUrl: "",
     discount: 0,
+    categoryID: "",
+  });
+
+  const[errors, setErrors] = useState<IProducErrorProps>({
+    name: "",
+    description: "",
+    price: "",
+    stock: "",
+    imgUrl: "",
+    discount: "",
     categoryID: "",
   });
 
@@ -147,7 +157,7 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
         title: '¡Actualizado!',
         text: 'El producto ha sido actualizado con éxito.',
       }).then(() => {
-        router.push("/productList");
+        router.push("/dashboardAdmin");
       });
     } catch (error) {
       console.error("Error updating product:", error);
@@ -160,6 +170,13 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
       });
     }
   };
+
+  //!Validar formulario
+  useEffect(() => {
+    const errors = validateProductForm(dataProduct);
+    setErrors(errors);
+  }, [dataProduct]);
+
 
   if (!dataProduct) {
     return <div>Loading...</div>;
@@ -192,6 +209,7 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
                 onChange={handleChange}
                 required
               />
+              {errors.name && <p className="text-red-500 text-md">{errors.name}</p>}
             </div>
             <div>
               <label
@@ -214,23 +232,30 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
                   ></textarea>
                 </div>
               </div>
+              {errors.description && <p className="text-red-500 text-md">{errors.description}</p>}
             </div>
             <div className="mb-4">
               <span className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Imagen del producto
               </span>
               <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="relative p-2 bg-gray-100 rounded-lg sm:w-36 sm:h-36 dark:bg-gray-700">
-                  <img src={dataProduct.imgUrl} alt={dataProduct.name} />
+                <div className="mt-4 flex justify-center">
+                  <img 
+                  src={dataProduct.imgUrl} 
+                  alt={dataProduct.name} 
+                  width={150} 
+                  height={300}
+                  />
+                  
                 </div>
               </div>
               <div className="flex items-center justify-center w-full">
                 <label
                   htmlFor="dropzone-file"
-                  className="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                  className="flex flex-col items-center justify-center w-full h-36 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-bray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                 >
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <IoCloudUploadOutline />
+                    <IoCloudUploadOutline size={40} />
                     <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                       <span className="font-semibold">
                         Click para subir imagen{" "}
@@ -246,6 +271,7 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
                     className="hidden"
                     onChange={handleImageChange}
                   />
+                  {errors.imgUrl && <p className="text-red-500 text-md">{errors.imgUrl}</p>}
                 </label>
               </div>
             </div>
@@ -268,6 +294,7 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
                 value={dataProduct.price}
                 onChange={handleChange}
               />
+              {errors.price && <p className="text-red-500 text-md">{errors.price}</p>}  
             </div>
             <div>
               <label
@@ -290,6 +317,7 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
                   </option>
                 ))}
               </select>
+              {errors.categoryID && <p className="text-red-500 text-md">{errors.categoryID}</p>}
             </div>
             <div>
               <label
@@ -308,6 +336,7 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
                 value={dataProduct.discount}
                 onChange={handleChange}
               />
+              {errors.discount && <p className="text-red-500 text-md">{errors.discount}</p>}
             </div>
             <div>
               <label
@@ -326,6 +355,7 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
                 value={dataProduct.stock}
                 onChange={handleChange}
               />
+              {errors.stock && <p className="text-red-500 text-md">{errors.stock}</p>}
             </div>
           </div>
         </div>
@@ -340,7 +370,7 @@ const ProductEdit = ({ params }: { params: { id: string } }) => {
             data-modal-toggle="createProductModal"
             type="button"
             className="w-full justify-center sm:w-auto text-orange-500 inline-flex items-center hover:bg-orange-500 bg-white  focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-            href="/productList"
+            href="/dashboardAdmin"
           >
             <FaArrowLeft />
             &nbsp; Volver

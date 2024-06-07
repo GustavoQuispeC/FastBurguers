@@ -8,7 +8,6 @@ export function insertProductValidation(values: InsertProductProps): InsertError
     price: "",
     stock: "",
     imgUrl: "",
-    size: "",
     discount: "",
     categoryID: "",
   };
@@ -23,9 +22,7 @@ export function insertProductValidation(values: InsertProductProps): InsertError
     errors.stock = "El campo stock es requerido";
   } else if (!values.imgUrl) {
     errors.imgUrl = "El campo imagen es requerido";
-  } else if (!values.size.trim()) {
-    errors.size = "El campo tamaño es requerido";
-  } else if (!values.discount) {
+  }  else if (!values.discount) {
     errors.discount = "El campo descuento es requerido";
   } else if (!values.categoryID.trim()) {
     errors.categoryID = "El campo categoría es requerido";

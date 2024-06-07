@@ -10,6 +10,7 @@ import { IProductList } from "@/interfaces/IProduct";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Spinner from "../Spinner";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -21,6 +22,7 @@ const ProductList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [token, setToken] = useState<string | null>(null);
   const PRODUCTS_PER_PAGE = 10; // Cantidad de productos por página
+  const [loading, setLoading] = useState(true);
 
   //! Obtener token de usuario
   useEffect(() => {
@@ -141,6 +143,22 @@ const ProductList = () => {
       }
     }
   };
+
+  //! Spinner de carga
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (products.length === 0) {
+    return (
+      <div className="h-screen items- justify-center">
+        {loading ? <Spinner /> : <p>Algo no esta bien.</p>}
+      </div>
+    );
+  }
 
   return (
     <section className="p-3 sm:p-5 antialiased h-screen dark:bg-gray-700">

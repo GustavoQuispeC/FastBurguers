@@ -1,27 +1,40 @@
-'use client';
-import { getCategories } from "@/helpers/categories.helper";
+"use client";
+import {
+  UpdateCategory,
+  addCategory,
+  deleteCategory,
+  getCategories,
+} from "@/helpers/categories.helper";
 import { ICategory } from "@/interfaces/ICategory";
-import axios from "axios";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { IoSearchSharp } from "react-icons/io5";
 import { MdEdit } from "react-icons/md";
 import { RiAddLargeFill, RiDeleteBin6Fill } from "react-icons/ri";
 import { Button, Modal } from "flowbite-react";
 import Swal from "sweetalert2";
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
+import { formCategoryValidation } from "@/utils/formCategoryValidation";
+import Spinner from "../Spinner";
+
+
 
 const CategoriesList = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<any[]>([]);
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
-  const [currentCategoryId, setCurrentCategoryId] = useState<string | null>(null);
+  const [currentCategoryId, setCurrentCategoryId] = useState<string | null>(
+    null
+  );
+  const [loading, setLoading] = useState(true);
   const [token, setToken] = useState<string | null>(null);
+
   const [dataCategory, setDataCategory] = useState<ICategory>({
     name: "",
   });
+
+  const [errors, setErrors] = useState<ICategory>({
+    name: "",
+  })
 
   //! Obtener el token del usuario
   useEffect(() => {
@@ -39,7 +52,7 @@ const CategoriesList = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       const categories = await getCategories();
-      console.log("categories", categories)
+      console.log("categories", categories);
       setCategories(categories);
     };
 
@@ -56,25 +69,15 @@ const CategoriesList = () => {
   };
 
   //! Función para manejar el envío del formulario de agregar
+
   const handleSubmitAdd = async (e: any) => {
     e.preventDefault();
+    if (!token) {
+      console.error("No token available, authorization denied");
+      return;
+    }
     try {
-      const response = await fetch(`${apiURL}/categories`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(dataCategory),
-      });
-
-      console.log(dataCategory);
-
-      if (!response.ok) {
-        throw new Error("Failed to add category");
-      }
-
-      const newCategory = await response.json();
+      const newCategory = await addCategory(dataCategory.name, token);
       console.log(newCategory);
 
       // Actualizar la lista de categorías después de agregar una nueva
@@ -83,35 +86,27 @@ const CategoriesList = () => {
       // Resetear el formulario
       setDataCategory({ name: "" });
 
-      // Cerrar el modal
       setOpenModalAdd(false);
     } catch (error: any) {
-      console.error("Error adding category:", error);
+      console.error("Error adding category:", error.message);
     }
   };
 
   //! Función para manejar el envío del formulario de actualizar
+  
   const handleSubmitUpdate = async (e: any) => {
     e.preventDefault();
+    if (!token) {
+      console.error("No token available, authorization denied");
+      return;
+    }
     try {
       if (currentCategoryId) {
-        const response = await fetch(`${apiURL}/categories/${currentCategoryId}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(dataCategory),
-        });
-
-        console.log(dataCategory);
-
-        if (!response.ok) {
-          throw new Error("Failed to update category");
-        }
-
-        const updatedCategory = await response.json();
-        console.log(updatedCategory);
+        const updatedCategory = await UpdateCategory(
+          dataCategory.name,
+          currentCategoryId,
+          token
+        );
 
         // Actualizar la lista de categorías después de actualizar una categoría
         setCategories((prevCategories) =>
@@ -119,7 +114,6 @@ const CategoriesList = () => {
             category.id === currentCategoryId ? updatedCategory : category
           )
         );
-
         // Resetear el formulario
         setDataCategory({ name: "" });
 
@@ -148,32 +142,55 @@ const CategoriesList = () => {
     if (isConfirmed) {
       try {
         if (!token) {
-          Swal.fire("¡Error!", "Token no encontrado. Por favor, inicia sesión.", "error");
+          Swal.fire(
+            "¡Error!",
+            "Token no encontrado. Por favor, inicia sesión.",
+            "error"
+          );
           return;
         }
+        await deleteCategory(id, token);
 
-        const response = await fetch(`${apiURL}/categories/${id}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.ok) {
-          setCategories((prevCategories) => prevCategories.filter((category) => category.id !== id));
-          Swal.fire("¡Eliminado!", "La categoría ha sido eliminada", "success");
-          console.log("Categoría eliminada:", id);
-        } else {
-          const responseData = await response.json();
-          console.error("Error en la respuesta del servidor:", response.status, response.statusText, responseData);
-          Swal.fire("¡Error!", `Error del servidor: ${responseData.message || 'No se pudo eliminar la categoría'}`, "error");
-        }
-      } catch (error) {
+        // Actualizar la lista de categorías después de eliminar una categoría
+        setCategories((prevCategories) =>
+          prevCategories.filter((category) => category.id !== id)
+        );
+        Swal.fire("¡Eliminado!", "La categoría ha sido eliminada", "success");
+        console.log("Categoría eliminada:", id);
+      } catch (error: any) {
         console.error("Error deleting category:", error);
-        Swal.fire("¡Error!", "Ha ocurrido un error al eliminar la categoría", "error");
+        Swal.fire(
+          "¡Error!",
+          "Ha ocurrido un error al eliminar la categoría",
+          "error"
+        );
       }
     }
   };
+   //!Validar formulario
+   useEffect(() => {
+    const errors = formCategoryValidation(dataCategory);
+    setErrors(errors);
+  }, [dataCategory]);
+
+    //! Spinner de carga
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }, []);
+
+
+  if (categories.length === 0) {
+    return (
+      <div className="h-screen items- justify-center">
+      {loading ? <Spinner /> : <p>Algo no esta bien.</p>}
+    </div>
+    )
+
+  }
+  
 
   return (
     <div>
@@ -189,27 +206,25 @@ const CategoriesList = () => {
               <div className="flex-shrink-0 flex flex-col items-start md:flex-row md:items-center lg:justify-end space-y-3 md:space-y-0 md:space-x-3"></div>
             </div>
             <div className="flex flex-col md:flex-row items-stretch md:items-center md:space-x-3 space-y-3 md:space-y-0 justify-between mx-4 py-4 border-t dark:border-gray-700">
-              <div className="w-full md:w-1/2">
-                {/*  */}
-              </div>
+              <div className="w-full md:w-1/2">{/*  */}</div>
               <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                 <div className="flex items-center space-x-3 w-full md:w-auto">
-                  <Button
+                  <button
                     type="button"
                     id="createProductButton"
                     data-modal-toggle="createProductModal"
-                    className="flex items-center justify-center text-white bg-orange-500 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+                    className="flex items-center justify-center text-white bg-orange-500 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800 hover:bg-white hover:text-orange-500 hover:border-orange-500 border"
                     onClick={() => setOpenModalAdd(true)}
                   >
                     <RiAddLargeFill />
                     Agregar categoria
-                  </Button>
+                  </button>
                 </div>
               </div>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
                     <th scope="col" className="p-4">
                       Nombre
@@ -233,7 +248,7 @@ const CategoriesList = () => {
 
                       <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                         <div className="flex items-center space-x-4">
-                          <Button
+                          <button
                             type="button"
                             data-drawer-target="drawer-update-product"
                             data-drawer-show="drawer-update-product"
@@ -247,7 +262,7 @@ const CategoriesList = () => {
                           >
                             <MdEdit />
                             Editar
-                          </Button>
+                          </button>
                           <button
                             type="button"
                             onClick={() => handleDeleteCategory(category.id)}
@@ -263,7 +278,6 @@ const CategoriesList = () => {
                 </tbody>
               </table>
             </div>
-            
           </div>
         </div>
       </section>
@@ -285,6 +299,8 @@ const CategoriesList = () => {
                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 onChange={handleChange}
               />
+              {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
+              
             </div>
           </div>
         </Modal.Body>
@@ -320,6 +336,7 @@ const CategoriesList = () => {
                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 onChange={handleChange}
               />
+              {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
             </div>
           </div>
         </Modal.Body>

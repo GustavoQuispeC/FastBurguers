@@ -22,7 +22,7 @@ const DashboardAdmin = () => {
   }, []);
 
   return (
-    <div className="flex flex-row min-h-screen">
+    <div className="flex flex-row min-h-screen dark:bg-gray-700">
       {/* Barra lateral */}
       <div className="bg-gray-900 text-orange-400 w-36 md:w-52">
         <div className="p-1 md:p-4">
@@ -33,18 +33,20 @@ const DashboardAdmin = () => {
           <ul>
             <li className="mb-2">
               <button
-                onClick={() => setView("categories")}
+               onClick={() => setView("modifyProducts")}
+                
                 className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
               >
-                <RiFolderSettingsFill /> &nbsp; Categorías
+                 <TbSettingsCog /> &nbsp; Productos
               </button>
             </li>
             <li className="mb-2">
               <button
-                onClick={() => setView("modifyProducts")}
+               onClick={() => setView("categories")}
                 className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
               >
-               <TbSettingsCog /> &nbsp; Productos
+                <RiFolderSettingsFill /> &nbsp; Categorías
+              
               </button>
             </li>
           </ul>
@@ -53,11 +55,11 @@ const DashboardAdmin = () => {
       {/* Contenido principal */}
       <div className="flex-1 overflow-y-auto">
         {/* Barra de navegación */}
-        <div className="bg-gray-200 p-1 md:p-4">
-          <h2 className="text-lg font-semibold mb-2">
+        <div className="bg-gray-200 p-1 md:p-4 dark:bg-gray-500 ">
+          <h2 className="text-lg font-semibold mb-2 dark:text-white">
             Bienvenido usuario Administrador
           </h2>
-          <div className="bg-gray-50 p-4 rounded shadow">
+          <div className="bg-gray-50 p-4 rounded shadow dark:bg-gray-300">
             {/* Aquí irían los datos del usuario */}
             <p>
               <b>Nombre:</b> {token?.userData.data.name}
@@ -91,12 +93,12 @@ const DashboardAdmin = () => {
               <CategoriesList />
             </div>
           )}
-          {view === "modifyProducts" && (
+          
             <div>
               <h2 className="text-lg font-semibold mb-2">Modificar Producto</h2>
               <ProductList />
             </div>
-          )}
+          
         </div>
       </div>
     </div>

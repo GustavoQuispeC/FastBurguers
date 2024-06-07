@@ -29,7 +29,7 @@ export interface IProductList {
   category: string;
   valune?: number;
 }
-export interface InsertProductProps {
+export interface IProductProps {
   name: string;
   description: string;
   price: number;
@@ -38,7 +38,7 @@ export interface InsertProductProps {
   discount: number;
   categoryID: string;
 }
-export interface InsertErrorProductProps {
+export interface IProducErrorProps {
   name: string;
   description: string;
   price: string;
@@ -48,22 +48,3 @@ export interface InsertErrorProductProps {
   categoryID: string;
 }
 
-export interface UpdateProductProps {
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  imgUrl: string;
-  discount: number;
-  categoryID: string;
-}
-
-export interface UpdateErrorProductProps {
-  name: string;
-  description: string;
-  price: string;
-  stock: string;
-  imgUrl: string;
-  discount: string;
-  categoryID: string;
-}
