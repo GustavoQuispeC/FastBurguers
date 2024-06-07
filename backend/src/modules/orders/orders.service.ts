@@ -40,7 +40,7 @@ export class OrdersService {
         const productsArray = await Promise.all(
             products.map(async (element) => {
                 // validar stock
-                const foundStock = await this.productsRepository.findOne({ where: { name: element.name, price: 120 } })
+                const foundStock = await this.productsRepository.findOne({ where: { name: element.name} })
                 if(foundStock){
                     throw new Error(`El producto de ${foundStock}, ya no hay disponibles`)
                 }
