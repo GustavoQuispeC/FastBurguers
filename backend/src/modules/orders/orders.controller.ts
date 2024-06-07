@@ -15,9 +15,9 @@ export class OrdersController {
 
     @ApiBearerAuth()
     @Get(':id')
-    // @Roles(Role.ADMIN)
-    // @UseGuards(AuthGuards, RolesGuard)
-    getOrder(@Param('id') id: string){
+    @Roles(Role.ADMIN)
+    @UseGuards(AuthGuards, RolesGuard)
+    getOrder(@Param('id', ParseUUIDPipe) id: string){
         return this.ordersService.getOrder(id)
     }
 
@@ -31,16 +31,16 @@ export class OrdersController {
 
     @ApiBearerAuth()
     @Put(':id')
-    // @Roles(Role.ADMIN)
-    // @UseGuards(AuthGuards, RolesGuard)
-    update(@Body() orders: dateOrdersDto, @Param('id') id: string){
+    @Roles(Role.ADMIN)
+    @UseGuards(AuthGuards, RolesGuard)
+    update(@Body() orders: dateOrdersDto, @Param('id', ParseUUIDPipe) id: string){
         return this.ordersService.updateOrders(orders, id)
     }
 
     @ApiBearerAuth()
     @Delete(':id')
-    // @Roles(Role.SUPERADMIN)
-    // @UseGuards(AuthGuards,RolesGuard)
+    @Roles(Role.ADMIN)
+    @UseGuards(AuthGuards,RolesGuard)
     deleteOrders(@Param('id',ParseUUIDPipe) id:string) {
         return this.ordersService.deleteOrders(id)
     }

@@ -16,13 +16,11 @@ export class ProductsService {
 
 
     async getAll(){
-        const allProducts = await this.productsRepository.find({
+        return await this.productsRepository.find({
             relations:{
                 category:true
             }
-        })
-
-        return allProducts;
+        });
     }
 
     async getAllPage(page:string, limit:string){
@@ -30,17 +28,16 @@ export class ProductsService {
             const npage = Number(page)  
             const nlimit = Number(limit)
             if(npage<=0 || nlimit<=0) throw new Error();
-            const products = await this.productsRepository.find({
+
+            return await this.productsRepository.find({
                 take: nlimit,
                 skip: (npage-1)*nlimit,
                 relations:{
                     category:true
                 }
-            })
-            return products
-
+            });
         } catch (error) {
-            throw new BadRequestException('Page and limit must be positive integers')
+            throw new BadRequestException('La página y el límite deben ser números enteros positivos')
         }
     }
 
@@ -78,7 +75,7 @@ export class ProductsService {
     }
 
     async createProduct(product:CreateProductdto
-        , file?: Express.Multer.File
+        , file: Express.Multer.File
     ){
         const foundProduct = await this.productsRepository.findOneBy({name:product.name})
         if(foundProduct) throw new BadRequestException(`ya existe un producto con name: ${product.name}`)
@@ -92,7 +89,7 @@ export class ProductsService {
         if(file){
             const uploadImage = await this.fileUploadRepository.uploadImage(file);
             if(!uploadImage) throw new BadRequestException('Hubo un error al subir la imagen');
-            imgUrl = uploadImage?.url;
+            imgUrl = uploadImage.url;
         }
 
         const objectProduct  = new Products();
@@ -147,8 +144,7 @@ export class ProductsService {
         }
 
         await this.productsRepository.update(id, updateData);
-        const updatedProduct = await this.productsRepository.findOneBy({id});
-        return updatedProduct;
+        return await this.productsRepository.findOneBy({id});
     }
     
     async deleteProduct(id:string){
