@@ -1,6 +1,7 @@
 "use client";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
+import { destroyCookie, parseCookies } from "nookies";
 import {
   AiFillTag,
   AiOutlineClose,
@@ -18,7 +19,7 @@ import Link from "next/link";
 import { Dropdown } from "flowbite-react";
 import { DarkThemeToggle } from "flowbite-react";
 import { getProducts } from "@/helpers/products.helper";
-import { IUserSession } from "@/interfaces/IUser";
+import { IUserSession, IUserSessionLocal } from "@/interfaces/IUser";
 
 const Navbar = () => {
   const router = useRouter();
@@ -29,6 +30,7 @@ const Navbar = () => {
   const [allProducts, setAllProducts] = useState<IProduct[]>([]);
   const [searchResults, setSearchResults] = useState<IProduct[]>([]);
   const [userSesion, setUserSesion] = useState<IUserSession>();
+  const [userSesionLocal, setUserSesionLocal] = useState<IUserSessionLocal>();
   const [cartItemCount, setCartItemCount] = useState(0);
 
   useEffect(() => {
@@ -38,17 +40,25 @@ const Navbar = () => {
         setAllProducts(products);
         setSearchResults(products);
 
-        const userSession = localStorage.getItem("userSession");
-        if (userSession !== null) {
-          setUserSesion(JSON.parse(userSession));
+        let userSessionFromLocalStorage = localStorage.getItem("userSession");
+        if (userSessionFromLocalStorage) {
+          setUserSesionLocal(JSON.parse(userSessionFromLocalStorage));
+        } else {
+          // Si no está en el localStorage, intenta obtenerlo de las cookies
+          const cookies = parseCookies();
+          const userSessionCookie = cookies.userSession;
+          if (userSessionCookie) {
+            setUserSesion(JSON.parse(userSessionCookie));
+
+            // Si se obtiene de la cookie, también lo almacenamos en el localStorage
+            localStorage.setItem("userSession", userSessionCookie);
+          }
         }
 
         const cart = localStorage.getItem("cart");
         if (cart !== null) {
           const parsedCart = JSON.parse(cart);
-
           const totalCount = parsedCart.length;
-
           setCartItemCount(totalCount);
         }
       } catch (error) {
@@ -79,12 +89,14 @@ const Navbar = () => {
     });
     localStorage.removeItem("userSession");
     localStorage.removeItem("cart");
+    destroyCookie(null, "userSession");
   };
 
   const handleProductClick = () => {
     setSearchTerm("");
     setSearchResults(allProducts);
   };
+
   return (
     <>
       <div className="max-w-[1640px] dark:bg-gray-600 mx-auto flex dark:text-white justify-between items-center p-4">
@@ -144,7 +156,7 @@ const Navbar = () => {
               </span>
             )}
           </button>
-          {!userSesion && (
+          {!userSesion && !userSesionLocal && (
             <Link href="/login">
               <button className="text-gray-900 font-bold">
                 Iniciar Sesion
@@ -152,13 +164,13 @@ const Navbar = () => {
             </Link>
           )}
 
-          {userSesion && (
+          {(userSesion || userSesionLocal) && (
             <p className="text-gray-900 font-bold hidden md:block">
               ¡Bienvenido,
-              {userSesion?.userData.data.name}!
+              {userSesion?.data.name || userSesionLocal?.userData.data.name}!
             </p>
           )}
-          {userSesion && (
+          {(userSesion || userSesionLocal) && (
             <Dropdown
               arrowIcon={false}
               inline
@@ -174,10 +186,11 @@ const Navbar = () => {
             >
               <Dropdown.Header>
                 <span className="block text-sm">
-                  {userSesion?.userData.data.name}
+                  {userSesion?.data.name || userSesionLocal?.userData.data.name}
                 </span>
                 <span className="block truncate text-sm font-medium">
-                  {userSesion?.userData.data.email}
+                  {userSesion?.data.email ||
+                    userSesionLocal?.userData.data.email}
                 </span>
               </Dropdown.Header>
               <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>

@@ -5,6 +5,7 @@ import {
   LoginUserTerceros,
   RegisterUserTerceros,
 } from "@/helpers/AutenticacionTerceros.helper";
+import { cookies } from "next/headers";
 
 const handler = NextAuth({
   providers: [
@@ -27,26 +28,29 @@ const handler = NextAuth({
       const name = user.name as string;
 
       try {
-        // Intentar iniciar sesión
+        // Intentar registrar al usuario
         try {
-          await LoginUserTerceros(email);
+          await RegisterUserTerceros({ email, name });
 
-          return true; // Inicio de sesión exitoso
-        } catch (loginError) {
+          // Registro exitoso, intentar iniciar sesión
+
+          const data = await LoginUserTerceros(email);
+          const cookieData = JSON.stringify(data);
+
+          // Iniciar sesión exitoso, crear y establecer cookie
+          cookies().set("userSession", cookieData, {
+            path: "/",
+            maxAge: 3600,
+            sameSite: "lax",
+          });
+
+          return true;
+        } catch (registerError) {
           console.error(
-            "Login failed, attempting to register user:",
-            loginError
+            "Error during user registration and login:",
+            registerError
           );
-
-          // Si el inicio de sesión falla, intentar registrar al usuario
-          try {
-            await RegisterUserTerceros({ email, name });
-
-            return true; // Registro exitoso
-          } catch (registerError) {
-            console.error("Error during user registration:", registerError);
-            return false; // Registro fallido
-          }
+          return false; // Registro fallido
         }
       } catch (error) {
         console.error("Error during the signIn process:", error);
