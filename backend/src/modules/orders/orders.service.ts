@@ -99,7 +99,7 @@ export class OrdersService {
 
     async getAllOrder(){
         const orders = await this.ordersRepository.find({
-            relations: ['orderDetails','orderDetails.statushistory']
+            relations: ['orderDetails','orderDetails.products','orderDetails.statushistory']
         })
 
         return orders;
