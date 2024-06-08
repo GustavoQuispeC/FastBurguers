@@ -17,46 +17,34 @@ export interface IProductCart extends IProduct {
   drinkPrice?: string;
 }
 
-export interface InsertProductProps {
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  imgUrl: string;
-  size: string;
-  discount: number;
-  categoryID: string;
-}
-export interface InsertErrorProductProps {
-  name: string;
-  description: string;
-  price: string;
-  stock: string;
-  imgUrl: string;
-  size: string;
-  discount: string;
-  categoryID: string;
-}
-
-export interface UpdateProductProps {
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  imgUrl: string;
-  size: string;
-  discount: number;
-  categoryID: string;
-}
-
-export interface UpdateErrorProductProps {
+export interface IProductList {
   id: string;
   name: string;
   description: string;
+  price: number;
+  stock: number;
+  imgUrl: string;
+  size: string;
+  discount: number;
+  category: string;
+  valune?: number;
+}
+export interface IProductProps {
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+  imgUrl: string;
+  discount: number;
+  categoryID: string;
+}
+export interface IProducErrorProps {
+  name: string;
+  description: string;
   price: string;
   stock: string;
   imgUrl: string;
-  size: string;
   discount: string;
   categoryID: string;
 }
+

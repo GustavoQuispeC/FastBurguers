@@ -26,7 +26,12 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/app/MTailwind.tsx"
-, "next-i18next.config.js", "next-i18next.config.js", "public/static/locales/es/common.js", "src/app/checkout/page.jsx", "src/app/contact/page.jsx"  ],
+    "src/app/MTailwind.tsx",
+    "next-i18next.config.js",
+    "next-i18next.config.js",
+    "public/static/locales/es/common.js",
+    "src/app/checkout/page.jsx",
+    "src/app/contact/page.jsx"
+  ],
   "exclude": ["node_modules"]
 }

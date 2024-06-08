@@ -29,10 +29,11 @@ export class TestimonyService {
         const newTestimony = await this.testimonyRepository.save(testimony)
 
         const findTestimony = await this.testimonyRepository.findOne({where: { email: newTestimony.email }})
-        // const findTestimony = await this.testimonyRepository.findOneBy({email: newTestimony.email})
 
-        const {name, ...testimonyAll} = findTestimony;
-        return { message: name + ' left a comment' }
+        if (!findTestimony) throw new BadRequestException('Testimony not found after creation');
+
+        const {name } = findTestimony;
+        return { message: name + ' left a comment' };
 
     }
 

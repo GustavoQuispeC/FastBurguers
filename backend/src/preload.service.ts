@@ -6,7 +6,8 @@ import { Users } from './entities/users.entity';
 import { Products } from './entities/products.entity';
 import { Categories } from './entities/categories.entity';
 import * as data from './data/data.json'
-import { SizeProduct } from './enum/sizeProduct.enum';
+import { OrdersService } from './modules/orders/orders.service';
+
 
 
 @Injectable()
@@ -14,31 +15,29 @@ export class PreloadService implements OnModuleInit {
     constructor(
         @InjectRepository(Users) private usersRepository: Repository<Users>,
         @InjectRepository(Products) private productsRepository: Repository<Products>,
-        @InjectRepository(Categories) private categoriesRepository: Repository<Categories>
+        @InjectRepository(Categories) private categoriesRepository: Repository<Categories>,
+        private readonly ordersService: OrdersService,
     ){}
 
     async delay(ms: number): Promise<void> {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    async addDefaultSuperAdmin(){
-        const defaultUser = {
-            email: "adminTest@gmail.com",
-            name: "Admin01",
-            password: "1234aA#abc",
-            isAdmin:true,
-            isSuperAdmin:true,
-            phone: 123456789,
-            country: "España",
-            address: "EnriqueDelgado",
-            city:"Madrid",
-        }
+
+    async addDefaultOrder(){
+        const users = await this.usersRepository.find()
+        const products = await this.productsRepository.find()
+        await this.ordersService.addOrder(users[0].id,[{id:products[0].id}, {id:products[1].id}]);
+        console.log("Precarga de Orders")
+    }
+
+    async addDefaultUser(defaultUser:  any){
         const foundAdmin = await this.usersRepository.findOneBy({email:defaultUser.email})
         if(!foundAdmin){
             const hashedPass = await bcrypt.hash(defaultUser.password,10)
             await this.usersRepository.save({...defaultUser,password:hashedPass})
         }
-        console.log("Precarga de SuperAdminDefault") 
+        console.log("Precarga de Usuario") 
     }
 
     async addDefaultCategories(){
@@ -111,9 +110,36 @@ export class PreloadService implements OnModuleInit {
 
 
     async onModuleInit() {
+
+        const defaultAdmin = {
+            email: "adminTest@gmail.com",
+            name: "Admin01",
+            password: "1234aA#abc",
+            isAdmin:true,
+            isSuperAdmin:true,
+            phone: 123456789,
+            country: "España",
+            address: "EnriqueDelgado",
+            city:"Madrid",
+        }
+    
+        const defaultUser =  {
+            email: "adminTest@gmail.com",
+            name: "Admin01",
+            password: "1234aA#abc",
+            isAdmin:true,
+            isSuperAdmin:true,
+            phone: 123456789,
+            country: "España",
+            address: "EnriqueDelgado",
+            city:"Madrid",
+        }
+
         await this.addDefaultCategories();
         await this.delay(1000); 
-        await this.addDefaultSuperAdmin();
+        await this.addDefaultUser(defaultUser);
         await this.addDefaultProducts()
+        await this.addDefaultUser(defaultAdmin);
+        await this.addDefaultOrder();
     }
 }

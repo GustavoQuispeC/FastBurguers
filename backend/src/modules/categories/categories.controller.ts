@@ -1,7 +1,6 @@
-import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { AuthGuards } from 'src/guards/auth.guard';
-import { retry } from 'rxjs';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/enum/roles.enum';
@@ -17,7 +16,7 @@ export class CategoriesController {
 
 
     @Get()
-    getCategories(page:string, limit:string){
+    getCategories(@Query('page') page: string, @Query('limit') limit: string){
         if(page&&limit){
             return this.categoryService.getAll(page,limit)
         }
@@ -32,7 +31,7 @@ export class CategoriesController {
 
     @ApiBearerAuth()
     @Put(':id')
-    @Roles(Role.SUPERADMIN)
+    @Roles(Role.ADMIN)
     @UseGuards(AuthGuards,RolesGuard)
     updateName(@Param('id',ParseUUIDPipe) id:string ,@Body() category:UpdateCategoryDto){
         return this.categoryService.updateName(id,category)
@@ -40,15 +39,15 @@ export class CategoriesController {
 
     @ApiBearerAuth()
     @Post()
-    @Roles(Role.SUPERADMIN)
+    @Roles(Role.ADMIN)
     @UseGuards(AuthGuards,RolesGuard)
     createCategory(@Body() category:CreateCategoryDto){
         return this.categoryService.createCategory(category)
     }
 
     @ApiBearerAuth()
-    @Delete()
-    @Roles(Role.SUPERADMIN)
+    @Delete(':id')
+    @Roles(Role.ADMIN)
     @UseGuards(AuthGuards,RolesGuard)
     deleteCategory(@Param('id',ParseUUIDPipe) id:string){
         return this.categoryService.deleteCategory(id)

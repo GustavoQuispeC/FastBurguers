@@ -12,7 +12,11 @@ export class AuthGuards implements CanActivate {
         
         try {
             const request = context.switchToHttp().getRequest()
-            const token = request.headers.authorization?.split(' ')[1]
+            const authHeader = request.headers.authorization;
+
+            if(!authHeader) throw new UnauthorizedException("No se envió token")
+
+            const token = authHeader?.split(' ')[1]
             // ['Bearer:', token]
             if(!token) throw new UnauthorizedException('No se envio token')
 

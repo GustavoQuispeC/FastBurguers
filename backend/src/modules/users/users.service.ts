@@ -17,12 +17,11 @@ export class UsersService {
             const npage = Number(page)  
             const nlimit = Number(limit)
             if(npage<=0 || nlimit<=0) throw new Error();
-            const users = await this.userRepository.find({
+
+            return await this.userRepository.find({
                 take: nlimit,
                 skip: (npage-1)*nlimit
-            })
-            return users
-
+            });
         } catch (error) {
             throw new BadRequestException('Page and limit must be positive integers')
         }
@@ -30,7 +29,10 @@ export class UsersService {
     }
 
     async getById(id:string){
-        const user = await this.userRepository.findOneBy({id})
+        const user = await this.userRepository.findOne({
+            where:{id},
+            relations:['orders','orders.orderDetails', 'orders.orderDetails.products' , 'orders.orderDetails.statushistory']
+        })
         if(!user) throw new BadRequestException(`No se encontro usario con ${id}`)
         const {password, isAdmin, isSuperAdmin, ...userInfoPublic} = user;
         return userInfoPublic;

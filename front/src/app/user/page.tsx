@@ -35,33 +35,6 @@ const Register = () => {
       theme: "colored",
     });
 
-  const GoogleOnClick = async () => {
-    await signIn("google", {
-      redirect: false,
-    });
-  };
-
-  const FacebookOnClick = async () => {
-    await signIn("facebook", {
-      redirect: false,
-    });
-  };
-
-  useEffect(() => {
-    if (session?.user) {
-      const name = session.user.name ?? undefined;
-      const email = session.user.email ?? undefined;
-
-      RegisterUserTerceros({
-        name,
-        email,
-      } as Partial<IUserTerceros>).then(() => {
-        setRedirected(true);
-        Router.push("/login");
-      });
-    }
-  }, [session, redirected]);
-
   const [dataUser, setDataUser] = useState<RegisterProps>({
     name: "",
     email: "",
@@ -84,6 +57,19 @@ const Register = () => {
     city: "",
   });
 
+  const [touched, setTouched] = useState<
+    Partial<Record<keyof RegisterErrorProps, boolean>>
+  >({
+    name: false,
+    email: false,
+    address: false,
+    phone: false,
+    password: false,
+    confirmPassword: false,
+    country: false,
+    city: false,
+  });
+
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleTogglePassword = () => {
     setShowPassword(!showPassword);
@@ -97,6 +83,13 @@ const Register = () => {
       ...prevDataUser,
       [name]: value,
     }));
+
+    if (!touched[name as keyof RegisterErrorProps]) {
+      setTouched((prevTouched) => ({
+        ...prevTouched,
+        [name]: true,
+      }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -113,14 +106,13 @@ const Register = () => {
     }
 
     try {
-      // Convertir phone a número antes de enviar los datos
       const userToRegister = {
         ...dataUser,
         phone: parseInt(dataUser.phone, 10),
       };
       await RegisterUser(userToRegister);
       notify();
-      Router.push("/login"); // Redirige al usuario después del registro
+      Router.push("/login");
     } catch (error: any) {
       toast.error(`Error registrando usuario: ${error.message}`, {
         theme: "colored",
@@ -156,25 +148,6 @@ const Register = () => {
             className="bg-white dark:bg-gray-800 p-6 md:p-10 rounded-lg shadow-lg w-full"
           >
             <div className="flex justify-center mb-6">
-              <div className="flex justify-evenly items-center  w-32 ">
-                <button onClick={GoogleOnClick}>
-                  <Image
-                    src="/google.png"
-                    alt="google"
-                    width={35}
-                    height={35}
-                  />
-                </button>
-
-                <button onClick={FacebookOnClick}>
-                  <Image
-                    src="/facebook.png"
-                    alt="facebook"
-                    width={38}
-                    height={38}
-                  />
-                </button>
-              </div>
               <span className="inline-block  bg-gray-200 rounded-full p-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -208,7 +181,9 @@ const Register = () => {
                 />{" "}
                 <FaUser className="text-gray-900 dark:text-gray-200 absolute right-2" />
               </div>
-              {error.name && <p style={{ color: "red" }}>{error.name}</p>}
+              {touched.name && error.name && (
+                <p style={{ color: "red" }}>{error.name}</p>
+              )}
             </div>
 
             <div className="pb-4">
@@ -225,7 +200,9 @@ const Register = () => {
                 />{" "}
                 <HiMail className="text-gray-900 dark:text-gray-200 absolute right-2" />
               </div>
-              {error.email && <p style={{ color: "red" }}>{error.email}</p>}
+              {touched.email && error.email && (
+                <p style={{ color: "red" }}>{error.email}</p>
+              )}
             </div>
 
             <div className="pb-4">
@@ -248,7 +225,7 @@ const Register = () => {
                   {showPassword ? <FaEye /> : <FaEyeSlash />}
                 </button>
               </div>
-              {error.password && (
+              {touched.password && error.password && (
                 <p className="text-red-500 text-sm">{error.password}</p>
               )}
             </div>
@@ -273,7 +250,7 @@ const Register = () => {
                   {showPassword ? <FaEye /> : <FaEyeSlash />}
                 </button>
               </div>
-              {error.confirmPassword && (
+              {touched.confirmPassword && error.confirmPassword && (
                 <p className="text-red-500 text-sm">{error.confirmPassword}</p>
               )}
             </div>
@@ -292,7 +269,9 @@ const Register = () => {
                 />{" "}
                 <MdMapsHomeWork className="text-gray-900 dark:text-gray-200 absolute right-2" />
               </div>
-              {error.address && <p style={{ color: "red" }}>{error.address}</p>}
+              {touched.address && error.address && (
+                <p style={{ color: "red" }}>{error.address}</p>
+              )}
             </div>
 
             <div className="pb-4">
@@ -303,13 +282,15 @@ const Register = () => {
                   type="country"
                   value={dataUser.country}
                   onChange={handleChange}
-                  placeholder="Ingrese su pais"
+                  placeholder="Ingrese su país"
                   required
                   className="w-full pr-10"
                 />{" "}
                 <FaFlag className="text-gray-900 dark:text-gray-200 absolute right-2" />
               </div>
-              {error.country && <p style={{ color: "red" }}>{error.country}</p>}
+              {touched.country && error.country && (
+                <p style={{ color: "red" }}>{error.country}</p>
+              )}
             </div>
 
             <div className="pb-4">
@@ -326,7 +307,9 @@ const Register = () => {
                 />{" "}
                 <FaTreeCity className="text-gray-900 dark:text-gray-200 absolute right-2" />
               </div>
-              {error.city && <p style={{ color: "red" }}>{error.city}</p>}
+              {touched.city && error.city && (
+                <p style={{ color: "red" }}>{error.city}</p>
+              )}
             </div>
 
             <div className="pb-4">
@@ -343,7 +326,9 @@ const Register = () => {
                 />
                 <FaPhoneSquare className="text-gray-900 dark:text-gray-200 absolute right-2" />
               </div>
-              {error.phone && <p style={{ color: "red" }}>{error.phone}</p>}
+              {touched.phone && error.phone && (
+                <p style={{ color: "red" }}>{error.phone}</p>
+              )}
             </div>
 
             <button

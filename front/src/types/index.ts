@@ -34,18 +34,18 @@ export interface RegisterErrorProps {
 }
 
 export interface userSession {
-  token: string;
   userData: {
+    message: string;
+    token: string;
+    data: {
     id: number;
     name: string;
     email: string;
     address: string;
     phone: string;
-    role: string;
-    credential: {
-      id: number;
-      password: string;
+    city: string;
+    country: string;
     };
-    orders: any[]; // Cambia el tipo según la estructura real de "orders"
+   
   };
 }
