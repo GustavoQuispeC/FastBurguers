@@ -16,7 +16,7 @@ const DashboardAdmin = () => {
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const userToken = localStorage.getItem("userSession");
-      console.log(userToken);
+
       setToken(JSON.parse(userToken!));
       !userToken && redirect("/");
     }

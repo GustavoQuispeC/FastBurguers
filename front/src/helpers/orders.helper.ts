@@ -14,6 +14,13 @@ export async function createOrder(
       body: JSON.stringify(order),
     });
 
+    if (!res.ok) {
+      const errorDetails = await res.json();
+      throw new Error(
+        `Error creando orden: ${res.status} - ${errorDetails.message}`
+      );
+    }
+
     const data = await res.json();
 
     return data;
