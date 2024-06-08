@@ -1,18 +1,15 @@
-"use client";
-
 import { createOrder } from "@/helpers/orders.helper";
 import { IProductCart } from "@/interfaces/IProduct";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
+
 function Message({ content }: any) {
   return <p>{content}</p>;
 }
-const totalAmount = localStorage.getItem("totalAmount") || "0";
-const amount = parseFloat(totalAmount).toFixed(2);
-const total = parseFloat(amount);
-console.log(total);
+
 const PayPalButton: React.FC = () => {
   const [userId, setUserId] = useState<string>("");
   const [userToken, setUserToken] = useState<string>("");
@@ -34,6 +31,10 @@ const PayPalButton: React.FC = () => {
   }, []);
 
   const handlecreateOrder = async (): Promise<string> => {
+    const totalAmount = localStorage.getItem("totalAmount") || "0";
+    const amount = parseFloat(totalAmount).toFixed(2);
+    const total = parseFloat(amount);
+
     try {
       const response = await fetch(`${apiURL}/payments/create-order`, {
         method: "POST",
