@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { CreateStatusDto } from './status-histories.dto';
 import { OrderDetails } from 'src/entities/orderdetails.entity';
 import { Orders } from 'src/entities/orders.entity';
+import { timeStamp } from 'console';
+import { timestamp } from 'rxjs';
 
 @Injectable()
 export class StatusHistoriesService {
@@ -17,7 +19,7 @@ export class StatusHistoriesService {
     {}
     
 
-    async registerStatus(idOrder:string,statusData:CreateStatusDto){
+    async registerStatus(idOrder:string,statusData: any){
 
         const orderFound = await this.ordersRepository.findOne({
             where: { id: idOrder },
@@ -31,15 +33,16 @@ export class StatusHistoriesService {
 
         const statusFound = await this.statusHistRepository.find({
             where: {
-                orderdetails: { id: id },
+                orderdetails: { id },
             },
             relations: ['orderdetails'], 
             });
   
         const hasStatus = statusFound.some((element)=>element.status === statusData.status)
         if(hasStatus) throw new NotAcceptableException(`La orden ya tiene creado el status: ${statusData.status}`)
-
-        const statusHistory  = this.statusHistRepository.create({orderdetails:orderDetailFound,...statusData})
+        
+        const completeStatus = {...statusData,timestamp:new Date()}
+        const statusHistory  = this.statusHistRepository.create({orderdetails:orderDetailFound,...completeStatus})
         return this.statusHistRepository.save(statusHistory)
     }
 
