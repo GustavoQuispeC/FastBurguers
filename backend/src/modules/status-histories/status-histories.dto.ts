@@ -12,9 +12,4 @@ export class CreateStatusDto {
     )
     status: OrderStatus
 
-    @IsNotEmpty()
-    @Type(() => Date)
-    @IsDate()
-    timestamp:Date
-
 }
