@@ -69,9 +69,8 @@ export class OrdersService {
         await this.orderDetailsRepository.save(orderDetails)
 
         // registramos status
-        const infoStatus:CreateStatusDto =  {
+        const infoStatus =  {
             status:OrderStatus.SOLICITUD_RECIBIDA,
-            timestamp:order.date
         }
         console.log(newOrder.id)
         console.log(infoStatus)
@@ -98,6 +97,14 @@ export class OrdersService {
         return order
     }
 
+    async getAllOrder(){
+        const orders = await this.ordersRepository.find({
+            relations: ['orderDetails','orderDetails.statushistory']
+        })
+
+        return orders;
+    }
+
     async updateOrders(orders: dateOrdersDto, id: string) {
         const orderfound = await this.ordersRepository.findOneBy({id})
         if(!orderfound) throw new NotFoundException(`No se encontro la orden con ${id}`)
@@ -106,6 +113,7 @@ export class OrdersService {
         const updatedOrder = await this.ordersRepository.findOneBy({id});
         return updatedOrder;
     }
+
 
     async deleteOrders(id: string) {
         const orderfound = await this.ordersRepository.findOneBy({id})

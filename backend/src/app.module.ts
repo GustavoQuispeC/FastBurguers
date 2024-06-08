@@ -19,6 +19,7 @@ import { MorganMiddleware } from './middlewares/morgan.middleware';
 import { TestimonyModule } from './modules/testimony/testimony.module';
 import { PaymentsModule } from './paypal/payments.module';
 import { StatusHistoriesModule } from './modules/status-histories/status-histories.module';
+import { EventsGateway } from './events/events.gateway';
 
 @Module({
   imports: [
@@ -48,7 +49,7 @@ import { StatusHistoriesModule } from './modules/status-histories/status-histori
     PaymentsModule
   ],
   controllers: [AppController],
-  providers: [AppService, PreloadService],
+  providers: [AppService, PreloadService,EventsGateway],
 })
 export class AppModule implements NestModule{
   configure(consumer: MiddlewareConsumer) {
