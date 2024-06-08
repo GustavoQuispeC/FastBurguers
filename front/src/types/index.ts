@@ -38,14 +38,13 @@ export interface userSession {
     message: string;
     token: string;
     data: {
-    id: number;
-    name: string;
-    email: string;
-    address: string;
-    phone: string;
-    city: string;
-    country: string;
+      userid: string;
+      name: string;
+      email: string;
+      address: string;
+      phone: string;
+      city: string;
+      country: string;
     };
-   
   };
 }
