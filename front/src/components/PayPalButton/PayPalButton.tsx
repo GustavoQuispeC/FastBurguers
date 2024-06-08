@@ -2,7 +2,7 @@ import { createOrder } from "@/helpers/orders.helper";
 import { IProductCart } from "@/interfaces/IProduct";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -18,16 +18,16 @@ const PayPalButton: React.FC = () => {
   const [message, setMessage] = useState("");
   const Router = useRouter();
 
+  // Use a ref to store the cart
+  const cartRef = useRef<IProductCart[]>([]);
+ 
+
   useEffect(() => {
     const cartData = JSON.parse(
       localStorage.getItem("cart") || "[]"
     ) as IProductCart[];
     setCart(cartData);
-
-    const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
-
-    setUserId(userSession?.userData?.data?.userid || "");
-    setUserToken(userSession?.userData?.token || "");
+    cartRef.current = cartData; // Update the ref
   }, []);
 
   const handlecreateOrder = async (): Promise<string> => {
@@ -45,7 +45,6 @@ const PayPalButton: React.FC = () => {
       });
 
       const orderId = await response.text();
-
       return orderId;
     } catch (error: any) {
       console.error(error);
@@ -67,7 +66,6 @@ const PayPalButton: React.FC = () => {
       );
   
       const orderData = await response.json();
-  
       const errorDetail = orderData?.details?.[0];
   
       if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
@@ -80,27 +78,38 @@ const PayPalButton: React.FC = () => {
           `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
         );
       }
-      
+
       const transaction = orderData.purchase_units[0].payments.captures[0];
-  
+
       if (transaction.status === "COMPLETED") {
+        const userSession = JSON.parse(
+          localStorage.getItem("userSession") || "{}"
+        );
+        const userId = userSession?.userData?.data?.userid || "";
+        const userToken = userSession?.userData?.token || "";
+
+        if (!userId || !userToken) {
+          throw new Error("User data is missing.");
+        }
+
+        const currentCart = cartRef.current;
+        if (currentCart.length === 0) {
+          throw new Error("Cart is empty.");
+        }
+
         const order = {
           userId,
-          products: cart.map((item) => ({ id: String(item.id) })),
+          products: currentCart.map((item) => ({ id: String(item.id) })),
         };
-  
-        const createOrderResponse = await createOrder(order, userToken);
-  
-        console.log("Order created successfully:", createOrderResponse);
-        
-        // Guardar la respuesta en localStorage
-        localStorage.setItem("Order", JSON.stringify(createOrderResponse));
-  
+
+        const response = await createOrder(order, userToken);
+
+        console.log("Order created successfully:", response);
         localStorage.removeItem("cart");
-  
+
         Router.push("/tracking");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       setMessage(`Sorry, your transaction could not be processed...${error}`);
     }

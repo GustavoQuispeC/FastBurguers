@@ -7,15 +7,16 @@ import ProductList from "@/components/ProductList/page";
 import { GiSettingsKnobs } from "react-icons/gi";
 import { RiFolderSettingsFill } from "react-icons/ri";
 import { TbSettingsCog } from "react-icons/tb";
+import PedidosList from "@/components/PedidosList/PedidosList";
 
 const DashboardAdmin = () => {
   const [token, setToken] = useState<userSession>();
-  const [view, setView] = useState<string>(""); // Estado para la vista actual
+  const [view, setView] = useState<string>("pedidos"); // Estado para la vista actual, por defecto "pedidos"
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const userToken = localStorage.getItem("userSession");
-      console.log(userToken);
+
       setToken(JSON.parse(userToken!));
       !userToken && redirect("/");
     }
@@ -26,27 +27,32 @@ const DashboardAdmin = () => {
       {/* Barra lateral */}
       <div className="bg-gray-900 text-orange-400 w-36 md:w-52">
         <div className="p-1 md:p-4">
-            
-        <p className="text-xl text-white font-semibold mb-4 flex items-center">
-        <GiSettingsKnobs /> &nbsp;Dashboard
+          <p className="text-xl text-white font-semibold mb-4 flex items-center">
+            <GiSettingsKnobs /> &nbsp;Dashboard
           </p>
           <ul>
             <li className="mb-2">
               <button
-               onClick={() => setView("modifyProducts")}
-                
+                onClick={() => setView("pedidos")}
                 className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
               >
-                 <TbSettingsCog /> &nbsp; Productos
+                <RiFolderSettingsFill /> &nbsp; Pedidos
               </button>
             </li>
             <li className="mb-2">
               <button
-               onClick={() => setView("categories")}
+                onClick={() => setView("modifyProducts")}
+                className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
+              >
+                <TbSettingsCog /> &nbsp; Productos
+              </button>
+            </li>
+            <li className="mb-2">
+              <button
+                onClick={() => setView("categories")}
                 className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
               >
                 <RiFolderSettingsFill /> &nbsp; Categorías
-              
               </button>
             </li>
           </ul>
@@ -68,19 +74,16 @@ const DashboardAdmin = () => {
               <b>Email:</b> {token?.userData.data.email}
             </p>
             <p>
-              <b>Telefono: </b>
-              {token?.userData.data.phone}
+              <b>Teléfono:</b> {token?.userData.data.phone}
             </p>
             <p>
-              <b>Dirección:</b> {token?.userData.data.address}{" "}
+              <b>Dirección:</b> {token?.userData.data.address}
             </p>
             <p>
-              <b>Pais:</b>
-              {token?.userData.data.country}
+              <b>País:</b> {token?.userData.data.country}
             </p>
             <p>
-              <b>Ciudad:</b>
-              {token?.userData.data.city}
+              <b>Ciudad:</b> {token?.userData.data.city}
             </p>
           </div>
         </div>
@@ -88,17 +91,25 @@ const DashboardAdmin = () => {
           {view === "categories" && (
             <div>
               <h2 className="text-lg font-semibold mb-2">
-                Modificar categoria
+                Modificar Categoría
               </h2>
               <CategoriesList />
             </div>
           )}
-          
+
+          {view === "modifyProducts" && (
             <div>
               <h2 className="text-lg font-semibold mb-2">Modificar Producto</h2>
               <ProductList />
             </div>
-          
+          )}
+
+          {view === "pedidos" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Pedidos</h2>
+              <PedidosList />
+            </div>
+          )}
         </div>
       </div>
     </div>

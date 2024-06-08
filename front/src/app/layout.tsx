@@ -38,7 +38,6 @@ export default function RootLayout({
             </Provider>
           </PayPalContext>
         </CategoryProvider>
-
       </body>
     </html>
   );

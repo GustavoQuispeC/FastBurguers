@@ -9,6 +9,7 @@ export interface IProduct {
   discount: number;
   category: string;
   valune?: number;
+  quantity?: number;
 }
 
 export interface IProductCart extends IProduct {
