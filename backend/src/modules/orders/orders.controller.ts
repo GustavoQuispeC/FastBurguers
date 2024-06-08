@@ -13,6 +13,15 @@ export class OrdersController {
 
     constructor(private readonly ordersService: OrdersService){}
 
+    
+    @ApiBearerAuth()
+    @Get()
+    @Roles(Role.ADMIN)
+    @UseGuards(AuthGuards,RolesGuard)
+    getAllOrdes(){
+        return this.ordersService.getAllOrder()
+    }
+
     @ApiBearerAuth()
     @Get(':id')
     @Roles(Role.ADMIN)
