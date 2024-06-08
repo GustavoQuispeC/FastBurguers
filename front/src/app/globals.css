@@ -14,3 +14,12 @@ body {
       @apply border border-black rounded-xl px-5 py-1
     }
   } */
+
+  @layer utilities {
+    .animation-delay-200 {
+      animation-delay: 0.2s;
+    }
+    .animation-delay-400 {
+      animation-delay: 0.4s;
+    }
+  }

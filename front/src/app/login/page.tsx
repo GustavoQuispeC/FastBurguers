@@ -12,14 +12,11 @@ import { validateLoginForm } from "../../utils/loginFormValidation";
 import { FaEyeSlash } from "react-icons/fa6";
 
 import Image from "next/image";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { LoginUser } from "@/helpers/Autenticacion.helper";
-import { LoginUserTerceros } from "@/helpers/AutenticacionTerceros.helper";
 
 const Login = () => {
   const Router = useRouter();
-  const [redirected, setRedirected] = useState(false);
-  const { data: session } = useSession();
 
   const [dataUser, setDataUser] = useState<LoginProps>({
     email: "",
@@ -31,36 +28,26 @@ const Login = () => {
     password: "",
   });
 
+  const [touched, setTouched] = useState<
+    Partial<Record<keyof LoginErrorProps, boolean>>
+  >({
+    email: false,
+    password: false,
+  });
+
   const GoogleOnClick = async () => {
     await signIn("google", {
-      redirect: false,
+      callbackUrl: "http://localhost:3000/home",
+      redirect: true,
     });
   };
   const FacebookOnClick = async () => {
     await signIn("facebook", {
-      redirect: false,
+      callbackUrl: "http://localhost:3000/home",
+      redirect: true,
     });
   };
 
-  useEffect(() => {
-    if (session?.user?.email) {
-      const email = session.user.email;
-
-      LoginUserTerceros(email)
-        .then((user) => {
-          localStorage.setItem(
-            "userSession",
-            JSON.stringify({ userData: user })
-          );
-
-          setRedirected(true);
-          Router.push("/home");
-        })
-        .catch((error) => {
-          console.error("Error al obtener los datos del usuario:", error);
-        });
-    }
-  }, [session, redirected]);
   //! Mostrar u ocultar contraseña
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleTogglePassword = () => {
@@ -70,10 +57,17 @@ const Login = () => {
   //! Manejar cambios en los inputs
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setDataUser({
-      ...dataUser,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setDataUser((prevDataUser) => ({
+      ...prevDataUser,
+      [name]: value,
+    }));
+
+    setTouched((prevTouched) => ({
+      ...prevTouched,
+      [name]: true,
+    }));
   };
 
   //? Manejar submit del formulario
@@ -134,10 +128,12 @@ const Login = () => {
                   placeholder="nombre@ejemplo.com"
                   required
                   className="w-full pr-10"
-                />{" "}
+                />
                 <HiMail className="text-gray-900 dark:text-gray-200 absolute right-2" />
               </div>
-              {error.email && <p style={{ color: "red" }}>{error.email}</p>}
+              {touched.email && error.email && (
+                <p style={{ color: "red" }}>{error.email}</p>
+              )}
             </div>
             <div className="mb-4 mt-3">
               <div className="relative flex items-center">
@@ -159,11 +155,10 @@ const Login = () => {
                   {showPassword ? <FaEye /> : <FaEyeSlash />}
                 </button>
               </div>
-              {error.password && (
+              {touched.password && error.password && (
                 <p className="text-red-500 text-sm">{error.password}</p>
               )}
             </div>
-
             <div className="mt-12">
               <button
                 type="submit"
@@ -182,12 +177,10 @@ const Login = () => {
               </p>
             </div>
             <hr className="my-6 border-gray-300" />
-
             <div className="flex justify-around items-center">
               <button onClick={GoogleOnClick}>
                 <Image src="/google.png" alt="google" width={30} height={30} />
               </button>
-
               <button onClick={FacebookOnClick}>
                 <Image
                   src="/facebook.png"

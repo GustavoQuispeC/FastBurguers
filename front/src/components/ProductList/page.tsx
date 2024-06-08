@@ -1,4 +1,3 @@
-
 "use client";
 import { MdEdit } from "react-icons/md";
 import { IoSearchSharp } from "react-icons/io5";
@@ -7,10 +6,11 @@ import { Pagination } from "flowbite-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import React from "react";
-import {IProductList } from "@/interfaces/IProduct";
+import { IProductList } from "@/interfaces/IProduct";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Spinner from "../Spinner";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -22,9 +22,10 @@ const ProductList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [token, setToken] = useState<string | null>(null);
   const PRODUCTS_PER_PAGE = 10; // Cantidad de productos por página
+  const [loading, setLoading] = useState(true);
 
-   //! Obtener token de usuario
-   useEffect(() => {
+  //! Obtener token de usuario
+  useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const userSession = localStorage.getItem("userSession");
       if (userSession) {
@@ -52,7 +53,7 @@ const ProductList = () => {
 
   //! Función para calcular los productos a mostrar en la página actual
   const getCurrentPageProducts = () => {
-    const filteredProducts = filterProducts(); 
+    const filteredProducts = filterProducts();
     const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
     const endIndex = startIndex + PRODUCTS_PER_PAGE;
     return filteredProducts.slice(startIndex, endIndex);
@@ -65,7 +66,7 @@ const ProductList = () => {
     } else {
       return products.filter((product) =>
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
-      ); 
+      );
     }
   };
 
@@ -75,7 +76,6 @@ const ProductList = () => {
     setCurrentPage(1); // Reiniciar la página actual al cambiar el término de búsqueda
   };
   const onPageChange = (page: number) => setCurrentPage(page);
-  
 
   //! Función para manejar la eliminación de un producto
   const handleDeleteProduct = async (id: string) => {
@@ -89,39 +89,76 @@ const ProductList = () => {
       confirmButtonText: "Sí, eliminar",
       cancelButtonText: "Cancelar",
     });
-  
+
     if (isConfirmed) {
       try {
-        console.log("Token:", token)
+        console.log("Token:", token);
         if (!token) {
-          Swal.fire("¡Error!", "Token no encontrado. Por favor, inicia sesión.", "error");
+          Swal.fire(
+            "¡Error!",
+            "Token no encontrado. Por favor, inicia sesión.",
+            "error"
+          );
           return;
         }
-  
+
         const response = await fetch(`${apiURL}/products/${id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-  
+
         const responseData = await response.json();
         console.log("Response data:", responseData);
-  
+
         if (response.ok) {
           Swal.fire("¡Eliminado!", "El producto ha sido eliminado", "success");
-          setProducts((prevProducts) => prevProducts.filter(product => product.id !== id));
+          setProducts((prevProducts) =>
+            prevProducts.filter((product) => product.id !== id)
+          );
           console.log("Producto eliminado:", id);
         } else {
-          console.error("Error en la respuesta del servidor:", response.status, response.statusText, responseData);
-          Swal.fire("¡Error!", `Error del servidor: ${responseData.message || 'No se pudo eliminar el producto'}`, "error");
+          console.error(
+            "Error en la respuesta del servidor:",
+            response.status,
+            response.statusText,
+            responseData
+          );
+          Swal.fire(
+            "¡Error!",
+            `Error del servidor: ${
+              responseData.message || "No se pudo eliminar el producto"
+            }`,
+            "error"
+          );
         }
       } catch (error) {
         console.error("Error deleting product:", error);
-        Swal.fire("¡Error!", "Ha ocurrido un error al eliminar el producto", "error");
+        Swal.fire(
+          "¡Error!",
+          "Ha ocurrido un error al eliminar el producto",
+          "error"
+        );
       }
     }
   };
+
+  //! Spinner de carga
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (products.length === 0) {
+    return (
+      <div className="h-screen items- justify-center">
+        {loading ? <Spinner /> : <p>Algo no esta bien.</p>}
+      </div>
+    );
+  }
 
   return (
     <section className="p-3 sm:p-5 antialiased h-screen dark:bg-gray-700">
@@ -175,18 +212,36 @@ const ProductList = () => {
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
               <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
-                  <th scope="col" className="p-4">Producto</th>
-                  <th scope="col" className="p-4">Tamaño</th>
-                  <th scope="col" className="p-4">Stock</th>
-                  <th scope="col" className="p-4">Precio</th>
-                  <th scope="col" className="p-4">Descuento</th>
-                  <th scope="col" className="p-4">Acciones</th>
+                  <th scope="col" className="p-4">
+                    Producto
+                  </th>
+                  <th scope="col" className="p-4">
+                    Tamaño
+                  </th>
+                  <th scope="col" className="p-4">
+                    Stock
+                  </th>
+                  <th scope="col" className="p-4">
+                    Precio
+                  </th>
+                  <th scope="col" className="p-4">
+                    Descuento
+                  </th>
+                  <th scope="col" className="p-4">
+                    Acciones
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {getCurrentPageProducts().map((product: IProductList) => (
-                  <tr key={product.id} className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700">
-                    <th scope="row" className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  <tr
+                    key={product.id}
+                    className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    <th
+                      scope="row"
+                      className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    >
                       <div className="flex items-center">
                         <img
                           src={product.imgUrl}
@@ -220,8 +275,6 @@ const ProductList = () => {
                           data-drawer-show="drawer-update-product"
                           aria-controls="drawer-update-product"
                           className="py-2 px-3 flex items-center text-sm font-medium text-center text-orange-400 bg-gray-900 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-
-
                           href={`/productList/${product.id}`}
                         >
                           <MdEdit />
@@ -258,6 +311,5 @@ const ProductList = () => {
     </section>
   );
 };
-
 
 export default ProductList;

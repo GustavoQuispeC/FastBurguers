@@ -1,6 +1,7 @@
 "use client";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Image from "next/image";
+import { destroyCookie, parseCookies } from "nookies";
 import {
   AiFillTag,
   AiOutlineClose,
@@ -23,7 +24,6 @@ import { IUserSession } from "@/interfaces/IUser";
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const { data: sesion } = useSession();
 
   const [nav, setNav] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,17 +39,25 @@ const Navbar = () => {
         setAllProducts(products);
         setSearchResults(products);
 
-        const userSession = localStorage.getItem("userSession");
-        if (userSession !== null) {
-          setUserSesion(JSON.parse(userSession));
+        const cookies = parseCookies();
+        const userSessionCookie = cookies.userSession;
+        if (userSessionCookie) {
+          setUserSesion(JSON.parse(userSessionCookie));
+
+          // Almacenar en localStorage si se obtiene de la cookie
+          localStorage.setItem("userSession", userSessionCookie);
+        } else {
+          // Si no está en las cookies, intenta obtenerlo del localStorage
+          let userSessionFromLocalStorage = localStorage.getItem("userSession");
+          if (userSessionFromLocalStorage) {
+            setUserSesion(JSON.parse(userSessionFromLocalStorage));
+          }
         }
 
         const cart = localStorage.getItem("cart");
         if (cart !== null) {
           const parsedCart = JSON.parse(cart);
-
           const totalCount = parsedCart.length;
-
           setCartItemCount(totalCount);
         }
       } catch (error) {
@@ -74,15 +82,20 @@ const Navbar = () => {
   };
 
   const CerrarSesion = () => {
-    signOut();
+    signOut({
+      callbackUrl: "http://localhost:3000/login",
+      redirect: true,
+    });
     localStorage.removeItem("userSession");
     localStorage.removeItem("cart");
+    destroyCookie(null, "userSession");
   };
 
   const handleProductClick = () => {
     setSearchTerm("");
     setSearchResults(allProducts);
   };
+
   return (
     <>
       <div className="max-w-[1640px] dark:bg-gray-600 mx-auto flex dark:text-white justify-between items-center p-4">
@@ -142,7 +155,7 @@ const Navbar = () => {
               </span>
             )}
           </button>
-          {!sesion && !userSesion && (
+          {!userSesion && (
             <Link href="/login">
               <button className="text-gray-900 font-bold">
                 Iniciar Sesion
@@ -150,19 +163,19 @@ const Navbar = () => {
             </Link>
           )}
 
-          {(sesion || userSesion) && (
+          {userSesion && (
             <p className="text-gray-900 font-bold hidden md:block">
               ¡Bienvenido,
-              {sesion?.user?.name || userSesion?.userData.data.name}!
+              {userSesion?.userData.data.name}!
             </p>
           )}
-          {(sesion || userSesion) && (
+          {userSesion && (
             <Dropdown
               arrowIcon={false}
               inline
               label={
                 <Image
-                  src={sesion?.user?.image || "/perfil.png"}
+                  src={"/perfil.png"}
                   alt="imagen"
                   width={30}
                   height={30}
@@ -172,10 +185,10 @@ const Navbar = () => {
             >
               <Dropdown.Header>
                 <span className="block text-sm">
-                  {sesion?.user?.name || userSesion?.userData.data.name}
+                  {userSesion?.userData.data.name}
                 </span>
                 <span className="block truncate text-sm font-medium">
-                  {sesion?.user?.email || userSesion?.userData.data.email}
+                  {userSesion?.userData.data.email}
                 </span>
               </Dropdown.Header>
               <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>

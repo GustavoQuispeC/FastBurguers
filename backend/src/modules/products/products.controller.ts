@@ -1,11 +1,9 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   HttpStatus,
-  Inject,
   Param,
   ParseFilePipeBuilder,
   ParseUUIDPipe,
@@ -88,25 +86,23 @@ export class ProductsController {
     async createProduct(
         @Body() product:CreateProductdto,
         @UploadedFile(
-        //     new ParseFilePipeBuilder()
-        // .addMaxSizeValidator({
-        //     maxSize: 500000,
-        //     message: 'El archivo es muy largo, el tamaño maximo es de 500KB',
-        // })
-        // .build({
-        //     errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-        // })
-        ) file?: Express.Multer.File
+            new ParseFilePipeBuilder()
+        .addMaxSizeValidator({
+            maxSize: 500000,
+            message: 'El archivo es muy largo, el tamaño maximo es de 500KB',
+        })
+        .build({
+            errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        })
+        ) file: Express.Multer.File
     ){
-        console.log(product);
-
     return this.productService.createProduct(product, file);
   }
 
   @ApiBearerAuth()
   @Put(':id')
-  // @Roles(Role.ADMIN)
-  // @UseGuards(AuthGuards, RolesGuard)
+  @Roles(Role.ADMIN)
+  @UseGuards(AuthGuards, RolesGuard)
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -139,7 +135,7 @@ export class ProductsController {
 
   @ApiBearerAuth()
   @Delete(':id')
-  @Roles(Role.SUPERADMIN)
+  @Roles(Role.ADMIN)
   @UseGuards(AuthGuards, RolesGuard)
   deleteProduct(@Param('id', ParseUUIDPipe) id: string) {
     return this.productService.deleteProduct(id);

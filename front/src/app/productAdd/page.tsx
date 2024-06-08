@@ -1,46 +1,44 @@
 "use client";
-import { insertProduct } from "@/helpers/products.helper";
 import { getCategories } from "@/helpers/categories.helper";
-import {
-  InsertProductProps,
-  InsertErrorProductProps,
-} from "@/interfaces/IProduct";
-import { insertProductValidation } from "@/utils/insertProductValidation";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
+import axios from "axios";
+import Link from "next/link";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import Image from "next/image";
+import { IProductProps } from "@/interfaces/IProduct";
+import Swal from "sweetalert2";
+import { validateProductForm } from "@/utils/formProductValidation";
 
 const InsertProduct = () => {
   const router = useRouter();
+  const [token, setToken] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [categories, setCategories] = useState<any[]>([]);
 
-  const [dataProduct, setDataProduct] = useState<InsertProductProps>({
+  //! Estado para almacenar los datos del producto
+  const [dataProduct, setDataProduct] = useState<IProductProps>({
     name: "",
     description: "",
     price: 0,
     stock: 0,
-    imgUrl: "", // Add the missing imgUrl property
-    size: "",
     discount: 0,
+    imgUrl: "",
     categoryID: "",
   });
 
-  const [imageFile, setImageFile] = useState<File | null>(null);
-
-  const [errors, setErrors] = useState<InsertErrorProductProps>({
+  //! Estado para almacenar los errores
+  const [errors, setErrors] = useState({
     name: "",
     description: "",
     price: "",
     stock: "",
-    imgUrl: "", // Add the missing imgUrl property
-    size: "",
     discount: "",
     categoryID: "",
   });
 
-  const [token, setToken] = useState<string | null>(null);
+  //! Obtener el token del usuario
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const userSession = localStorage.getItem("userSession");
@@ -52,7 +50,7 @@ const InsertProduct = () => {
     }
   }, [router]);
 
-  const [categories, setCategories] = useState<any[]>([]);
+  //! Obtener las categorías
   useEffect(() => {
     const fetchCategories = async () => {
       const categories = await getCategories();
@@ -62,6 +60,7 @@ const InsertProduct = () => {
     fetchCategories();
   }, []);
 
+  //! Función para manejar los cambios en los inputs
   const handleChange = (e: any) => {
     e.preventDefault();
     setDataProduct({
@@ -70,25 +69,89 @@ const InsertProduct = () => {
     });
   };
 
+  //! Función para manejar los cambios en la imagen
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setImageFile(file);
+
+      const imageUrl = URL.createObjectURL(file);
+
+      // Copiar el estado anterior y actualizar solo imgUrl
+      setDataProduct((prevDataProduct) => ({
+        ...prevDataProduct,
+        imgUrl: imageUrl,
+      }));
     }
   };
 
+  console.log("dataProduct", dataProduct);
+
+  //! Función para enviar los datos del producto al backend
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!token) return;
+
+    const formData = new FormData();
+    formData.append("name", dataProduct.name);
+    formData.append("description", dataProduct.description);
+    formData.append("price", dataProduct.price.toString());
+    formData.append("stock", dataProduct.stock.toString());
+    formData.append("discount", dataProduct.discount.toString());
+    formData.append("categoryID", dataProduct.categoryID);
+    if (imageFile) {
+      formData.append("file", imageFile);
+    }
+
+    // Mostrar alerta de carga mientras se procesa la solicitud
+    Swal.fire({
+      title: "Agregando producto...",
+      text: "Por favor espera.",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
 
     try {
-      const response = await insertProduct(dataProduct, imageFile, token);
-      console.log("Product added successfully:", response);
-      router.push("/productList");
+      const response = await axios.post(
+        "http://localhost:3001/products",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("Response:", response);
+      console.log("Product added successfully");
+
+      // Mostrar alerta de éxito
+      Swal.fire({
+        icon: "success",
+        title: "¡Agregado!",
+        text: "El producto ha sido agregado con éxito.",
+      }).then(() => {
+        router.push("/dashboardAdmin");
+      });
     } catch (error) {
       console.error("Error adding product:", error);
+
+      // Mostrar alerta de error
+      Swal.fire({
+        icon: "error",
+        title: "¡Error!",
+        text: "Ha ocurrido un error al agregar el producto.",
+      });
     }
   };
+
+  //!Validar formulario
+  useEffect(() => {
+    const errors = validateProductForm(dataProduct);
+    setErrors(errors);
+  }, [dataProduct]);
 
   return (
     <div className="min-h-screen flex flex-col justify-start items-center p-10 dark:bg-gray-700">
@@ -208,27 +271,6 @@ const InsertProduct = () => {
                   <span className="text-red-500">{errors.stock}</span>
                 )}
               </div>
-              <div>
-                <label
-                  htmlFor="size"
-                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                >
-                  Talla
-                </label>
-                <input
-                  type="text"
-                  name="size"
-                  id="size"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-                  dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="Talla"
-                  value={dataProduct.size}
-                  onChange={handleChange}
-                />
-                {errors.size && (
-                  <span className="text-red-500">{errors.size}</span>
-                )}
-              </div>
             </div>
 
             <div className="sm:col-span-2">
@@ -281,6 +323,7 @@ const InsertProduct = () => {
                 />
               </label>
             </div>
+
             {imageFile && (
               <div className="mt-4 flex justify-center">
                 <Image
@@ -296,6 +339,7 @@ const InsertProduct = () => {
 
           <div className="items-center space-y-4 sm:flex sm:space-y-0 sm:space-x-4">
             <button
+              disabled={Object.values(errors).some((error) => error)}
               type="submit"
               className="w-full sm:w-auto justify-center text-orange-400 inline-flex bg-gray-900 hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
             >
@@ -306,7 +350,7 @@ const InsertProduct = () => {
               data-modal-toggle="createProductModal"
               type="button"
               className="w-full justify-center sm:w-auto text-orange-500 inline-flex items-center hover:bg-orange-500 bg-white  focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-              href="/productList"
+              href="/dashboardAdmin"
             >
               <FaArrowLeft />
               &nbsp; Volver

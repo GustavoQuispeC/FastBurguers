@@ -13,15 +13,53 @@ const steps = [
   { name: "Entregado", icon: <AiOutlineCheckCircle size={24} /> },
 ];
 
+// Definimos la interfaz para el estado de la orden
+interface OrderStatus {
+  id: string;
+  status: string;
+  updatedAt: string;
+}
+
+// Mapeamos los estados a los índices
+const statusToIndex: { [key: string]: number } = {
+  "Pago Recibido": 0,
+  "En Preparación": 1,
+  "En Camino": 2,
+  "Entregado": 3,
+};
+
 const Tracking = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
+  // Función para obtener el estado de la orden
+  const fetchOrderStatus = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/order-status?orderId=123456`); // Cambia '123456' por el ID real de la orden
+      const data: OrderStatus = await response.json();
+      const stepIndex = statusToIndex[data.status] ?? 0;
+      setCurrentStep(stepIndex);
+      setLoading(false);
+    } catch (err) {
+      setError('Error al obtener el estado de la orden');
+      setLoading(false);
+    }
+  };
+
+  // Usamos useEffect para hacer polling
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentStep((prevStep) => (prevStep + 1) % steps.length);
-    }, 5000); // Cambia cada 5 segundos
-    return () => clearInterval(interval);
+    // Llamamos fetchOrderStatus cada 30 segundos
+    fetchOrderStatus(); // Llamada inicial
+    const intervalId = setInterval(fetchOrderStatus, 30000); // Intervalo en ms
+
+    // Limpiamos el intervalo cuando el componente se desmonta
+    return () => clearInterval(intervalId);
   }, []);
+
+  if (loading) return <p>Cargando...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div className="max-w-md mx-auto p-4">

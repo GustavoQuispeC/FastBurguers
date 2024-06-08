@@ -8,25 +8,25 @@ async function bootstrap() {
 
   // Configuración de CORS
   app.enableCors({
-    origin: '*', 
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type,Authorization', 
-    credentials: true, 
+    allowedHeaders: 'Content-Type,Authorization',
+    credentials: true,
   });
 
   app.useGlobalPipes(new ValidationPipe());
 
   const swaggerConfig = new DocumentBuilder()
-  .setTitle('FastBurguers')
-  .setDescription('API para FastBurguers construido con NestJS')
-  .setVersion('1.0.0')
-  .addBearerAuth()
-  .build();
+    .setTitle('FastBurguers')
+    .setDescription('API para FastBurguers construido con NestJS')
+    .setVersion('1.0.0')
+    .addBearerAuth()
+    .build();
   const documentSwagger = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, documentSwagger);
-  
-  await app.listen(3001);
-  console.log(`Server listening on port 3001`);
-  
+
+  const port = process.env.PORT || 3001;
+  await app.listen(port);
+  console.log(`Server listening on port ${port}`);
 }
 bootstrap();
