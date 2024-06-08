@@ -1,8 +1,17 @@
-import { IProduct } from "./IProduct";
+export interface IStatusHistory {
+  id: string;
+  status: string;
+  timestamp: string;
+}
+
+export interface IOrderDetails {
+  id: string;
+  price: string;
+}
 
 export interface IPedido {
   id: string;
   date: string;
-  prince: string;
-  products: IProduct[];
+  orderDetails: IOrderDetails;
+  statushistory: IStatusHistory[];
 }

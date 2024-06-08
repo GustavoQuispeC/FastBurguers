@@ -1,5 +1,5 @@
 "use client";
-import { getPedidos } from "@/helpers/pedidos.helper"; // Asumiendo que tienes un helper para obtener los pedidos
+import { GetPedidos } from "@/helpers/Pedidos.helper";
 import { IPedido } from "@/interfaces/IPedido"; // Define la interfaz para los pedidos
 import { useEffect, useState } from "react";
 import Spinner from "../Spinner";
@@ -10,9 +10,17 @@ const PedidosList = () => {
 
   useEffect(() => {
     const fetchPedidos = async () => {
-      const pedidos = await getPedidos();
-      setPedidos(pedidos);
-      setLoading(false);
+      if (typeof window !== "undefined" && window.localStorage) {
+        const userSession = localStorage.getItem("userSession");
+        if (userSession) {
+          const parsedSession = JSON.parse(userSession);
+          const token = parsedSession.userData.token;
+          const pedidos = await GetPedidos(token);
+          setPedidos(pedidos);
+        }
+
+        setLoading(false);
+      }
     };
 
     fetchPedidos();
@@ -66,7 +74,7 @@ const PedidosList = () => {
                         {new Date(pedido.date).toLocaleDateString()}
                       </td>
                       <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        {pedido.products.map((producto) => (
+                        {pedido.products?.map((producto) => (
                           <div key={producto.id}>
                             {producto.name} - {producto.quantity}
                           </div>
