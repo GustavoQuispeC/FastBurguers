@@ -95,6 +95,9 @@ const PedidosList = () => {
                       Fecha
                     </th>
                     <th scope="col" className="p-4">
+                      Hora
+                    </th>
+                    <th scope="col" className="p-4">
                       Precio Total
                     </th>
                     <th scope="col" className="p-4">
@@ -125,6 +128,10 @@ const PedidosList = () => {
                       ] || currentStatus;
                     const isDelivered = currentStatus === "entregado";
 
+                    const fecha = new Date(pedido.date);
+                    const fechaStr = fecha.toLocaleDateString();
+                    const horaStr = fecha.toLocaleTimeString();
+
                     return (
                       <tr
                         key={pedido.id}
@@ -134,7 +141,10 @@ const PedidosList = () => {
                           {pedido.id}
                         </td>
                         <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          {new Date(pedido.date).toLocaleDateString()}
+                          {fechaStr}
+                        </td>
+                        <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                          {horaStr}
                         </td>
                         <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                           {pedido.orderDetails.price}
