@@ -22,11 +22,11 @@ export async function createOrder(order: { userId: string; products: { id: strin
   }
 }
 
-export async function getOrders(userId: string, token: string) {
+export async function getOrder(orderId: string, token: string) {
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
   try {
-    const res = await fetch(`${apiURL}/orders/${userId}`, {
+    const res = await fetch(`${apiURL}/orders/${orderId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
