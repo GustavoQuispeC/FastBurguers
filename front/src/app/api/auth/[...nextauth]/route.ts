@@ -35,7 +35,7 @@ const handler = NextAuth({
           // Registro exitoso, intentar iniciar sesión
 
           const data = await LoginUserTerceros(email);
-          const cookieData = JSON.stringify(data);
+          const cookieData = JSON.stringify({ userData: data });
 
           // Iniciar sesión exitoso, crear y establecer cookie
           cookies().set("userSession", cookieData, {

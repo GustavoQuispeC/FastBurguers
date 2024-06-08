@@ -14,32 +14,9 @@ import { FaEyeSlash } from "react-icons/fa6";
 import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
 import { LoginUser } from "@/helpers/Autenticacion.helper";
-import { LoginUserTerceros } from "@/helpers/AutenticacionTerceros.helper";
 
 const Login = () => {
   const Router = useRouter();
-
-  const { data: session } = useSession();
-
-  useEffect(() => {
-    const fetchAndSetUser = async () => {
-      const userEmail = session?.user?.email;
-
-      if (userEmail) {
-        try {
-          const user = await LoginUserTerceros(userEmail);
-          localStorage.setItem(
-            "userSession",
-            JSON.stringify({ userData: user })
-          );
-        } catch (error) {
-          console.error("Error fetching user:", error);
-        }
-      }
-    };
-
-    fetchAndSetUser();
-  }, []);
 
   const [dataUser, setDataUser] = useState<LoginProps>({
     email: "",

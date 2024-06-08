@@ -19,7 +19,7 @@ import Link from "next/link";
 import { Dropdown } from "flowbite-react";
 import { DarkThemeToggle } from "flowbite-react";
 import { getProducts } from "@/helpers/products.helper";
-import { IUserSession, IUserSessionLocal } from "@/interfaces/IUser";
+import { IUserSession } from "@/interfaces/IUser";
 
 const Navbar = () => {
   const router = useRouter();
@@ -30,7 +30,6 @@ const Navbar = () => {
   const [allProducts, setAllProducts] = useState<IProduct[]>([]);
   const [searchResults, setSearchResults] = useState<IProduct[]>([]);
   const [userSesion, setUserSesion] = useState<IUserSession>();
-  const [userSesionLocal, setUserSesionLocal] = useState<IUserSessionLocal>();
   const [cartItemCount, setCartItemCount] = useState(0);
 
   useEffect(() => {
@@ -40,18 +39,18 @@ const Navbar = () => {
         setAllProducts(products);
         setSearchResults(products);
 
-        let userSessionFromLocalStorage = localStorage.getItem("userSession");
-        if (userSessionFromLocalStorage) {
-          setUserSesionLocal(JSON.parse(userSessionFromLocalStorage));
-        } else {
-          // Si no está en el localStorage, intenta obtenerlo de las cookies
-          const cookies = parseCookies();
-          const userSessionCookie = cookies.userSession;
-          if (userSessionCookie) {
-            setUserSesion(JSON.parse(userSessionCookie));
+        const cookies = parseCookies();
+        const userSessionCookie = cookies.userSession;
+        if (userSessionCookie) {
+          setUserSesion(JSON.parse(userSessionCookie));
 
-            // Si se obtiene de la cookie, también lo almacenamos en el localStorage
-            localStorage.setItem("userSession", userSessionCookie);
+          // Almacenar en localStorage si se obtiene de la cookie
+          localStorage.setItem("userSession", userSessionCookie);
+        } else {
+          // Si no está en las cookies, intenta obtenerlo del localStorage
+          let userSessionFromLocalStorage = localStorage.getItem("userSession");
+          if (userSessionFromLocalStorage) {
+            setUserSesion(JSON.parse(userSessionFromLocalStorage));
           }
         }
 
@@ -156,7 +155,7 @@ const Navbar = () => {
               </span>
             )}
           </button>
-          {!userSesion && !userSesionLocal && (
+          {!userSesion && (
             <Link href="/login">
               <button className="text-gray-900 font-bold">
                 Iniciar Sesion
@@ -164,13 +163,13 @@ const Navbar = () => {
             </Link>
           )}
 
-          {(userSesion || userSesionLocal) && (
+          {userSesion && (
             <p className="text-gray-900 font-bold hidden md:block">
               ¡Bienvenido,
-              {userSesion?.data.name || userSesionLocal?.userData.data.name}!
+              {userSesion?.userData.data.name}!
             </p>
           )}
-          {(userSesion || userSesionLocal) && (
+          {userSesion && (
             <Dropdown
               arrowIcon={false}
               inline
@@ -186,11 +185,10 @@ const Navbar = () => {
             >
               <Dropdown.Header>
                 <span className="block text-sm">
-                  {userSesion?.data.name || userSesionLocal?.userData.data.name}
+                  {userSesion?.userData.data.name}
                 </span>
                 <span className="block truncate text-sm font-medium">
-                  {userSesion?.data.email ||
-                    userSesionLocal?.userData.data.email}
+                  {userSesion?.userData.data.email}
                 </span>
               </Dropdown.Header>
               <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
