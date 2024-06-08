@@ -14,11 +14,8 @@ export async function createOrder(
       body: JSON.stringify(order),
     });
 
-    if (!res.ok) {
-      throw new Error("Failed to create order");
-    }
-
     const data = await res.json();
+
     return data;
   } catch (error: any) {
     throw new Error(error.message);

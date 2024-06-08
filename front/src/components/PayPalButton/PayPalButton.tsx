@@ -79,13 +79,9 @@ const PayPalButton: React.FC = () => {
         setMessage(
           `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
         );
-        console.log(
-          "Capture result",
-          orderData,
-          JSON.stringify(orderData, null, 2)
-        );
       }
       const transaction = orderData.purchase_units[0].payments.captures[0];
+
       if (transaction.status === "COMPLETED") {
         const order = {
           userId,
@@ -93,8 +89,10 @@ const PayPalButton: React.FC = () => {
         };
 
         const response = await createOrder(order, userToken);
+
         console.log("Order created successfully:", response);
-        alert("Order created successfully");
+        localStorage.removeItem("cart");
+
         Router.push("/tracking");
       }
     } catch (error) {
