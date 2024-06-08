@@ -19,25 +19,25 @@ import { MorganMiddleware } from './middlewares/morgan.middleware';
 import { TestimonyModule } from './modules/testimony/testimony.module';
 import { PaymentsModule } from './paypal/payments.module';
 import { StatusHistoriesModule } from './modules/status-histories/status-histories.module';
-import { EventsGateway } from './events/events.gateway';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [typeOrmConfig]
+      load: [typeOrmConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => configService.get('typeorm')
+      useFactory: (configService: ConfigService) =>
+        configService.get('typeorm'),
     }),
     JwtModule.register({
-      global:true,
+      global: true,
       secret: process.env.JWT_SECRET,
-      signOptions:{expiresIn:'60m'},
+      signOptions: { expiresIn: '60m' },
     }),
-    TypeOrmModule.forFeature([Products,Categories,Users]),
+    TypeOrmModule.forFeature([Products, Categories, Users]),
     UsersModule,
     CategoriesModule,
     ProductsModule,
@@ -46,12 +46,12 @@ import { EventsGateway } from './events/events.gateway';
     OrdersModule,
     TestimonyModule,
     StatusHistoriesModule,
-    PaymentsModule
+    PaymentsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PreloadService,EventsGateway],
+  providers: [AppService, PreloadService],
 })
-export class AppModule implements NestModule{
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(MorganMiddleware).forRoutes('*');
   }
