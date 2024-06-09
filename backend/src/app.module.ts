@@ -24,19 +24,20 @@ import { StatusHistoriesModule } from './modules/status-histories/status-histori
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [typeOrmConfig]
+      load: [typeOrmConfig],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => configService.get('typeorm')
+      useFactory: (configService: ConfigService) =>
+        configService.get('typeorm'),
     }),
     JwtModule.register({
-      global:true,
+      global: true,
       secret: process.env.JWT_SECRET,
-      signOptions:{expiresIn:'60m'},
+      signOptions: { expiresIn: '60m' },
     }),
-    TypeOrmModule.forFeature([Products,Categories,Users]),
+    TypeOrmModule.forFeature([Products, Categories, Users]),
     UsersModule,
     CategoriesModule,
     ProductsModule,
@@ -45,12 +46,12 @@ import { StatusHistoriesModule } from './modules/status-histories/status-histori
     OrdersModule,
     TestimonyModule,
     StatusHistoriesModule,
-    PaymentsModule
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService, PreloadService],
 })
-export class AppModule implements NestModule{
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(MorganMiddleware).forRoutes('*');
   }
