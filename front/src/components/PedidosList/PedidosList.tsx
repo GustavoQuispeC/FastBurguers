@@ -2,7 +2,7 @@
 import { GetPedidos, ChangeStatus } from "@/helpers/Pedidos.helper";
 import { useEffect, useState } from "react";
 import Spinner from "../Spinner";
-import { IOrderList } from "@/interfaces/IOrderList";
+import { IOrderList } from "@/interfaces/IOrder";
 
 const PedidosList = () => {
   const [pedidos, setPedidos] = useState<IOrderList[]>([]);

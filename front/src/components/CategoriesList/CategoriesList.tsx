@@ -15,8 +15,6 @@ import Swal from "sweetalert2";
 import { formCategoryValidation } from "@/utils/formCategoryValidation";
 import Spinner from "../Spinner";
 
-
-
 const CategoriesList = () => {
   const router = useRouter();
   const [categories, setCategories] = useState<any[]>([]);
@@ -34,7 +32,7 @@ const CategoriesList = () => {
 
   const [errors, setErrors] = useState<ICategory>({
     name: "",
-  })
+  });
 
   //! Obtener el token del usuario
   useEffect(() => {
@@ -93,7 +91,7 @@ const CategoriesList = () => {
   };
 
   //! Función para manejar el envío del formulario de actualizar
-  
+
   const handleSubmitUpdate = async (e: any) => {
     e.preventDefault();
     if (!token) {
@@ -167,30 +165,27 @@ const CategoriesList = () => {
       }
     }
   };
-   //!Validar formulario
-   useEffect(() => {
+  //!Validar formulario
+  useEffect(() => {
     const errors = formCategoryValidation(dataCategory);
     setErrors(errors);
   }, [dataCategory]);
 
-    //! Spinner de carga
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }, []);
-
+  //! Spinner de carga
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   if (categories.length === 0) {
     return (
       <div className="h-screen items- justify-center">
-      {loading ? <Spinner /> : <p>Algo no esta bien.</p>}
-    </div>
-    )
-
+        {loading ? <Spinner /> : <p>Algo no esta bien.</p>}
+      </div>
+    );
   }
-  
 
   return (
     <div>
@@ -299,8 +294,9 @@ const CategoriesList = () => {
                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 onChange={handleChange}
               />
-              {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
-              
+              {errors.name && (
+                <p className="text-red-500 text-xs">{errors.name}</p>
+              )}
             </div>
           </div>
         </Modal.Body>
@@ -336,7 +332,9 @@ const CategoriesList = () => {
                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
                 onChange={handleChange}
               />
-              {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
+              {errors.name && (
+                <p className="text-red-500 text-xs">{errors.name}</p>
+              )}
             </div>
           </div>
         </Modal.Body>

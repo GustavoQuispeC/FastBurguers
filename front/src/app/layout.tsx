@@ -9,8 +9,6 @@ import Footer from "@/components/footer/Footer";
 import { PayPalContext } from "@/context/PayPalContext";
 import { CategoryProvider } from "@/context/category.context";
 
-
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

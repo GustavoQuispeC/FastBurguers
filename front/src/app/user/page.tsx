@@ -1,5 +1,5 @@
 "use client";
-import { Alert, TextInput } from "flowbite-react";
+import { TextInput } from "flowbite-react";
 import { useRouter } from "next/navigation";
 import { RegisterErrorProps, RegisterProps } from "../../types";
 import { validateRegisterForm } from "../../utils/registerFormValidation";
@@ -14,21 +14,12 @@ import { useEffect, useState } from "react";
 import { HiMail } from "react-icons/hi";
 import { MdMapsHomeWork } from "react-icons/md";
 import { FaTreeCity } from "react-icons/fa6";
-
 import { ToastContainer, toast, Zoom } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-import { signIn, signOut, useSession } from "next-auth/react";
-import Image from "next/image";
-import { RegisterUserTerceros } from "@/helpers/AutenticacionTerceros.helper";
 import { RegisterUser } from "@/helpers/Autenticacion.helper";
-import { IUserTerceros } from "@/interfaces/IUserTerceros";
 
 const Register = () => {
   const Router = useRouter();
-
-  const [redirected, setRedirected] = useState(false);
-  const { data: session } = useSession();
 
   const notify = () =>
     toast.success("Usuario registrado exitosamente", {

@@ -3,14 +3,13 @@ import React, { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { IoHome } from "react-icons/io5";
 import { MdBorderColor } from "react-icons/md";
-import { FaCartPlus, FaCheckCircle } from "react-icons/fa";
+import { FaCartPlus } from "react-icons/fa";
 import Link from "next/link";
 import { userSession } from "@/types";
-import { getOrders } from "@/helpers/orders.helper";
-import { IOrders, Order } from "@/interfaces/IOrders";
-import { FcBullish, FcCalendar, FcMoneyTransfer, FcOk } from "react-icons/fc";
+import { FcCalendar, FcMoneyTransfer, FcOk } from "react-icons/fc";
 import Spinner from "@/components/Spinner";
 import axios from "axios";
+import { IOrderList } from "@/interfaces/IOrder";
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 //!Obtener datos de la sesion
@@ -18,7 +17,7 @@ const Dashboard = () => {
   //!Obtener datos de la sesion
   const [token, setToken] = useState<userSession>();
   const [loading, setLoading] = useState(true);
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<IOrderList[]>([]);
 
   //!Obtener datos de la sesion
   useEffect(() => {
@@ -32,17 +31,13 @@ const Dashboard = () => {
 
   const userId = token?.userData.data.userid;
 
-  const listOrders = async (userId: any): Promise<Order[]> => {
+  const listOrders = async (userId: any): Promise<IOrderList[]> => {
     try {
-      const { data } = await axios.get<IOrders>(
-       
-        `${apiURL}/users/${userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token?.userData.token}`,
-          },
-        }
-      );
+      const { data } = await axios.get(`${apiURL}/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token?.userData.token}`,
+        },
+      });
       return data.orders;
     } catch (error: any) {
       console.error(error);

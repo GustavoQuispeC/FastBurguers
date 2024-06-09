@@ -11,8 +11,6 @@ function Message({ content }: any) {
 }
 
 const PayPalButton: React.FC = () => {
-  const [userId, setUserId] = useState<string>("");
-  const [userToken, setUserToken] = useState<string>("");
   const [cart, setCart] = useState<IProductCart[]>([]);
 
   const [message, setMessage] = useState("");

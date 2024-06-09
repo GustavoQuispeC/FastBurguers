@@ -1,4 +1,4 @@
-import { IOrderList } from "./IOrderList";
+import { IProduct } from "./IProduct";
 
 export interface IOrderUser {
   name: string;
@@ -9,4 +9,22 @@ export interface IOrderUser {
   city: string;
   country: string;
   orders: IOrderList[];
+}
+
+export interface IOrderList {
+  id: string;
+  date: string;
+  orderDetails: IOrderDetails;
+}
+
+export interface IOrderDetails {
+  id: string;
+  price: string;
+  products: IProduct[];
+  statushistory: IStatushistory[];
+}
+export interface IStatushistory {
+  id: string;
+  status: string;
+  timestamp: string;
 }
