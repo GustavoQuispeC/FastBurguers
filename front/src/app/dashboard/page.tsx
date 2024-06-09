@@ -11,8 +11,6 @@ import { IOrders, Order } from "@/interfaces/IOrders";
 import { FcBullish, FcCalendar, FcMoneyTransfer, FcOk } from "react-icons/fc";
 import Spinner from "@/components/Spinner";
 import axios from "axios";
-import { IStatusHistory } from "@/interfaces/IPedido";
-import { IProduct } from "@/interfaces/IProduct";
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 //!Obtener datos de la sesion
