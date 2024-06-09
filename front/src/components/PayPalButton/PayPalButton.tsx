@@ -41,7 +41,7 @@ const PayPalButton: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ amount: total }),
+        body: JSON.stringify({ amount: 0.1 }),
       });
 
       const orderId = await response.text();
@@ -80,7 +80,7 @@ const PayPalButton: React.FC = () => {
       }
 
       const transaction = orderData.purchase_units[0].payments.captures[0];
-
+  
       if (transaction.status === "COMPLETED") {
         const userSession = JSON.parse(
           localStorage.getItem("userSession") || "{}"
@@ -101,19 +101,23 @@ const PayPalButton: React.FC = () => {
           userId,
           products: currentCart.map((item) => ({ id: String(item.id) })),
         };
-
-        const response = await createOrder(order, userToken);
-
-        console.log("Order created successfully:", response);
+  
+        const createOrderResponse = await createOrder(order, userToken);
+  
+        console.log("Order created successfully:", createOrderResponse);
+        
+        // Guardar la respuesta en localStorage
+        localStorage.setItem("Order", JSON.stringify(createOrderResponse));
+  
         localStorage.removeItem("cart");
-
+  
         Router.push("/tracking");
       }
     } catch (error: any) {
       console.error(error);
       setMessage(`Sorry, your transaction could not be processed...${error}`);
     }
-  };
+  }
 
   return (
     <>
