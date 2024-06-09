@@ -1,8 +1,9 @@
-import { IPedido } from "@/interfaces/IPedido";
+import { IOrderList } from "@/interfaces/IOrderList";
+
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function GetPedidos(token: string): Promise<IPedido[]> {
+export async function GetPedidos(token: string): Promise<IOrderList[]> {
   try {
     const res = await fetch(`${apiURL}/orders`, {
       method: "GET",
@@ -24,7 +25,7 @@ export async function ChangeStatus(
   token: string,
   id: string,
   status: string
-): Promise<IPedido[]> {
+): Promise<IOrderList[]> {
   try {
     const res = await fetch(`${apiURL}/status-histories/${id}`, {
       method: "POST",
