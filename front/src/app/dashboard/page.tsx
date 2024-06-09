@@ -3,54 +3,61 @@ import React, { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { IoHome } from "react-icons/io5";
 import { MdBorderColor } from "react-icons/md";
-import { FaCartPlus } from "react-icons/fa";
+import { FaCartPlus, FaCheckCircle } from "react-icons/fa";
 import Link from "next/link";
 import { userSession } from "@/types";
 import { getOrders } from "@/helpers/orders.helper";
-import { IOrderUser } from "@/interfaces/IOrder";
+import { IOrders, Order } from "@/interfaces/IOrders";
+import { FcBullish, FcCalendar, FcMoneyTransfer, FcOk } from "react-icons/fc";
+import Spinner from "@/components/Spinner";
+import axios from "axios";
+import { IStatusHistory } from "@/interfaces/IPedido";
+import { IProduct } from "@/interfaces/IProduct";
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 //!Obtener datos de la sesion
 const Dashboard = () => {
   //!Obtener datos de la sesion
   const [token, setToken] = useState<userSession>();
+  const [loading, setLoading] = useState(true);
+  const [orders, setOrders] = useState<Order[]>([]);
+
+  //!Obtener datos de la sesion
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const userToken = localStorage.getItem("userSession");
       console.log(userToken);
-
       setToken(JSON.parse(userToken!));
-      !userToken && redirect("/");
+      !userToken && redirect("/login");
     }
   }, []);
 
   const userId = token?.userData.data.userid;
 
-  //!Obtener las ordenes
-  const [orders, setOrders] = useState<IOrderUser[]>([]);
-
-  useEffect(() => {
-    async function getDataOrder() {
-      try {
-        const response = await getOrders(userId!, token!.userData.token);
-        // Asegurarse de que response sea un array antes de establecer el estado
-        if (response?.orders && Array.isArray(response.orders)) {
-          setOrders(response
-         
-          );
-        } else {
-          console.error(
-            "Error: El response de getOrders no contiene órdenes válidas"
-          );
+  const listOrders = async (userId: any): Promise<Order[]> => {
+    try {
+      const { data } = await axios.get<IOrders>(
+       
+        `${apiURL}/users/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token?.userData.token}`,
+          },
         }
-      } catch (error: any) {
-        console.error(error);
-      }
+      );
+      return data.orders;
+    } catch (error: any) {
+      console.error(error);
+      return [];
     }
-    if (token) {
-      getDataOrder();
-    }
-  }, [token, userId]);
+  };
 
+  //!Obtener las ordenes
+  useEffect(() => {
+    if (userId) {
+      listOrders(userId).then(setOrders);
+    }
+  }, [userId]);
   console.log(orders);
 
   //!Formatear la fecha
@@ -59,8 +66,24 @@ const Dashboard = () => {
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
   }
 
+  //! Spinner de carga
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (orders.length === 0) {
+    return (
+      <div className="h-screen items- justify-center">
+        {loading ? <Spinner /> : <p>Algo no esta bien.</p>}
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-row min-h-screen">
+    <div className="flex flex-row min-h-screen dark:bg-gray-700">
       {/* Barra lateral */}
       <div className="bg-gray-900 text-orange-400 w-36 md:w-52">
         <div className="p-1 md:p-4">
@@ -105,10 +128,11 @@ const Dashboard = () => {
       {/* Contenido principal */}
       <div className="flex-1 overflow-y-auto">
         {/* Barra de navegación */}
-        <div className="bg-gray-200 p-1 md:p-4">
-          <h2 className="text-lg font-semibold mb-2">Datos de Usuario</h2>
-          <div className="bg-gray-50 p-4 rounded shadow">
-            {/* Aquí irían los datos del usuario */}
+        <div className="bg-gray-200 dark:bg-gray-500 p-1 md:p-4">
+          <h2 className="text-lg font-semibold mb-2 dark:text-white">
+            Datos de Usuario
+          </h2>
+          <div className="bg-gray-50 dark:bg-gray-300 p-4 rounded shadow">
             <p>
               <b>Nombre:</b> {token?.userData.data.name}
             </p>
@@ -116,57 +140,77 @@ const Dashboard = () => {
               <b>Email:</b> {token?.userData.data.email}
             </p>
             <p>
-              <b>Teléfono: </b>
-              {token?.userData.data.phone}
+              <b>Teléfono:</b> {token?.userData.data.phone}
             </p>
             <p>
               <b>Dirección:</b> {token?.userData.data.address}
             </p>
             <p>
-              <b>País:</b>
-              {token?.userData.data.country}
+              <b>País:</b> {token?.userData.data.country}
             </p>
             <p>
-              <b>Ciudad:</b>
-              {token?.userData.data.city}
+              <b>Ciudad:</b> {token?.userData.data.city}
             </p>
           </div>
         </div>
         {/* Sección de datos de usuario y órdenes */}
-
-        <div>
-          {/* Contenido de las órdenes */}
-          {orders?.map((order: IOrderUser) => (
-            <div key={order.id} className="bg-teal-50 p-4 rounded shadow mb-4">
-              <h2 className="text-sm font-semibold mb-2">Orden: {order.id}</h2>
-
-              <h2 className="text-sm font-semibold mb-2">
-                Orden: {}
-              </h2>
-
-              <div className="flex flex-col">
-                {/* Iterar sobre las órdenes dentro de cada objeto order */}
-                {order.orders?.map((details) => (
-                  <div key={details.id}>
-                    <div className="flex flex-row">
-                      <p className="mr-1">Fecha: {formatDate(details.date)}</p>
+        <div className="p-1 md:p-4">
+          <h2 className="text-lg font-semibold mb-2 dark:text-white">
+            Historial de Ordenes
+          </h2>
+          <div className="bg-gray-200 p-4 rounded shadow">
+            {orders.length > 0 ? (
+              <div>
+                {orders.map((order, index) => (
+                  <div key={index} className="mb-4">
+                    <h3 className="font-bold">Orden ID: {order.id}</h3>
+                    <div className="flex items-center mb-2">
+                      <FcCalendar className="mr-2" />
+                      <p>Fecha: {formatDate(order.date)}</p>
                     </div>
-                    {/* Detalle de compra */}
-                    <p className="font-bold text-cyan-700 pt-2">
-                      Detalle de compra:
-                      {details.orderDetails.products?.map((product) => (
-                        <div key={product.id} className="flex flex-row">
-                          <p className="mr-1">
-                            {product.name} x {product.imgUrl} - {product.price}
-                          </p>
-                        </div>
-                      ))}
-                    </p>
+                    <div>
+                      <h4 className="font-semibold">Productos:</h4>
+                      {order.orderDetails.products.map(
+                        (product, productIndex) => (
+                          <div className="flex items-center" key={productIndex}>
+                            <p className="mr-2">-{product.name}</p>
+                            <p>${product.price}</p>
+                          </div>
+                        )
+                      )}
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Manejo de pedido:</h4>
+                      {order.orderDetails.statushistory.map(
+                        (status, statusIndex) => (
+                          <div key={statusIndex} className="flex items-center">
+                            <FcOk className="mr-2" />
+                            <p>
+                              {status.status}
+                              {" - "}
+                              {formatDate(status.timestamp)}
+                            </p>
+                          </div>
+                        )
+                      )}
+                    </div>
+                    <div>
+                      <h4 className="font-semibold">Total pagado:</h4>
+                      <div
+                        className="flex items-center"
+                        style={{ marginBottom: "0.5rem" }}
+                      >
+                        <FcMoneyTransfer className="mr-2" />
+                        <p>${order.orderDetails.price}</p>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
-            </div>
-          ))}
+            ) : (
+              <p>No hay órdenes disponibles.</p>
+            )}
+          </div>
         </div>
       </div>
     </div>

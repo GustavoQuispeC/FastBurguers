@@ -16,5 +16,6 @@ export interface IOrderDetails {
 export interface IPedido {
   id: string;
   date: string;
-  orderDetails: IOrderDetails;
+  orderDetails: IOrderDetails[];
 }
+ 
