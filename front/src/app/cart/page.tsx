@@ -190,17 +190,20 @@ const Cart = () => {
               Subtotal{" "}
               <span className="ml-auto font-bold">${subtotal.toFixed(2)}</span>
             </li>
-            <li className="flex flex-wrap gap-4 text-sm">
-              Bebida{" "}
-              <span className="ml-auto font-bold">${bebida.toFixed(2)}</span>
-            </li>
-            <li className="flex flex-wrap gap-4 text-sm">
-              Descuento{" "}
-              <span className="ml-auto font-bold">
-                -${descuento.toFixed(2)}
-              </span>
-            </li>
-
+            {bebida > 0 && (
+              <li className="flex flex-wrap gap-4 text-sm">
+                Bebida{" "}
+                <span className="ml-auto font-bold">${bebida.toFixed(2)}</span>
+              </li>
+            )}
+            {descuento > 0 && (
+              <li className="flex flex-wrap gap-4 text-sm">
+                Descuento{" "}
+                <span className="ml-auto font-bold">
+                  -${descuento.toFixed(2)}
+                </span>
+              </li>
+            )}
             <li className="flex flex-wrap gap-4 text-sm font-bold">
               Total <span className="ml-auto">${total.toFixed(2)}</span>
             </li>

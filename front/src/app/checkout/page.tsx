@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import PayPalButton from "@/components/PayPalButton/PayPalButton";
 import { TextInput } from "flowbite-react";
 import { IProductCart } from "@/interfaces/IProduct";
@@ -131,22 +130,27 @@ const Checkout = () => {
                               ${item.price.toFixed(2)}
                             </span>
                           </li>
-                          <li className="flex flex-wrap gap-4">
-                            Bebida{" "}
-                            <span className="ml-auto">
-                              ${parseFloat(item.drinkPrice || "0").toFixed(2)}
-                            </span>
-                          </li>
-                          <li className="flex flex-wrap gap-4">
-                            Descuento{" "}
-                            <span className="ml-auto">
-                              -$
-                              {calculateDiscountAmount(
-                                item.price,
-                                item.discount
-                              ).toFixed(2)}
-                            </span>
-                          </li>
+                          {parseFloat(item.drinkPrice || "0") > 0 && (
+                            <li className="flex flex-wrap gap-4">
+                              Bebida{" "}
+                              <span className="ml-auto">
+                                ${parseFloat(item.drinkPrice || "0").toFixed(2)}
+                              </span>
+                            </li>
+                          )}
+                          {calculateDiscountAmount(item.price, item.discount) >
+                            0 && (
+                            <li className="flex flex-wrap gap-4">
+                              Descuento{" "}
+                              <span className="ml-auto">
+                                -$
+                                {calculateDiscountAmount(
+                                  item.price,
+                                  item.discount
+                                ).toFixed(2)}
+                              </span>
+                            </li>
+                          )}
                         </ul>
                       </div>
                     </div>
