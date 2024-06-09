@@ -22,7 +22,7 @@ export class OrdersService {
         private readonly statusHistoriService:StatusHistoriesService,
     ){}
 
-    async addOrder(userId: string, products: any){
+    async addOrder(userId: string, products: any, quantity: any){
         let total = 0
         // verificamos que exista el usuario:
         const user = await this.usersRepository.findOneBy({id: userId})
@@ -38,7 +38,7 @@ export class OrdersService {
 
         // asociamos cada id recibido con el Producto
         const productsArray = await Promise.all(
-            products.map(async (element) => {
+            products.map(async (element, number) => {
                 // validar stock
                 const foundStock = await this.productsRepository.findOne({ where: { name: element.name} })
                 if(!foundStock){
@@ -50,7 +50,7 @@ export class OrdersService {
                     throw new NotFoundException(`Producto con id ${element.id} no encontrado`)
                 }
                 // calculamos el monto total:
-                total += Number(product.price)
+                total += Number(product.price) * quantity[number]
                 // actualizamos el stock:
                 await this.productsRepository.update(
                     {id: element.id},
@@ -63,7 +63,7 @@ export class OrdersService {
         // creamos OrderDetail y la insertamos en BD:
         const orderDetails = new OrderDetails()
 
-        orderDetails.price = Number(Number(total).toFixed(2)) // numero con 2 decimales
+        orderDetails.amount = Number(Number(total).toFixed(2)) // numero con 2 decimales
         orderDetails.products = productsArray
         orderDetails.order = newOrder
         await this.orderDetailsRepository.save(orderDetails)
