@@ -1,5 +1,4 @@
-import { IOrderDetails, IPedido, IStatusHistory } from "./IPedido";
-import { IProduct } from "./IProduct";
+import { IOrderList } from "./IOrderList";
 
 export interface IOrderUser {
   name: string;
@@ -9,5 +8,5 @@ export interface IOrderUser {
   phone: number;
   city: string;
   country: string;
-  orders: IPedido[];
+  orders: IOrderList[];
 }
