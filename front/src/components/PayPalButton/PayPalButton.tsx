@@ -11,12 +11,16 @@ function Message({ content }: any) {
 }
 
 const PayPalButton: React.FC = () => {
+  const [userId, setUserId] = useState<string>("");
+  const [userToken, setUserToken] = useState<string>("");
+  const [cart, setCart] = useState<IProductCart[]>([]);
+
   const [message, setMessage] = useState("");
   const Router = useRouter();
 
   // Use a ref to store the cart
   const cartRef = useRef<IProductCart[]>([]);
-  const [cart, setCart] = useState<IProductCart[]>([]);
+ 
 
   useEffect(() => {
     const cartData = JSON.parse(
@@ -37,7 +41,7 @@ const PayPalButton: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ amount: total }),
+        body: JSON.stringify({ amount: 0.1 }),
       });
 
       const orderId = await response.text();
@@ -60,10 +64,10 @@ const PayPalButton: React.FC = () => {
           },
         }
       );
-
+  
       const orderData = await response.json();
       const errorDetail = orderData?.details?.[0];
-
+  
       if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
         return actions.restart();
       } else if (errorDetail) {
@@ -76,7 +80,7 @@ const PayPalButton: React.FC = () => {
       }
 
       const transaction = orderData.purchase_units[0].payments.captures[0];
-
+  
       if (transaction.status === "COMPLETED") {
         const userSession = JSON.parse(
           localStorage.getItem("userSession") || "{}"
@@ -97,19 +101,23 @@ const PayPalButton: React.FC = () => {
           userId,
           products: currentCart.map((item) => ({ id: String(item.id) })),
         };
-
-        const response = await createOrder(order, userToken);
-
-        console.log("Order created successfully:", response);
+  
+        const createOrderResponse = await createOrder(order, userToken);
+  
+        console.log("Order created successfully:", createOrderResponse);
+        
+        // Guardar la respuesta en localStorage
+        localStorage.setItem("Order", JSON.stringify(createOrderResponse));
+  
         localStorage.removeItem("cart");
-
+  
         Router.push("/tracking");
       }
     } catch (error: any) {
       console.error(error);
       setMessage(`Sorry, your transaction could not be processed...${error}`);
     }
-  };
+  }
 
   return (
     <>

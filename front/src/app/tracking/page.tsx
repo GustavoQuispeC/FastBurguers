@@ -1,69 +1,158 @@
 "use client";
-import { useState, useEffect } from "react";
-import { Transition } from "@headlessui/react";
-import { AiOutlineCheckCircle } from "react-icons/ai";
-import { FaTruck } from "react-icons/fa";
-import { GiReceiveMoney } from "react-icons/gi";
-import { BiPackage } from "react-icons/bi";
+import React, { useState, useEffect } from 'react';
+import { FaHashtag, FaCheck, FaClipboardCheck } from 'react-icons/fa';
+import { FaBoxesPacking, FaCartShopping, FaHouseChimney, FaTruckArrowRight } from 'react-icons/fa6';
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 const steps = [
-  { name: "Pago Recibido", icon: <GiReceiveMoney size={24} /> },
-  { name: "En Preparación", icon: <BiPackage size={24} /> },
-  { name: "En Camino", icon: <FaTruck size={24} /> },
-  { name: "Entregado", icon: <AiOutlineCheckCircle size={24} /> },
+  { name: "Solicitud Recibida", icon: <FaClipboardCheck className="text-blue-500 text-3xl sm:text-5xl mx-4 mb-3" /> },
+  { name: "En Preparación", icon: <FaBoxesPacking className="text-yellow-500 text-3xl sm:text-5xl mx-4 mb-3" /> },
+  { name: "En Camino", icon: <FaTruckArrowRight className="text-blue-500 text-3xl sm:text-5xl mx-4 mb-3" /> },
+  { name: "Entregado", icon: <FaHouseChimney className="text-green-500 text-3xl sm:text-5xl mx-4 mb-3" /> },
 ];
 
-const Tracking = () => {
+
+const statusToIndex: { [key: string]: number } = {
+  'solicitud_recibida': 0,
+  'en_preparacion': 1,
+  'en_camino': 2,
+  'entregado': 3,
+};
+
+const OrderStatus = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [orderId, setOrderId] = useState<string | null>(null);
+  const [orderDate, setOrderDate] = useState<string | null>(null);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentStep((prevStep) => (prevStep + 1) % steps.length);
-    }, 5000); // Cambia cada 5 segundos
-    return () => clearInterval(interval);
+    
+    const orderDataArray = JSON.parse(localStorage.getItem('Order') || '[]');
+    console.log('Order data from local storage:', orderDataArray); 
+
+    if (orderDataArray.length > 0) {
+      const orderData = orderDataArray[0];
+      const orderId = orderData.id;
+      const orderDate = orderData.date;
+      setOrderId(orderId);
+      setOrderDate(orderDate);
+      console.log('Order ID:', orderId); 
+      console.log('Order Date:', orderDate);
+
+      if (orderId) {
+       
+        const userSession = JSON.parse(localStorage.getItem('userSession') || '{}');
+        const token = userSession.userData?.token;
+        console.log('Token:', token); 
+
+        if (token) {
+         
+          const fetchOrderStatus = async () => {
+            try {
+              setLoading(true);
+              const response = await fetch(`${apiURL}/status-histories/${orderId}`, {
+                headers: {
+                  'Authorization': `Bearer ${token}`
+                }
+              });
+              const data: Array<any> = await response.json();
+              console.log('Response data from server:', data); 
+
+             
+              const stepIndex = data.length - 1;
+              setCurrentStep(stepIndex);
+              setLoading(false);
+            } catch (err) {
+              setError('Error al obtener el estado de la orden');
+              setLoading(false);
+            }
+          };
+
+         
+          fetchOrderStatus();
+          const intervalId = setInterval(fetchOrderStatus, 30000);
+
+        
+          return () => clearInterval(intervalId);
+        } else {
+          setError('Token no encontrado en el local storage');
+          setLoading(false);
+        }
+      } else {
+        setError('ID de orden no encontrado en el objeto de la orden');
+        setLoading(false);
+      }
+    } else {
+      setError('Datos de orden no encontrados en el local storage');
+      setLoading(false);
+    }
   }, []);
 
+  if (loading) return <p className="text-center">Cargando...</p>;
+  if (error) return <p className="text-center">{error}</p>;
+
   return (
-    <div className="max-w-md mx-auto p-4">
-      <div className="relative">
-        {steps.map((step, index) => (
-          <Transition
-            key={index}
-            show={currentStep === index}
-            enter="transform transition duration-[400ms]"
-            enterFrom="opacity-0 rotate-[-120deg] scale-50"
-            enterTo="opacity-100 rotate-0 scale-100"
-            leave="transform transition duration-[400ms]"
-            leaveFrom="opacity-100 rotate-0 scale-100"
-            leaveTo="opacity-0 scale-95"
-          >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <div className="flex items-center justify-center text-orange-400">
-                  {step.icon}
-                </div>
-                <p className="mt-2 text-lg font-bold text-gray-700 dark:text-gray-300">
-                  {step.name}
+    <div className="flex flex-col overflow-auto h-screen text-black">
+      <div className="container mx-auto px-4 py-5 h-full">
+        <div className="card bg-gray-200 shadow-lg border border-black rounded-lg py-3 px-5 my-5">
+          <div className="flex flex-col sm:flex-row justify-between mx-5 pt-3 my-3">
+            <div className="text-center sm:text-left mb-4 sm:mb-0">
+              <p className="text-2xl sm:text-3xl text-orange-500 mb-3">
+                FastBurgers
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-center mb-4 sm:mb-0">
+          
+            </div>
+            <div className="flex flex-col text-right text-xl">
+              <p className="mb-0 font-bold text-monospace">
+                Expected Arrival
+                <span className="badge badge-primary border border-secondary text-orange-500 font-bold px-2 py-2 shadow ml-2">
+                  {orderDate}
+                </span>
+              </p>
+              <p className="font-bold text-monospace pt-3 ml-5 sm:ml-0">
+                Tracking ID
+                <span className="badge badge-danger border border-secondary text-orange-500 font-bold mx-1 px-2 py-2 shadow">
+                  {orderId}
+                </span>
+              </p>
+            </div>
+          </div>
+          <div className="container-fluid">
+            <div className="flex flex-col sm:flex-row justify-around p-2 items-center">
+              {steps.map((step, index) => (
+                <React.Fragment key={index}>
+                  <button className={`btn ${index <= currentStep ? 'bg-orange-500' : 'bg-gray-400'} text-white rounded-full mb-2 sm:mb-0`} title={step.name}>
+                    <FaCheck />
+                  </button>
+                  {index < steps.length - 1 && (
+                    <span className={`flex-grow mx-1 h-1 sm:w-1/2 sm:h-1 rounded ${index < currentStep ? 'bg-orange-500' : 'bg-gray-400'}`}></span>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-around my-3 py-4 mx-n2">
+            {steps.map((step, index) => (
+              <div className="flex flex-col sm:flex-row items-center" key={index}>
+                {step.icon}
+                <p className="text-black font-bold py-1 px-1 mx-n2 text-center sm:text-left">
+                  {step.name.split(' ').map((word, idx) => (
+                    <React.Fragment key={idx}>
+                      {word}
+                      <br />
+                    </React.Fragment>
+                  ))}
                 </p>
               </div>
-            </div>
-          </Transition>
-        ))}
-      </div>
-      <div className="flex justify-between mt-8">
-        {steps.map((step, index) => (
-          <div
-            key={index}
-            className={`flex-1 h-2 mx-1 rounded-full ${
-              index <= currentStep
-                ? "bg-orange-400"
-                : "bg-gray-200 dark:bg-gray-600"
-            }`}
-          ></div>
-        ))}
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Tracking;
+export default OrderStatus;
