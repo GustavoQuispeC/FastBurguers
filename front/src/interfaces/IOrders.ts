@@ -1,16 +1,6 @@
-
-
-
 import { IProduct } from "./IProduct";
 
 export interface IOrders {
-  // id: string;
-  // name: string;
-  // email: string;
-  // phone: number;
-  // country: string;
-  // address: string;
-  // city: string;
   orders: Order[];
 }
 
