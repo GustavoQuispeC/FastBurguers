@@ -1,8 +1,8 @@
-import { InsertErrorProductProps, InsertProductProps } from "@/interfaces/IProduct";
+import { IProducErrorProps, IProductProps } from "@/interfaces/IProduct";
 
 
-export function insertProductValidation(values: InsertProductProps): InsertErrorProductProps {
-  let errors: InsertErrorProductProps = {
+export function insertProductValidation(values: IProductProps): IProducErrorProps {
+  let errors: IProducErrorProps = {
     name: "",
     description: "",
     price: "",
