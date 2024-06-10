@@ -11,6 +11,8 @@ import { IProductProps } from "@/interfaces/IProduct";
 import Swal from "sweetalert2";
 import { validateProductForm } from "@/utils/formProductValidation";
 
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
+
 const InsertProduct = () => {
   const router = useRouter();
   const [token, setToken] = useState<string | null>(null);
@@ -113,16 +115,12 @@ const InsertProduct = () => {
     });
 
     try {
-      const response = await axios.post(
-        "http://localhost:3001/products",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post(`${apiURL}/products`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
       console.log("Response:", response);
       console.log("Product added successfully");
