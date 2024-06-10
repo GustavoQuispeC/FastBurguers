@@ -51,7 +51,7 @@ const Cart = () => {
 
   const calcularBebida = () => {
     return cart.reduce((acc, item) => {
-      return acc + item.quantity * parseFloat(item.drinkPrice || "0");
+      return acc + item.quantity * (parseFloat(item.drinkPrice || "0") || 0);
     }, 0);
   };
 
@@ -119,7 +119,8 @@ const Cart = () => {
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-gray-800">
-                      {item.name} + {item.drink}
+                      {item.name}
+                      {item.drink ? ` + ${item.drink}` : ""}
                     </h3>
                     <h6
                       onClick={() => removeFromCart(index)}
@@ -154,13 +155,13 @@ const Cart = () => {
                         $
                         {(
                           item.price * item.quantity * (1 - item.discount) +
-                          parseFloat(item.drinkPrice)
+                          (parseFloat(item.drinkPrice) || 0)
                         ).toFixed(2)}
                       </h4>
                       <h4 className="text-gray-500 line-through">
                         $
                         {(
-                          (item.price + parseFloat(item.drinkPrice)) *
+                          (item.price + (parseFloat(item.drinkPrice) || 0)) *
                           item.quantity
                         ).toFixed(2)}
                       </h4>
@@ -169,7 +170,7 @@ const Cart = () => {
                     <h4 className="text-lg font-bold text-gray-800">
                       $
                       {(
-                        (item.price + parseFloat(item.drinkPrice)) *
+                        (item.price + (parseFloat(item.drinkPrice) || 0)) *
                         item.quantity
                       ).toFixed(2)}
                     </h4>

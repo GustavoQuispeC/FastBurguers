@@ -196,9 +196,8 @@ const Navbar = () => {
                 </span>
               </Dropdown.Header>
               <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
-              <button onClick={CerrarSesion}>
-                <Dropdown.Item>Salir</Dropdown.Item>
-              </button>
+
+              <Dropdown.Item onClick={CerrarSesion}>Salir</Dropdown.Item>
             </Dropdown>
           )}
         </div>
