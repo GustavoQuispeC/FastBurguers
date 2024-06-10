@@ -67,13 +67,13 @@ const Dashboard = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  if (orders.length === 0) {
-    return (
-      <div className="h-screen items- justify-center">
-        {loading ? <Spinner /> : <p>Algo no esta bien.</p>}
-      </div>
-    );
-  }
+  // if (orders.length === 0) {
+  //   return (
+  //     <div className="h-screen items- justify-center">
+  //       {loading ? <Spinner /> : <p>Algo no esta bien.</p>}
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex flex-row min-h-screen dark:bg-gray-700">
