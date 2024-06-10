@@ -23,7 +23,7 @@ const Dashboard = () => {
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const userToken = localStorage.getItem("userSession");
-      console.log(userToken);
+
       setToken(JSON.parse(userToken!));
       !userToken && redirect("/login");
     }
@@ -31,7 +31,7 @@ const Dashboard = () => {
 
   const userId = token?.userData.data.userid;
 
-  const listOrders = async (userId: any): Promise<IOrderList[]> => {
+  const listOrders = async (userId: string): Promise<IOrderList[]> => {
     try {
       const { data } = await axios.get(`${apiURL}/users/${userId}`, {
         headers: {
