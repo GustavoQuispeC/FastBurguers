@@ -6,12 +6,12 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { StatusHistory } from 'src/entities/statushistory.entity';
 import { Repository } from 'typeorm';
-//import { CreateStatusDto } from './status-histories.dto';
+// import { CreateStatusDto } from './status-histories.dto';
 import { OrderDetails } from 'src/entities/orderdetails.entity';
 import { Orders } from 'src/entities/orders.entity';
 
 // import { timeStamp } from 'console';
-//import { timestamp } from 'rxjs';
+// import { timestamp } from 'rxjs';
 
 @Injectable()
 export class StatusHistoriesService {
@@ -53,7 +53,7 @@ export class StatusHistoriesService {
         `La orden ya tiene creado el status: ${statusData.status}`,
       );
 
-    //const statusHistory  = this.statusHistRepository.create({orderdetails:orderDetailFound,...statusData})
+    // const statusHistory  = this.statusHistRepository.create({orderdetails:orderDetailFound,...statusData})
 
     const completeStatus = { ...statusData, timestamp: new Date() };
     const statusHistory = this.statusHistRepository.create({

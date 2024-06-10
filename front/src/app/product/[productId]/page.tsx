@@ -13,7 +13,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
   const router = useRouter();
   const [producto, setProducto] = useState<IProduct>();
   const [tamaño, setTamaño] = useState("Mediana");
-  const [bebida, setBebida] = useState("Coca-Cola");
+  const [bebida, setBebida] = useState<string | null>(null);
   const [precioBebida, setPrecioBebida] = useState<number>(0); // Estado para almacenar el precio de la bebida
 
   useEffect(() => {
@@ -31,16 +31,18 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
 
   useEffect(() => {
     const fetchBebidaPrice = async () => {
-      try {
-        const bebidas = await getProductsByCategory("Bebidas");
-        const bebidaSeleccionada = bebidas.find(
-          (b: IProduct) => b.name === bebida
-        );
-        if (bebidaSeleccionada) {
-          setPrecioBebida(bebidaSeleccionada.price);
+      if (bebida) {
+        try {
+          const bebidas = await getProductsByCategory("Bebidas");
+          const bebidaSeleccionada = bebidas.find(
+            (b: IProduct) => b.name === bebida
+          );
+          if (bebidaSeleccionada) {
+            setPrecioBebida(bebidaSeleccionada.price);
+          }
+        } catch (error) {
+          console.error("Error fetching bebidas:", error);
         }
-      } catch (error) {
-        console.error("Error fetching bebidas:", error);
       }
     };
 
@@ -70,6 +72,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
     }
     return null;
   };
+
   const handleBuyClickAgregar = () => {
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
     const existingProduct = currentCart.find(
@@ -90,22 +93,27 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
         }
       });
     } else {
-      currentCart.push({
+      const newProduct: any = {
         ...producto,
         size: tamaño,
-        drink: bebida,
-        drinkPrice: precioBebida,
-      }); // Guardar el precio de la bebida en el localStorage
+      };
+
+      if (bebida) {
+        newProduct.drink = bebida;
+        newProduct.drinkPrice = precioBebida;
+      }
+
+      currentCart.push(newProduct);
       localStorage.setItem("cart", JSON.stringify(currentCart));
       router.push("/home");
     }
   };
 
   return (
-    <div className="font-sans my-10  dark:bg-gray-700">
+    <div className="font-sans my-10 dark:bg-gray-700">
       <div className="p-4 max-w-6xl max-md:max-w-xl mx-auto">
         <div className="grid items-start grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="w-full h-5/6 lg:sticky top-0 flex justify-center items-center  ">
+          <div className="w-full h-5/6 lg:sticky top-0 flex justify-center items-center">
             <img
               src={producto?.imgUrl}
               alt={producto?.name}

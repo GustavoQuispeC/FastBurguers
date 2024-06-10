@@ -1,5 +1,4 @@
-import { IOrderList } from "@/interfaces/IOrderList";
-
+import { IOrderList } from "@/interfaces/IOrder";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 

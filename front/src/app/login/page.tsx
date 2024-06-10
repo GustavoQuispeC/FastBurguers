@@ -12,7 +12,7 @@ import { validateLoginForm } from "../../utils/loginFormValidation";
 import { FaEyeSlash } from "react-icons/fa6";
 
 import Image from "next/image";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { LoginUser } from "@/helpers/Autenticacion.helper";
 
 const Login = () => {

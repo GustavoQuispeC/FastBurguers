@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import FiltroProductos from "../../components/filtroProductos/FiltroProductos";
@@ -107,5 +107,3 @@ const Product = () => {
 };
 
 export default Product;
-
-//Usuario puede filtrar por categoría y rango de precios
