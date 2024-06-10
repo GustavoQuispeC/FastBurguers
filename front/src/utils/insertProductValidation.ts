@@ -1,8 +1,9 @@
-import { InsertErrorProductProps, InsertProductProps } from "@/interfaces/IProduct";
+import { IProductProps, IProducErrorProps } from "@/interfaces/IProduct";
 
-
-export function insertProductValidation(values: InsertProductProps): InsertErrorProductProps {
-  let errors: InsertErrorProductProps = {
+export function insertProductValidation(
+  values: IProductProps
+): IProducErrorProps {
+  let errors: IProducErrorProps = {
     name: "",
     description: "",
     price: "",
@@ -22,7 +23,7 @@ export function insertProductValidation(values: InsertProductProps): InsertError
     errors.stock = "El campo stock es requerido";
   } else if (!values.imgUrl) {
     errors.imgUrl = "El campo imagen es requerido";
-  }  else if (!values.discount) {
+  } else if (!values.discount) {
     errors.discount = "El campo descuento es requerido";
   } else if (!values.categoryID.trim()) {
     errors.categoryID = "El campo categoría es requerido";

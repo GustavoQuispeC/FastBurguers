@@ -76,10 +76,13 @@ const Footer: React.FC = (): React.ReactElement => {
               deliciosas y más! Nos enfocamos en ingredientes frescos y un
               servicio rápido para ofrecer una experiencia gastronómica de
               primera clase. Disfruta de nuestra variedad de hamburguesas,
-              acompañamientos y bebidas hoy. ©2024  Fast Burgers. Todos los
+              acompañamientos y bebidas hoy. ©2024 Fast Burgers. Todos los
               Derechos Reservados.
             </p>
-            <p>&copy;{new Date().getFullYear()} Fast Burger. Todos los derechos reservados </p>
+            <p>
+              &copy;{new Date().getFullYear()} Fast Burger. Todos los derechos
+              reservados{" "}
+            </p>
           </div>
           <FooterList>
             <h3 className="text-base text-orange-500 font bold mb-2">
@@ -93,7 +96,7 @@ const Footer: React.FC = (): React.ReactElement => {
               <Link href={"https://twitter.com/"}>
                 <AiFillTwitterCircle size={24} />
               </Link>
-              <Link href={"https://www.instagram.com/patolucaaaaa/"}>
+              <Link href={"https://www.instagram.com/"}>
                 <AiFillInstagram size={24} />
               </Link>
               <Link href={"https://www.youtube.com/"}>

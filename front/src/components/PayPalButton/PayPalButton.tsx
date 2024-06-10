@@ -11,12 +11,13 @@ function Message({ content }: any) {
 }
 
 const PayPalButton: React.FC = () => {
+  const [cart, setCart] = useState<IProductCart[]>([]);
+
   const [message, setMessage] = useState("");
   const Router = useRouter();
 
   // Use a ref to store the cart
   const cartRef = useRef<IProductCart[]>([]);
-  const [cart, setCart] = useState<IProductCart[]>([]);
 
   useEffect(() => {
     const cartData = JSON.parse(
@@ -98,9 +99,13 @@ const PayPalButton: React.FC = () => {
           products: currentCart.map((item) => ({ id: String(item.id) })),
         };
 
-        const response = await createOrder(order, userToken);
+        const createOrderResponse = await createOrder(order, userToken);
 
-        console.log("Order created successfully:", response);
+        console.log("Order created successfully:", createOrderResponse);
+
+        // Guardar la respuesta en localStorage
+        localStorage.setItem("Order", JSON.stringify(createOrderResponse));
+
         localStorage.removeItem("cart");
 
         Router.push("/tracking");

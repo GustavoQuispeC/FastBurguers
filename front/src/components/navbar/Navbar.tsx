@@ -96,6 +96,10 @@ const Navbar = () => {
     setSearchResults(allProducts);
   };
 
+  const handleNavLinkClick = () => {
+    setNav(false);
+  };
+
   return (
     <>
       <div className="max-w-[1640px] dark:bg-gray-600 mx-auto flex dark:text-white justify-between items-center p-4">
@@ -192,9 +196,8 @@ const Navbar = () => {
                 </span>
               </Dropdown.Header>
               <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
-              <button onClick={CerrarSesion}>
-                <Dropdown.Item>Salir</Dropdown.Item>
-              </button>
+
+              <Dropdown.Item onClick={CerrarSesion}>Salir</Dropdown.Item>
             </Dropdown>
           )}
         </div>
@@ -225,37 +228,61 @@ const Navbar = () => {
             <ul className="flex flex-col p-4 text-gray-800">
               <li className="text-xl py-4 flex">
                 <TbTruckDelivery size={25} className="mr-4" />
-                <Link href="#" className="hover:text-orange-400">
+                <Link
+                  href="/tracking"
+                  className="hover:text-orange-400"
+                  onClick={handleNavLinkClick}
+                >
                   Envios
                 </Link>
               </li>
               <li className="text-xl py-4 flex">
                 <FaHome size={25} className="mr-4" />
-                <Link href="/" className="hover:text-orange-400">
+                <Link
+                  href="/"
+                  className="hover:text-orange-400"
+                  onClick={handleNavLinkClick}
+                >
                   Inicio
                 </Link>
               </li>
               <li className="text-xl py-4 flex">
                 <AiFillProduct size={25} className="mr-4" />
-                <Link href="/product" className="hover:text-orange-400">
+                <Link
+                  href="/product"
+                  className="hover:text-orange-400"
+                  onClick={handleNavLinkClick}
+                >
                   Productos
                 </Link>
               </li>
               <li className="text-xl py-4 flex">
                 <AiFillTag size={25} className="mr-4" />
-                <Link href="#" className="hover:text-orange-400">
+                <Link
+                  href="#"
+                  className="hover:text-orange-400"
+                  onClick={handleNavLinkClick}
+                >
                   Promociones
                 </Link>
               </li>
               <li className="text-xl py-4 flex">
                 <FaCartPlus size={25} className="mr-4" />
-                <Link href="/cart" className="hover:text-orange-400">
+                <Link
+                  href="/cart"
+                  className="hover:text-orange-400"
+                  onClick={handleNavLinkClick}
+                >
                   Carrito
                 </Link>
               </li>
               <li className="text-xl py-4 flex">
                 <MdHelp size={25} className="mr-4" />
-                <Link href="/contact" className="hover:text-orange-400">
+                <Link
+                  href="/contact"
+                  className="hover:text-orange-400"
+                  onClick={handleNavLinkClick}
+                >
                   Nosotros
                 </Link>
               </li>

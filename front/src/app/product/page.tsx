@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import FiltroProductos from "../../components/filtroProductos/FiltroProductos";
-import categories from "@/helpers/categories"; 
-import { useCategory } from "@/context/category.context"; 
+import categories from "@/helpers/categories";
+import { useCategory } from "@/context/category.context";
 
 const Product = () => {
   const { selectedCategory, setSelectedCategory } = useCategory();
@@ -49,7 +49,7 @@ const Product = () => {
   return (
     <>
       <ul className="flex flex-wrap gap-3 bg-slate-700 mt-10 p-3 justify-around font-bold text-white w-11/12 rounded-lg items-center m-auto">
-        {categories.map((category:any) => (
+        {categories.map((category: any) => (
           <li key={category.id} className="w-full sm:w-auto text-center">
             <button
               onClick={() => handleCategoryClick(category.id)}

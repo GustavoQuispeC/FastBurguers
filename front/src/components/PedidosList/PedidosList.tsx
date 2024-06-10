@@ -1,11 +1,11 @@
 "use client";
 import { GetPedidos, ChangeStatus } from "@/helpers/Pedidos.helper";
-import { IPedido } from "@/interfaces/IPedido";
 import { useEffect, useState } from "react";
 import Spinner from "../Spinner";
+import { IOrderList } from "@/interfaces/IOrder";
 
 const PedidosList = () => {
-  const [pedidos, setPedidos] = useState<IPedido[]>([]);
+  const [pedidos, setPedidos] = useState<IOrderList[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchPedidos = async (token: string) => {
@@ -85,7 +85,7 @@ const PedidosList = () => {
               </div>
             </div>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left text-center text-gray-500 dark:text-gray-400">
+              <table className="w-full text-sm text-center text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
                     <th scope="col" className="p-4">

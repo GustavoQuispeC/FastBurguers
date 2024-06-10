@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { IProduct } from "@/interfaces/IProduct";
 import { getProductsByCategory } from "@/helpers/categories.helper";
+import Spinner from "../Spinner";
 
 interface GridProductsProps {
   categoryId: number;
@@ -58,7 +59,7 @@ const FiltroProductos: React.FC<GridProductsProps> = ({
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner />;
   }
 
   return (

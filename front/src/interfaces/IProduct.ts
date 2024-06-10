@@ -1,5 +1,5 @@
 export interface IProduct {
-  //id: number;
+  id: number;
   name: string;
   description: string;
   price: number;
@@ -48,3 +48,4 @@ export interface IProducErrorProps {
   discount: string;
   categoryID: string;
 }
+

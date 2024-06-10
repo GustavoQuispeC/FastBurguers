@@ -6,7 +6,6 @@ import GridProducts from "../../components/gridProducts/GridProducts";
 import { getProducts } from "@/helpers/products.helper";
 import { IProduct } from "@/interfaces/IProduct";
 import { getProductsByCategory } from "@/helpers/categories.helper";
-import PayPalButton from "@/components/PayPalButton/PayPalButton";
 
 const Home = () => {
   const [promocionesProducts, setPromocionesProducts] = useState<IProduct[]>(

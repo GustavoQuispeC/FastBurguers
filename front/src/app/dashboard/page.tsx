@@ -3,48 +3,54 @@ import React, { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { IoHome } from "react-icons/io5";
 import { MdBorderColor } from "react-icons/md";
-import { FaCartPlus, FaCheckCircle } from "react-icons/fa";
+import { FaCartPlus } from "react-icons/fa";
 import Link from "next/link";
 import { userSession } from "@/types";
-import { getOrders } from "@/helpers/orders.helper";
-import { IOrderUser } from "@/interfaces/IOrder";
-import { FcBullish, FcCalendar, FcMoneyTransfer, FcOk } from "react-icons/fc";
+import { FcCalendar, FcMoneyTransfer, FcOk } from "react-icons/fc";
 import Spinner from "@/components/Spinner";
+import axios from "axios";
+import { IOrderList } from "@/interfaces/IOrder";
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 //!Obtener datos de la sesion
 const Dashboard = () => {
   //!Obtener datos de la sesion
   const [token, setToken] = useState<userSession>();
   const [loading, setLoading] = useState(true);
-  const [orders, setOrders] = useState<IOrderUser[]>([]);
+  const [orders, setOrders] = useState<IOrderList[]>([]);
 
   //!Obtener datos de la sesion
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const userToken = localStorage.getItem("userSession");
-      console.log(userToken);
+
       setToken(JSON.parse(userToken!));
-      !userToken && redirect("/");
+      !userToken && redirect("/login");
     }
   }, []);
 
   const userId = token?.userData.data.userid;
 
-//!Obtener las ordenes
-  useEffect(() => {
-    async function getDataOrder() {
-      try {
-        const response = await getOrders(userId!, token!.userData.token);
-        setOrders(response.orders);
-      } catch (error: any) {
-        console.error(error);
-      }
+  const listOrders = async (userId: string): Promise<IOrderList[]> => {
+    try {
+      const { data } = await axios.get(`${apiURL}/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token?.userData.token}`,
+        },
+      });
+      return data.orders;
+    } catch (error: any) {
+      console.error(error);
+      return [];
     }
-    if (token) {
-      getDataOrder();
-    }
-  }, [token, userId]);
+  };
 
+  //!Obtener las ordenes
+  useEffect(() => {
+    if (userId) {
+      listOrders(userId).then(setOrders);
+    }
+  }, [userId]);
   console.log(orders);
 
   //!Formatear la fecha
@@ -52,7 +58,7 @@ const Dashboard = () => {
     const date = new Date(dateString);
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
   }
-  
+
   //! Spinner de carga
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -68,7 +74,6 @@ const Dashboard = () => {
       </div>
     );
   }
-
 
   return (
     <div className="flex flex-row min-h-screen dark:bg-gray-700">
@@ -117,7 +122,9 @@ const Dashboard = () => {
       <div className="flex-1 overflow-y-auto">
         {/* Barra de navegación */}
         <div className="bg-gray-200 dark:bg-gray-500 p-1 md:p-4">
-          <h2 className="text-lg font-semibold mb-2 dark:text-white">Datos de Usuario</h2>
+          <h2 className="text-lg font-semibold mb-2 dark:text-white">
+            Datos de Usuario
+          </h2>
           <div className="bg-gray-50 dark:bg-gray-300 p-4 rounded shadow">
             <p>
               <b>Nombre:</b> {token?.userData.data.name}
@@ -141,7 +148,9 @@ const Dashboard = () => {
         </div>
         {/* Sección de datos de usuario y órdenes */}
         <div className="p-1 md:p-4">
-          <h2 className="text-lg font-semibold mb-2 dark:text-white">Historial de Ordenes</h2>
+          <h2 className="text-lg font-semibold mb-2 dark:text-white">
+            Historial de Ordenes
+          </h2>
           <div className="bg-gray-200 p-4 rounded shadow">
             {orders.length > 0 ? (
               <div>
