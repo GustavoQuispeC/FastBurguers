@@ -24,8 +24,8 @@ export class StatusHistoriesController {
 
     @ApiBearerAuth()
     @Get(':id')
-    @Roles(Role.ADMIN)
-    @UseGuards(AuthGuards,RolesGuard)
+    // @Roles(Role.ADMIN)
+    // @UseGuards(AuthGuards,RolesGuard)
     findStatus(@Param('id',ParseUUIDPipe) id_order:string){
         return this.statusHistoriesService.getStatus(id_order)
     }
