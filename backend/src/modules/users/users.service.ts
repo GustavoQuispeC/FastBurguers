@@ -18,10 +18,17 @@ export class UsersService {
             const nlimit = Number(limit)
             if(npage<=0 || nlimit<=0) throw new Error();
 
-            return await this.userRepository.find({
+            const users = await this.userRepository.find({
                 take: nlimit,
                 skip: (npage-1)*nlimit
             });
+
+            const publicUsers = users.map((user)=>{
+                const {password, ...userInfoPublic} = user;
+                return userInfoPublic   
+            })
+            return publicUsers;
+
         } catch (error) {
             throw new BadRequestException('Page and limit must be positive integers')
         }
@@ -53,7 +60,7 @@ export class UsersService {
 
         await this.userRepository.update(id,newUser);
         const updatedUser = await this.userRepository.findOneBy({id});
-        const {password, isAdmin, isSuperAdmin, ...userInfoPublic} = updatedUser;
+        const {password, ...userInfoPublic} = updatedUser;
 
         return userInfoPublic;
     }

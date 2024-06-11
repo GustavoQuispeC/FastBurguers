@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsArray, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUUID, IsUrl, Length, MaxLength, isArray } from "class-validator";
+import { IsArray, IsBoolean, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUUID, IsUrl, Length, MaxLength, isArray } from "class-validator";
 import { SizeProduct } from "src/enum/sizeProduct.enum";
 import { UUID } from "typeorm/driver/mongodb/bson.typings";
 
@@ -59,13 +59,21 @@ export class CreateProductdto{
     categoryID:string
     
     /**
-     *  Must be : personal, regular or extrema
+     *  Must be : personal, regular or extrema, optional value
      * @example 'personal'
      */
     @IsOptional()
     @IsEnum(SizeProduct,
         {message: 'Size take only : personal | regular | extrema values'})
     size: SizeProduct
+
+    /**
+     * Must be a boolean valor, optional value
+     * @example 'true'
+     */
+    @IsOptional()
+    @IsBoolean()
+    condition: boolean
 }
 
 
@@ -138,6 +146,14 @@ export class UpdatedProductdto {
     @IsEnum(SizeProduct,
         {message: 'Size take only : personal | regular | extrema values'})
     size?: SizeProduct
+
+    /**
+     * Must be a boolean valor, optional value
+     * @example 'true'
+     */
+    @IsOptional()
+    @IsBoolean()
+    condition: boolean
 }
 
 export class GetByCategoriesDto {
