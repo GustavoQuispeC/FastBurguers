@@ -1,6 +1,8 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { jwtDecode } from "jwt-decode";
 import { userSession } from "@/types";
 import CategoriesList from "@/components/CategoriesList/CategoriesList";
 import ProductList from "@/components/ProductList/page";
@@ -12,17 +14,43 @@ import PedidosList from "@/components/PedidosList/PedidosList";
 import TopVentas from "@/components/TopVentas/TopVentas";
 
 const DashboardAdmin = () => {
-  const [token, setToken] = useState<userSession>();
+  const [token, setToken] = useState<userSession | null>(null);
   const [view, setView] = useState<string>("pedidos"); // Estado para la vista actual, por defecto "pedidos"
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const userToken = localStorage.getItem("userSession");
 
-      setToken(JSON.parse(userToken!));
-      !userToken && redirect("/");
+      if (userToken) {
+        const parsedToken = JSON.parse(userToken);
+
+        try {
+          const decodedToken = jwtDecode(parsedToken.userData.token) as {
+            isAdmin: boolean;
+            isSuperAdmin: boolean;
+          };
+
+          if (!decodedToken.isAdmin && !decodedToken.isSuperAdmin) {
+            // Si no es admin o superadmin, redirigir a home
+            router.push("/home");
+          } else {
+            // Si es admin o superadmin, guardar el token en el estado
+            setToken(parsedToken);
+          }
+        } catch (error) {
+          console.error("Error decoding token:", error);
+          router.push("/home"); // En caso de error decodificando, redirigir a home
+        }
+      } else {
+        router.push("/home"); // Si no hay token, redirigir a home
+      }
     }
-  }, []);
+  }, [router]);
+
+  if (!token) {
+    return null; // Puedes mostrar un loader o similar mientras se verifica el token
+  }
 
   return (
     <div className="flex flex-row min-h-screen dark:bg-gray-700">
@@ -57,7 +85,6 @@ const DashboardAdmin = () => {
                 <TbCategoryPlus /> &nbsp; Categorías
               </button>
             </li>
-
             <li className="mb-2">
               <button
                 onClick={() => setView("topVentas")}
@@ -72,7 +99,7 @@ const DashboardAdmin = () => {
       {/* Contenido principal */}
       <div className="flex-1 overflow-y-auto">
         {/* Barra de navegación */}
-        <div className="bg-gray-200 p-1 md:p-4 dark:bg-gray-500 ">
+        <div className="bg-gray-200 p-1 md:p-4 dark:bg-gray-500">
           <h2 className="text-lg font-semibold mb-2 dark:text-white">
             Bienvenido usuario Administrador
           </h2>
