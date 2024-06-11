@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 const Cart = () => {
   const router = useRouter();
   const [cart, setCart] = useState<IProductCart[]>([]);
+  const [userSession, setUserSession] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
@@ -18,6 +19,9 @@ const Cart = () => {
         quantity: item.quantity || 1,
       }));
       setCart(initializedCartItems);
+
+      const userSessionExists = localStorage.getItem("userSession");
+      setUserSession(!!userSessionExists);
     }
   }, []);
 
@@ -214,7 +218,12 @@ const Cart = () => {
             <Link href="/checkout">
               <button
                 type="button"
-                className="text-sm px-4 py-2.5 w-full font-semibold tracking-wide bg-gray-900 hover:bg-gray-700 text-orange-400 rounded-md"
+                className={`text-sm px-4 py-2.5 w-full font-semibold tracking-wide rounded-md ${
+                  userSession
+                    ? "bg-gray-900 hover:bg-gray-700 text-orange-400"
+                    : "bg-gray-300 cursor-not-allowed text-gray-500"
+                }`}
+                disabled={!userSession}
               >
                 Ir a pagar
               </button>
