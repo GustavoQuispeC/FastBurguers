@@ -8,6 +8,7 @@ import { GiSettingsKnobs } from "react-icons/gi";
 import { RiFolderSettingsFill } from "react-icons/ri";
 import { TbSettingsCog } from "react-icons/tb";
 import PedidosList from "@/components/PedidosList/PedidosList";
+import UserRol from "@/components/UserRol/UserRol";
 
 const DashboardAdmin = () => {
   const [token, setToken] = useState<userSession>();
@@ -53,6 +54,14 @@ const DashboardAdmin = () => {
                 className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
               >
                 <RiFolderSettingsFill /> &nbsp; Categorías
+              </button>
+            </li>
+            <li className="mb-2">
+              <button
+                onClick={() => setView("users")}
+                className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
+              >
+                <RiFolderSettingsFill /> &nbsp; Usuarios
               </button>
             </li>
           </ul>
@@ -108,6 +117,12 @@ const DashboardAdmin = () => {
             <div>
               <h2 className="text-lg font-semibold mb-2">Pedidos</h2>
               <PedidosList />
+            </div>
+          )}
+          {view === "users" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Usuarios</h2>
+              <UserRol />
             </div>
           )}
         </div>
