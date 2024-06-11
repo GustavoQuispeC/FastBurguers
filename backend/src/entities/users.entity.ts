@@ -21,6 +21,9 @@ export class Users {
     @Column({default: false})
     isSuperAdmin: boolean;
 
+    @Column({default:true})
+    condition: boolean;
+
     @Column({ type: 'int', nullable: true })
     phone: number;
 
