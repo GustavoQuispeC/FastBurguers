@@ -2,14 +2,8 @@ import { Injectable, NotAcceptableException, UnprocessableEntityException } from
 import { InjectRepository } from '@nestjs/typeorm';
 import { StatusHistory } from 'src/entities/statushistory.entity';
 import { Repository } from 'typeorm';
-import { CreateStatusDto } from './status-histories.dto';
 import { OrderDetails } from 'src/entities/orderdetails.entity';
 import { Orders } from 'src/entities/orders.entity';
-<<<<<<< HEAD
-=======
-import { timeStamp } from 'console';
-import { timestamp } from 'rxjs';
->>>>>>> 21d187e76b4c947a57cbd59593dd87b742f3b4a2
 
 @Injectable()
 export class StatusHistoriesService {
@@ -43,14 +37,9 @@ export class StatusHistoriesService {
   
         const hasStatus = statusFound.some((element)=>element.status === statusData.status)
         if(hasStatus) throw new NotAcceptableException(`La orden ya tiene creado el status: ${statusData.status}`)
-<<<<<<< HEAD
-
-        const statusHistory  = this.statusHistRepository.create({orderdetails:orderDetailFound,...statusData})
-=======
         
         const completeStatus = {...statusData,timestamp:new Date()}
         const statusHistory  = this.statusHistRepository.create({orderdetails:orderDetailFound,...completeStatus})
->>>>>>> 21d187e76b4c947a57cbd59593dd87b742f3b4a2
         return this.statusHistRepository.save(statusHistory)
     }
 
