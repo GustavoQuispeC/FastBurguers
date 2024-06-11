@@ -78,6 +78,11 @@ export class CreateUserDto{
     @IsOptional()
     @IsBoolean()
     isSuperAdmin?:boolean
+
+    @ApiHideProperty()
+    @IsOptional()
+    @IsBoolean()
+    condition?:boolean
 }
 
 
@@ -153,6 +158,10 @@ export class UpdateUserDto{
     @IsOptional()
     @IsBoolean()
     isSuperAdmin?:boolean
+
+    @IsOptional()
+    @IsBoolean()
+    condition?:boolean
 }
 
 export class LoginUserDto extends PickType(CreateUserDto,['email', 'password']){}

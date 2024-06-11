@@ -4,15 +4,27 @@ import { useEffect, useState } from "react";
 import PayPalButton from "@/components/PayPalButton/PayPalButton";
 import { TextInput } from "flowbite-react";
 import { IProductCart } from "@/interfaces/IProduct";
+import { useRouter } from "next/navigation";
 
 const Checkout = () => {
   const [cart, setCart] = useState<IProductCart[]>([]);
+  const [userSessionExists, setUserSessionExists] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const cartData = JSON.parse(
       localStorage.getItem("cart") || "[]"
     ) as IProductCart[];
     setCart(cartData);
+  }, []);
+
+  useEffect(() => {
+    const userSession = localStorage.getItem("userSession");
+    if (!userSession) {
+      router.push("/cart");
+    } else {
+      setUserSessionExists(true);
+    }
   }, []);
 
   const calculateDiscountAmount = (price: number, discount: number) => {
@@ -35,12 +47,16 @@ const Checkout = () => {
   };
 
   const totalConDescuento = calcularTotalConDescuento();
-  const shippingCost = 20; // Costo de envío
+  const shippingCost = 0; // Costo de envío
 
   useEffect(() => {
     const totalAmount = (totalConDescuento + shippingCost).toFixed(2);
     localStorage.setItem("totalAmount", totalAmount);
   }, [totalConDescuento]);
+
+  if (!userSessionExists) {
+    return null;
+  }
 
   return (
     <div className="font-[sans-serif] bg-white pt-6">

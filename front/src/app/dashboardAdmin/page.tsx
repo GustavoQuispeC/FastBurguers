@@ -5,9 +5,11 @@ import { userSession } from "@/types";
 import CategoriesList from "@/components/CategoriesList/CategoriesList";
 import ProductList from "@/components/ProductList/page";
 import { GiSettingsKnobs } from "react-icons/gi";
-import { RiFolderSettingsFill } from "react-icons/ri";
-import { TbSettingsCog } from "react-icons/tb";
+import { HiChartBar, HiClipboardList } from "react-icons/hi";
+import { TbCategoryPlus } from "react-icons/tb";
+import { SiAzureartifacts } from "react-icons/si";
 import PedidosList from "@/components/PedidosList/PedidosList";
+import TopVentas from "@/components/TopVentas/TopVentas";
 
 const DashboardAdmin = () => {
   const [token, setToken] = useState<userSession>();
@@ -36,7 +38,7 @@ const DashboardAdmin = () => {
                 onClick={() => setView("pedidos")}
                 className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
               >
-                <RiFolderSettingsFill /> &nbsp; Pedidos
+                <HiClipboardList /> &nbsp; Pedidos
               </button>
             </li>
             <li className="mb-2">
@@ -44,7 +46,7 @@ const DashboardAdmin = () => {
                 onClick={() => setView("modifyProducts")}
                 className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
               >
-                <TbSettingsCog /> &nbsp; Productos
+                <SiAzureartifacts /> &nbsp; Productos
               </button>
             </li>
             <li className="mb-2">
@@ -52,7 +54,16 @@ const DashboardAdmin = () => {
                 onClick={() => setView("categories")}
                 className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
               >
-                <RiFolderSettingsFill /> &nbsp; Categorías
+                <TbCategoryPlus /> &nbsp; Categorías
+              </button>
+            </li>
+
+            <li className="mb-2">
+              <button
+                onClick={() => setView("topVentas")}
+                className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
+              >
+                <HiChartBar /> &nbsp; Ventas
               </button>
             </li>
           </ul>
@@ -108,6 +119,13 @@ const DashboardAdmin = () => {
             <div>
               <h2 className="text-lg font-semibold mb-2">Pedidos</h2>
               <PedidosList />
+            </div>
+          )}
+
+          {view === "topVentas" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Top Ventas</h2>
+              <TopVentas />
             </div>
           )}
         </div>

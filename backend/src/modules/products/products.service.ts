@@ -132,6 +132,7 @@ export class ProductsService {
             ...(product.price !== undefined && { price: product.price }),
             ...(product.stock !== undefined && { stock: product.stock }),
             ...(product.discount !== undefined && { discount: product.discount }),
+            ...(product.condition !== undefined && { condition: product.condition }),
             ...(imgUrl && { imgUrl })
         };
 

@@ -29,6 +29,9 @@ export class Products {
     @Column({ type: 'enum', enum: SizeProduct, default: SizeProduct.PERSONAL })
     size: SizeProduct;
 
+    @Column({default:true})
+    condition: boolean;
+
     @ManyToOne(() => Categories, (category) => category.products)
     category: Categories;
 
