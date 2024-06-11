@@ -224,6 +224,11 @@ const Cart = () => {
                     : "bg-gray-300 cursor-not-allowed text-gray-500"
                 }`}
                 disabled={!userSession}
+                title={
+                  !userSession
+                    ? "Necesita estar logueado para continuar con el pago"
+                    : ""
+                }
               >
                 Ir a pagar
               </button>
