@@ -143,7 +143,71 @@ const ProductList = () => {
       }
     }
   };
-  const handleEnableProduct = async (id: string) => {};
+  //! Función para habilitar un producto
+  const handleEnableProduct = async (id: string) => {
+    if (!token) {
+      Swal.fire("¡Error!", "Token no encontrado. Por favor, inicia sesión.", "error");
+      return;
+    }
+    
+    try {
+      const response = await axios.put(
+        `${apiURL}/products/${id}`, 
+        { condition: true }, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Producto habilitado:", response.data);
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === id ? { ...product, condition: true } : product
+        )
+      );
+    } catch (error) {
+      console.error("Error enabling product:", error);
+      Swal.fire(
+        "¡Error!",
+        "Ha ocurrido un error al habilitar el producto",
+        "error"
+      );
+    }
+  };
+  
+  //! Función para manejar la deshabilitación de un producto
+  const handleDisableProduct = async (id: string) => {
+    if (!token) {
+      Swal.fire("¡Error!", "Token no encontrado. Por favor, inicia sesión.", "error");
+      return;
+    }
+  
+    try {
+      const response = await axios.put(
+        `${apiURL}/products/${id}`, 
+        { condition: false }, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Producto deshabilitado:", response.data);
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === id ? { ...product, condition: false } : product
+        )
+      );
+    } catch (error) {
+      console.error("Error disabling product:", error);
+      Swal.fire(
+        "¡Error!",
+        "Ha ocurrido un error al deshabilitar el producto",
+        "error"
+      );
+    }
+  };
 
   //! Spinner de carga
   useEffect(() => {
@@ -298,10 +362,14 @@ const ProductList = () => {
                     </td>
                     <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       <div className="flex items-center justify-center space-x-4">
-                        <input
+                      <input
                           type="checkbox"
-                          checked={product.enabled}
-                          onChange={() => handleEnableProduct(product.id)}
+                          checked={product.condition}
+                          onChange={() =>
+                            product.condition
+                              ? handleDisableProduct(product.id)
+                              : handleEnableProduct(product.id)
+                          }
                         />
                       </div>
                     </td>

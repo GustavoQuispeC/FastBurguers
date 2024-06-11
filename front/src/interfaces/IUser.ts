@@ -8,8 +8,8 @@ export interface IUser {
   phone: number;
   country: string;
   city: string;
-  enable: boolean;
-  role: string;
+  condition: boolean;
+  isAdmin: boolean;
 }
 export interface IUserSession {
   userData: {

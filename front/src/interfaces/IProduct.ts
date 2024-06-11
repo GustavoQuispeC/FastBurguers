@@ -29,7 +29,7 @@ export interface IProductList {
   size: string;
   discount: number;
   category: string;
-  enabled?: boolean;
+  condition: boolean;
 }
 export interface IProductProps {
   name: string;

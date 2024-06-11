@@ -1,28 +1,25 @@
 "use client";
 
 import { IoSearchSharp } from "react-icons/io5";
-import { RiAddLargeFill } from "react-icons/ri";
-import { Pagination} from "flowbite-react";
+import { Pagination } from "flowbite-react";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import React from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Spinner from "../Spinner";
 import { IUser } from "@/interfaces/IUser";
+import Swal from "sweetalert2";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 const UserRol = () => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
-
   const [users, setUsers] = useState<IUser[]>([]);
-
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [token, setToken] = useState<string | null>(null);
-  const PRODUCTS_PER_PAGE = 10; // Cantidad de productos por página
+  const USERS_PER_PAGE = 10; // Cantidad de usuarios por página
   const [loading, setLoading] = useState(true);
 
   //! Obtener token de usuario
@@ -38,40 +35,40 @@ const UserRol = () => {
   }, [router]);
 
   //! Obtener los usuarios
-useEffect(() => {
+  useEffect(() => {
     async function fetchUsers() {
-        try {
-            const response = await axios.get(`${apiURL}/users`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            const users = response.data;
-            console.log("Users:", users);
-            setUsers(users);
-            setTotalPages(Math.ceil(users.length / PRODUCTS_PER_PAGE));
-        } catch (error) {
-            console.error("Error fetching users:", error);
-        }
+      try {
+        const response = await axios.get(`${apiURL}/users`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const users = response.data;
+        console.log("Users:", users);
+        setUsers(users);
+        setTotalPages(Math.ceil(users.length / USERS_PER_PAGE));
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
     }
     fetchUsers();
-}, [token]);
+  }, [token]);
 
-  //! Función para calcular los productos a mostrar en la página actual
+  //! Función para calcular los usuarios a mostrar en la página actual
   const getCurrentPageUsers = () => {
     const filteredUsers = filterUsers();
-    const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
-    const endIndex = startIndex + PRODUCTS_PER_PAGE;
+    const startIndex = (currentPage - 1) * USERS_PER_PAGE;
+    const endIndex = startIndex + USERS_PER_PAGE;
     return filteredUsers.slice(startIndex, endIndex);
   };
 
   //! Función para filtrar los usuarios
   const filterUsers = () => {
     if (searchTerm === "") {
-      return users; // Si el campo de búsqueda está vacío, mostrar todos los productos
+      return users; // Si el campo de búsqueda está vacío, mostrar todos los usuarios
     } else {
-      return users.filter((users) =>
-        users.name.toLowerCase().includes(searchTerm.toLowerCase())
+      return users.filter((user) =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
   };
@@ -83,28 +80,96 @@ useEffect(() => {
   };
   const onPageChange = (page: number) => setCurrentPage(page);
 
-  const handleEnableProduct = async (id: string) => {};
-
-  const handleRoleChange = async (id: string, role: string) => {
-    const updatedUsers = users.map((users) => {
-      if (users.id === id) {
-        return { ...users, role };
-      }
-      return users;
-    });
-    setUsers(updatedUsers);
+  //! Función para manejar el cambio de rol
+  const handleRoleChange = async (id: string, isAdmin: boolean) => {
     try {
-      await axios.put(
+      const response = await axios.put(
         `${apiURL}/users/${id}`,
-        { role },
+        { isAdmin },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
+      console.log("Rol de usuario actualizado:", response.data);
+      const updatedUsers = users.map((user) =>
+        user.id === id ? { ...user, isAdmin } : user
+      );
+      setUsers(updatedUsers);
     } catch (error) {
       console.error("Error updating user role:", error);
+      Swal.fire(
+        "¡Error!",
+        "Ha ocurrido un error al actualizar el rol del usuario",
+        "error"
+      );
+    }
+  };
+
+  //! Función para habilitar un usuario
+  const handleEnableUser = async (id: string) => {
+    if (!token) {
+      Swal.fire("¡Error!", "Token no encontrado. Por favor, inicia sesión.", "error");
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `${apiURL}/users/${id}`,
+        { condition: true },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Usuario habilitado:", response.data);
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === id ? { ...user, condition: true } : user
+        )
+      );
+    } catch (error) {
+      console.error("Error enabling user:", error);
+      Swal.fire(
+        "¡Error!",
+        "Ha ocurrido un error al habilitar el usuario",
+        "error"
+      );
+    }
+  };
+
+  //! Función para manejar la deshabilitación de un usuario
+  const handleDisableUser = async (id: string) => {
+    if (!token) {
+      Swal.fire("¡Error!", "Token no encontrado. Por favor, inicia sesión.", "error");
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `${apiURL}/users/${id}`,
+        { condition: false },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Usuario deshabilitado:", response.data);
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user.id === id ? { ...user, condition: false } : user
+        )
+      );
+    } catch (error) {
+      console.error("Error disabling user:", error);
+      Swal.fire(
+        "¡Error!",
+        "Ha ocurrido un error al deshabilitar el usuario",
+        "error"
+      );
     }
   };
 
@@ -119,7 +184,7 @@ useEffect(() => {
   if (users.length === 0) {
     return (
       <div className="h-screen items- justify-center">
-        {loading ? <Spinner /> : <p>Algo no esta bien.</p>}
+        {loading ? <Spinner /> : <p>Algo no está bien.</p>}
       </div>
     );
   }
@@ -159,7 +224,7 @@ useEffect(() => {
             </div>
             <div className="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
               <div className="flex items-center space-x-3 w-full md:w-auto">
-                
+                {/* Botones adicionales si es necesario */}
               </div>
             </div>
           </div>
@@ -182,52 +247,52 @@ useEffect(() => {
                 </tr>
               </thead>
               <tbody>
-                {getCurrentPageUsers().map((users: IUser) => (
+                {getCurrentPageUsers().map((user: IUser) => (
                   <tr
-                    key={users.id}
+                    key={user.id}
                     className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
                   >
                     <th
                       scope="row"
                       className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                     >
-                      <div className="flex items-center">
-                        {users.name}
-                      </div>
+                      <div className="flex items-center">{user.name}</div>
                     </th>
                     <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                      <div className="flex items-center">
-                        {users.email}
-                      </div>
+                      <div className="flex items-center">{user.email}</div>
                     </td>
                     <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    <div className="flex items-center space-x-4">
+                      <div className="flex items-center space-x-4">
                         <input
-                            type="radio"
-                            id={`user-${users.id}`}
-                            name={`role-${users.id}`}
-                            value="user"
-                            checked={users.role === "user"}
-                            onChange={() => handleRoleChange(users.id, "user")}
+                          type="radio"
+                          id={`user-${user.id}`}
+                          name={`role-${user.id}`}
+                          value="user"
+                          checked={user.isAdmin === false}
+                          onChange={() => handleRoleChange(user.id, false)}
                         />
-                        <label htmlFor={`user-${users.id}`}>User</label>
+                        <label htmlFor={`user-${user.id}`}>User</label>
                         <input
-                            type="radio"
-                            id={`admin-${users.id}`}
-                            name={`role-${users.id}`}
-                            value="admin"
-                            checked={users.role === "admin"}
-                            onChange={() => handleRoleChange(users.id, "admin")}
+                          type="radio"
+                          id={`admin-${user.id}`}
+                          name={`role-${user.id}`}
+                          value="admin"
+                          checked={user.isAdmin === true}
+                          onChange={() => handleRoleChange(user.id, true)}
                         />
-                        <label htmlFor={`admin-${users.id}`}>Admin</label>
-                    </div>
+                        <label htmlFor={`admin-${user.id}`}>Admin</label>
+                      </div>
                     </td>
                     <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       <div className="flex items-center justify-center space-x-4">
                         <input
                           type="checkbox"
-                          checked={users.enable}
-                          onChange={() => handleEnableProduct(users.id)}
+                          checked={user.condition}
+                          onChange={() =>
+                            user.condition
+                              ? handleDisableUser(user.id)
+                              : handleEnableUser(user.id)
+                          }
                         />
                       </div>
                     </td>

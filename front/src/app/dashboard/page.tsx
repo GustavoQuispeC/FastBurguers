@@ -67,13 +67,13 @@ const Dashboard = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  if (orders.length === 0) {
-    return (
-      <div className="h-screen items- justify-center">
-        {loading ? <Spinner /> : <p>Algo no esta bien.</p>}
-      </div>
-    );
-  }
+  // if (orders.length === 0) {
+  //   return (
+  //     <div className="h-screen items- justify-center">
+  //       {loading ? <Spinner /> : <p>Algo no esta bien.</p>}
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex flex-row min-h-screen dark:bg-gray-700">
@@ -107,14 +107,7 @@ const Dashboard = () => {
                 &nbsp; Carrito
               </a>
             </li>
-            <li className="mb-2">
-              <Link
-                href="/productList"
-                className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700"
-              >
-                <IoHome /> &nbsp; Modificar Productos
-              </Link>
-            </li>
+           
           </ul>
         </div>
       </div>
