@@ -49,3 +49,23 @@ export async function getOrders(userId: string, token: string) {
     throw new Error(error.message);
   }
 }
+
+export async function getOrdersByID(orderId: string) {
+  try {
+    const res = await fetch(`${apiURL}/orders/${orderId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch orders");
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
