@@ -20,6 +20,7 @@ import { TestimonyModule } from './modules/testimony/testimony.module';
 import { PaymentsModule } from './paypal/payments.module';
 import { StatusHistoriesModule } from './modules/status-histories/status-histories.module';
 import { MailerModule } from './modules/mailer/mailer.module';
+import { OrderRatingsModule } from './modules/ordersrating/orderrating.module';
 
 @Module({
   imports: [
@@ -48,7 +49,8 @@ import { MailerModule } from './modules/mailer/mailer.module';
     TestimonyModule,
     StatusHistoriesModule,
     PaymentsModule,
-    MailerModule
+    MailerModule,
+    OrderRatingsModule
   ],
   controllers: [AppController],
   providers: [AppService, PreloadService],

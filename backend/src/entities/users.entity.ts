@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Orders } from "./orders.entity";
+import { OrderRating } from "./orderrating.entity";
 
 @Entity({ name: 'users' })
 export class Users {
@@ -39,4 +40,7 @@ export class Users {
     @OneToMany(() => Orders, (order) => order.user)
     @JoinColumn({name: 'order_id'})
     orders: Orders[];
+
+    @OneToMany(() => OrderRating, orderRating => orderRating.user)
+    orderRating: OrderRating;
 }
