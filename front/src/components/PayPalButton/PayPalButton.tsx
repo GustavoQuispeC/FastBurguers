@@ -44,28 +44,77 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
         body: JSON.stringify({ amount: total }),
       });
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const orderId = await response.text();
       return orderId;
     } catch (error: any) {
       console.error(error);
-      setMessage(`Could not initiate PayPal Checkout...${error}`);
+      setMessage(`Could not initiate PayPal Checkout...${error.message}`);
       throw error;
     }
   };
 
   const handleApprove = async (data: any, actions: any) => {
     try {
+      const orderId = data.orderID;
+      const userSession = JSON.parse(
+        localStorage.getItem("userSession") || "{}"
+      );
+      const userId = userSession?.userData?.data?.userid || "";
+      const userToken = userSession?.userData?.token || "";
+      const customerName = userSession?.userData?.data?.name || "";
+      const email = userSession?.userData?.data?.email || "";
+
+      if (!userId || !userToken || !customerName || !email) {
+        throw new Error("User data is missing.");
+      }
+
+      const currentCart = cartRef.current;
+      if (currentCart.length === 0) {
+        throw new Error("Cart is empty.");
+      }
+
+      const items = currentCart.map((item) => ({
+        name: item.name,
+        quantity: item.quantity || 1,
+        price: item.price,
+      }));
+
+      console.log("Items:", items);
+
+      const total = localStorage.getItem("totalAmount") || "0";
+      const amount = parseFloat(total).toFixed(2);
+      const totalAmount = parseFloat(amount);
+
+      const body = {
+        email,
+        items,
+        totalAmount,
+        orderId,
+        customerName,
+      };
+
       const response = await fetch(
-        `${apiURL}/payments/capture-order/${data.orderID}`,
+        `${apiURL}/payments/capture-order/${orderId}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          body: JSON.stringify(body),
         }
       );
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const orderData = await response.json();
+      console.log("Order Data:", orderData);
+
       const errorDetail = orderData?.details?.[0];
 
       if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
@@ -82,21 +131,6 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
       const transaction = orderData.purchase_units[0].payments.captures[0];
 
       if (transaction.status === "COMPLETED") {
-        const userSession = JSON.parse(
-          localStorage.getItem("userSession") || "{}"
-        );
-        const userId = userSession?.userData?.data?.userid || "";
-        const userToken = userSession?.userData?.token || "";
-
-        if (!userId || !userToken) {
-          throw new Error("User data is missing.");
-        }
-
-        const currentCart = cartRef.current;
-        if (currentCart.length === 0) {
-          throw new Error("Cart is empty.");
-        }
-
         const order = {
           userId,
           products: currentCart.map((item) => ({ id: String(item.id) })),
@@ -115,7 +149,9 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
       }
     } catch (error: any) {
       console.error(error);
-      setMessage(`Sorry, your transaction could not be processed...${error}`);
+      setMessage(
+        `Sorry, your transaction could not be processed...${error.message}`
+      );
     }
   };
 
