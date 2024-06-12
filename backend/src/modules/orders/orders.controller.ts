@@ -24,8 +24,6 @@ export class OrdersController {
 
     @ApiBearerAuth()
     @Get(':id')
-    @Roles(Role.ADMIN)
-    @UseGuards(AuthGuards, RolesGuard)
     getOrder(@Param('id', ParseUUIDPipe) id: string){
         return this.ordersService.getOrder(id)
     }
