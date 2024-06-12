@@ -7,7 +7,7 @@ import React from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Spinner from "../Spinner";
-import { IUser } from "@/interfaces/IUser";
+import { IUsers } from "@/interfaces/IUsers";
 import Swal from "sweetalert2";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
@@ -15,7 +15,7 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 const UserRol = () => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
-  const [users, setUsers] = useState<IUser[]>([]);
+  const [users, setUsers] = useState<IUsers[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [token, setToken] = useState<string | null>(null);
@@ -273,7 +273,7 @@ const UserRol = () => {
                 </tr>
               </thead>
               <tbody>
-                {getCurrentPageUsers().map((user: IUser) => (
+                {getCurrentPageUsers().map((user: IUsers) => (
                   <tr
                     key={user.id}
                     className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
