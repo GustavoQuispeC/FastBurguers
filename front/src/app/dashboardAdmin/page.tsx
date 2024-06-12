@@ -12,10 +12,13 @@ import { TbCategoryPlus } from "react-icons/tb";
 import { SiAzureartifacts } from "react-icons/si";
 import PedidosList from "@/components/PedidosList/PedidosList";
 import TopVentas from "@/components/TopVentas/TopVentas";
+import UserRol from "@/components/UserRol/UserRol";
+import { RiFolderSettingsFill } from "react-icons/ri";
+import { FaUsersCog } from "react-icons/fa";
 
 const DashboardAdmin = () => {
-  const [token, setToken] = useState<userSession | null>(null);
-  const [view, setView] = useState<string>("pedidos"); // Estado para la vista actual, por defecto "pedidos"
+  const [token, setToken] = useState<userSession>();
+  const [view, setView] = useState<string>("modifyProducts"); // Estado para la vista actual, por defecto "pedidos"
   const router = useRouter();
 
   useEffect(() => {
@@ -63,18 +66,18 @@ const DashboardAdmin = () => {
           <ul>
             <li className="mb-2">
               <button
-                onClick={() => setView("pedidos")}
-                className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
-              >
-                <HiClipboardList /> &nbsp; Pedidos
-              </button>
-            </li>
-            <li className="mb-2">
-              <button
                 onClick={() => setView("modifyProducts")}
                 className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
               >
                 <SiAzureartifacts /> &nbsp; Productos
+              </button>
+            </li>
+            <li className="mb-2">
+              <button
+                onClick={() => setView("pedidos")}
+                className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
+              >
+                <HiClipboardList /> &nbsp; Pedidos
               </button>
             </li>
             <li className="mb-2">
@@ -91,6 +94,14 @@ const DashboardAdmin = () => {
                 className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
               >
                 <HiChartBar /> &nbsp; Ventas
+              </button>
+            </li>
+            <li className="mb-2">
+              <button
+                onClick={() => setView("users")}
+                className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
+              >
+                <FaUsersCog /> &nbsp; Usuarios
               </button>
             </li>
           </ul>
@@ -126,15 +137,6 @@ const DashboardAdmin = () => {
           </div>
         </div>
         <div className="p-1 md:p-4 flex flex-col flex-1">
-          {view === "categories" && (
-            <div>
-              <h2 className="text-lg font-semibold mb-2">
-                Modificar Categoría
-              </h2>
-              <CategoriesList />
-            </div>
-          )}
-
           {view === "modifyProducts" && (
             <div>
               <h2 className="text-lg font-semibold mb-2">Modificar Producto</h2>
@@ -149,10 +151,25 @@ const DashboardAdmin = () => {
             </div>
           )}
 
+          {view === "categories" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-2">
+                Modificar Categoría
+              </h2>
+              <CategoriesList />
+            </div>
+          )}
+
           {view === "topVentas" && (
             <div>
               <h2 className="text-lg font-semibold mb-2">Top Ventas</h2>
               <TopVentas />
+            </div>
+          )}
+          {view === "users" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-2"></h2>
+              <UserRol />
             </div>
           )}
         </div>
