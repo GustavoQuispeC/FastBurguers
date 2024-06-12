@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   GoogleMap,
   LoadScript,
-  Marker,
   DirectionsService,
   DirectionsRenderer,
+  useJsApiLoader,
 } from "@react-google-maps/api";
+import Spinner from "../Spinner";
 
 const containerStyle = {
   width: "100%",
@@ -25,7 +26,18 @@ const MapWithDirections: React.FC = () => {
   const [directions, setDirections] = useState<any>(null);
   const [distance, setDistance] = useState<string | null>(null);
   const [duration, setDuration] = useState<string | null>(null);
-  const [mapLoaded, setMapLoaded] = useState(false);
+
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const userMarkerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(
+    null
+  );
+  const restaurantMarkerRef =
+    useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
+  });
 
   useEffect(() => {
     const storedLocation = localStorage.getItem("userLocation");
@@ -47,6 +59,27 @@ const MapWithDirections: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (isLoaded && userLocation && mapRef.current) {
+      if (!userMarkerRef.current) {
+        userMarkerRef.current = new google.maps.marker.AdvancedMarkerElement({
+          position: userLocation,
+          map: mapRef.current,
+        });
+      } else {
+        userMarkerRef.current.position = userLocation;
+      }
+
+      if (!restaurantMarkerRef.current) {
+        restaurantMarkerRef.current =
+          new google.maps.marker.AdvancedMarkerElement({
+            position: restaurantLocation,
+            map: mapRef.current,
+          });
+      }
+    }
+  }, [isLoaded, userLocation]);
+
   const directionsCallback = useCallback((response: any) => {
     if (response !== null) {
       if (response.status === "OK") {
@@ -60,40 +93,32 @@ const MapWithDirections: React.FC = () => {
     }
   }, []);
 
-  const handleLoad = () => {
-    setMapLoaded(true);
-  };
-
-  return (
-    <LoadScript
-      googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string}
-      onLoad={handleLoad}
-    >
+  return isLoaded ? (
+    <>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={restaurantLocation}
         zoom={10}
+        onLoad={(map) => {
+          mapRef.current = map;
+        }}
       >
-        {userLocation && mapLoaded && (
-          <>
-            <Marker position={userLocation} />
-            <Marker position={restaurantLocation} />
-            <DirectionsService
-              options={{
-                destination: restaurantLocation,
-                origin: userLocation,
-                travelMode: (window as any).google.maps.TravelMode.DRIVING,
-              }}
-              callback={directionsCallback}
-            />
-            {directions && (
-              <DirectionsRenderer
-                options={{
-                  directions: directions,
-                }}
-              />
-            )}
-          </>
+        {userLocation && (
+          <DirectionsService
+            options={{
+              destination: restaurantLocation,
+              origin: userLocation,
+              travelMode: google.maps.TravelMode.DRIVING,
+            }}
+            callback={directionsCallback}
+          />
+        )}
+        {directions && (
+          <DirectionsRenderer
+            options={{
+              directions: directions,
+            }}
+          />
         )}
       </GoogleMap>
       {distance && duration && (
@@ -102,7 +127,11 @@ const MapWithDirections: React.FC = () => {
           <p>Duración estimada: {duration}</p>
         </div>
       )}
-    </LoadScript>
+    </>
+  ) : (
+    <div>
+      <Spinner />
+    </div>
   );
 };
 
