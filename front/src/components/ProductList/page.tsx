@@ -2,7 +2,7 @@
 import { MdEdit } from "react-icons/md";
 import { IoSearchSharp } from "react-icons/io5";
 import { RiDeleteBin6Fill, RiAddLargeFill } from "react-icons/ri";
-import { Pagination } from "flowbite-react";
+import { Button, Pagination, Tooltip } from "flowbite-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import React from "react";
@@ -143,6 +143,71 @@ const ProductList = () => {
       }
     }
   };
+  //! Función para habilitar un producto
+  const handleEnableProduct = async (id: string) => {
+    if (!token) {
+      Swal.fire("¡Error!", "Token no encontrado. Por favor, inicia sesión.", "error");
+      return;
+    }
+    
+    try {
+      const response = await axios.put(
+        `${apiURL}/products/${id}`, 
+        { condition: true }, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Producto habilitado:", response.data);
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === id ? { ...product, condition: true } : product
+        )
+      );
+    } catch (error) {
+      console.error("Error enabling product:", error);
+      Swal.fire(
+        "¡Error!",
+        "Ha ocurrido un error al habilitar el producto",
+        "error"
+      );
+    }
+  };
+  
+  //! Función para manejar la deshabilitación de un producto
+  const handleDisableProduct = async (id: string) => {
+    if (!token) {
+      Swal.fire("¡Error!", "Token no encontrado. Por favor, inicia sesión.", "error");
+      return;
+    }
+  
+    try {
+      const response = await axios.put(
+        `${apiURL}/products/${id}`, 
+        { condition: false }, 
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Producto deshabilitado:", response.data);
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === id ? { ...product, condition: false } : product
+        )
+      );
+    } catch (error) {
+      console.error("Error disabling product:", error);
+      Swal.fire(
+        "¡Error!",
+        "Ha ocurrido un error al deshabilitar el producto",
+        "error"
+      );
+    }
+  };
 
   //! Spinner de carga
   useEffect(() => {
@@ -230,6 +295,9 @@ const ProductList = () => {
                   <th scope="col" className="p-4">
                     Acciones
                   </th>
+                  <th scope="col" className="p-4">
+                    Habilitar
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -269,25 +337,40 @@ const ProductList = () => {
                     </td>
                     <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       <div className="flex items-center space-x-4">
-                        <Link
-                          type="button"
-                          data-drawer-target="drawer-update-product"
-                          data-drawer-show="drawer-update-product"
-                          aria-controls="drawer-update-product"
-                          className="py-2 px-3 flex items-center text-sm font-medium text-center text-orange-400 bg-gray-900 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                          href={`/productList/${product.id}`}
-                        >
-                          <MdEdit />
-                          Editar
-                        </Link>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteProduct(product.id)}
-                          className="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
-                        >
-                          <RiDeleteBin6Fill />
-                          Eliminar
-                        </button>
+                        <Tooltip content="Editar">
+                          <Link
+                            type="button"
+                            data-drawer-target="drawer-update-product"
+                            data-drawer-show="drawer-update-product"
+                            aria-controls="drawer-update-product"
+                            className="py-2 px-3 flex items-center text-sm font-medium text-center text-orange-400 bg-gray-900 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                            href={`/productList/${product.id}`}
+                          >
+                            <MdEdit size={20} />
+                          </Link>
+                        </Tooltip>
+                        <Tooltip content="Eliminar">
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteProduct(product.id)}
+                            className="flex items-center text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+                          >
+                            <RiDeleteBin6Fill size={20} />
+                          </button>
+                        </Tooltip>
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                      <div className="flex items-center justify-center space-x-4">
+                      <input
+                          type="checkbox"
+                          checked={product.condition}
+                          onChange={() =>
+                            product.condition
+                              ? handleDisableProduct(product.id)
+                              : handleEnableProduct(product.id)
+                          }
+                        />
                       </div>
                     </td>
                   </tr>

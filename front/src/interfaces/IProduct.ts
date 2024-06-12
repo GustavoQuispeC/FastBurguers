@@ -10,6 +10,7 @@ export interface IProduct {
   category: string;
   valune?: number;
   quantity?: number;
+ 
 }
 
 export interface IProductCart extends IProduct {
@@ -28,7 +29,7 @@ export interface IProductList {
   size: string;
   discount: number;
   category: string;
-  valune?: number;
+  condition: boolean;
 }
 export interface IProductProps {
   name: string;
