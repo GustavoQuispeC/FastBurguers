@@ -122,30 +122,30 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
       } else if (errorDetail) {
         throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
       } else {
-        const transaction = orderData.purchase_units[0].payments.captures[0];
+        // Accede a la captura desde el objeto de respuesta correctamente
+        const transaction = orderData.capture;
         setMessage(
           `Transaction ${transaction.status}: ${transaction.id}. See console for all available details`
         );
-      }
+        console.log("Capture result:", transaction);
 
-      const transaction = orderData.purchase_units[0].payments.captures[0];
+        if (transaction.status === "COMPLETED") {
+          const order = {
+            userId,
+            products: currentCart.map((item) => ({ id: String(item.id) })),
+          };
 
-      if (transaction.status === "COMPLETED") {
-        const order = {
-          userId,
-          products: currentCart.map((item) => ({ id: String(item.id) })),
-        };
+          const createOrderResponse = await createOrder(order, userToken);
 
-        const createOrderResponse = await createOrder(order, userToken);
+          console.log("Order created successfully:", createOrderResponse);
 
-        console.log("Order created successfully:", createOrderResponse);
+          // Guardar la respuesta en localStorage
+          localStorage.setItem("Order", JSON.stringify(createOrderResponse));
 
-        // Guardar la respuesta en localStorage
-        localStorage.setItem("Order", JSON.stringify(createOrderResponse));
+          localStorage.removeItem("cart");
 
-        localStorage.removeItem("cart");
-
-        Router.push("/tracking");
+          Router.push("/tracking");
+        }
       }
     } catch (error: any) {
       console.error(error);
