@@ -25,9 +25,9 @@ export class PaymentsController {
                 orderId: mailerDto.orderId,
                 customerName: mailerDto.customerName,
             };
-        await this.paymentsService.captureOrder(orderId);
-        await this.mailerService.sendMail(mailerDto.email, 'Confirmación de Compra', orderDetails)
-        return { message: 'Orden creada y correo enviado.' };
+        const capture = await this.paymentsService.captureOrder(orderId);
+        await this.mailerService.sendMail(mailerDto.email, 'Confirmación de Compra', orderDetails)        
+        return { message: 'Orden creada y correo enviado.', capture};
     }
 
 }
