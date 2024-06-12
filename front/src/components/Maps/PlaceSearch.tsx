@@ -8,7 +8,7 @@ interface PlaceSearchBoxProps {
   ) => void;
 }
 
-const PlaceSearchBox: React.FC<PlaceSearchBoxProps> = ({ onPlaceSelected }) => {
+const PlaceSearch: React.FC<PlaceSearchBoxProps> = ({ onPlaceSelected }) => {
   const searchBoxRef = useRef<google.maps.places.SearchBox | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -40,11 +40,11 @@ const PlaceSearchBox: React.FC<PlaceSearchBoxProps> = ({ onPlaceSelected }) => {
           ref={inputRef}
           type="text"
           placeholder="Busca tu ubicación"
-          className="p-2 border rounded w-full"
+          className="px-2 border border-gray-300 rounded w-full"
         />
       </StandaloneSearchBox>
     </LoadScript>
   );
 };
 
-export default PlaceSearchBox;
+export default PlaceSearch;

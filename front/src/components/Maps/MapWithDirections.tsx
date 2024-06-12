@@ -9,7 +9,7 @@ import {
 
 const containerStyle = {
   width: "100%",
-  height: "400px",
+  height: "330px",
 };
 
 const restaurantLocation = {
@@ -28,17 +28,23 @@ const MapWithDirections: React.FC = () => {
   const [mapLoaded, setMapLoaded] = useState(false);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setUserLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-      },
-      (error) => {
-        console.error("Error obteniendo la ubicación del usuario", error);
-      }
-    );
+    const storedLocation = localStorage.getItem("userLocation");
+    if (storedLocation) {
+      const { location } = JSON.parse(storedLocation);
+      setUserLocation(location);
+    } else {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        },
+        (error) => {
+          console.error("Error obteniendo la ubicación del usuario", error);
+        }
+      );
+    }
   }, []);
 
   const directionsCallback = useCallback((response: any) => {

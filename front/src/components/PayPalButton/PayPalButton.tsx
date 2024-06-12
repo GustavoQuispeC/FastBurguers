@@ -10,9 +10,12 @@ function Message({ content }: any) {
   return <p>{content}</p>;
 }
 
-const PayPalButton: React.FC = () => {
-  const [cart, setCart] = useState<IProductCart[]>([]);
+interface PayPalButtonProps {
+  allFieldsCompleted: boolean;
+}
 
+const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
+  const [cart, setCart] = useState<IProductCart[]>([]);
   const [message, setMessage] = useState("");
   const Router = useRouter();
 
@@ -127,6 +130,7 @@ const PayPalButton: React.FC = () => {
         }}
         createOrder={handlecreateOrder}
         onApprove={handleApprove}
+        disabled={!allFieldsCompleted} // Disable button if fields are not completed
       />
       <Message content={message} />
     </>
