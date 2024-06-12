@@ -7,7 +7,7 @@ import React from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Spinner from "../Spinner";
-import { IUser } from "@/interfaces/IUser";
+import { IUsers } from "@/interfaces/IUsers";
 import Swal from "sweetalert2";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
@@ -15,7 +15,7 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 const UserRol = () => {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
-  const [users, setUsers] = useState<IUser[]>([]);
+  const [users, setUsers] = useState<IUsers[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [token, setToken] = useState<string | null>(null);
@@ -36,7 +36,7 @@ const UserRol = () => {
 
   //! Obtener los usuarios
   useEffect(() => {
-    async function fetchUsers() {
+    const fetchUsers = async () => {
       try {
         const response = await axios.get(`${apiURL}/users`, {
           headers: {
@@ -47,11 +47,28 @@ const UserRol = () => {
         console.log("Users:", users);
         setUsers(users);
         setTotalPages(Math.ceil(users.length / USERS_PER_PAGE));
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error fetching users:", error);
+        if (error.response && error.response.status === 401) {
+          // Manejar el error 401 de forma específica
+          Swal.fire(
+            "¡Error!",
+            "No autorizado. Por favor, inicia sesión nuevamente.",
+            "error"
+          );
+        } else {
+          Swal.fire(
+            "¡Error!",
+            "Ha ocurrido un error al obtener los usuarios.",
+            "error"
+          );
+        }
       }
+    };
+
+    if (token) {
+      fetchUsers();
     }
-    fetchUsers();
   }, [token]);
 
   //! Función para calcular los usuarios a mostrar en la página actual
@@ -78,6 +95,7 @@ const UserRol = () => {
     setSearchTerm(e.target.value); // Actualizar el estado del término de búsqueda
     setCurrentPage(1); // Reiniciar la página actual al cambiar el término de búsqueda
   };
+
   const onPageChange = (page: number) => setCurrentPage(page);
 
   //! Función para manejar el cambio de rol
@@ -110,7 +128,11 @@ const UserRol = () => {
   //! Función para habilitar un usuario
   const handleEnableUser = async (id: string) => {
     if (!token) {
-      Swal.fire("¡Error!", "Token no encontrado. Por favor, inicia sesión.", "error");
+      Swal.fire(
+        "¡Error!",
+        "Token no encontrado. Por favor, inicia sesión.",
+        "error"
+      );
       return;
     }
 
@@ -143,7 +165,11 @@ const UserRol = () => {
   //! Función para manejar la deshabilitación de un usuario
   const handleDisableUser = async (id: string) => {
     if (!token) {
-      Swal.fire("¡Error!", "Token no encontrado. Por favor, inicia sesión.", "error");
+      Swal.fire(
+        "¡Error!",
+        "Token no encontrado. Por favor, inicia sesión.",
+        "error"
+      );
       return;
     }
 
@@ -183,7 +209,7 @@ const UserRol = () => {
 
   if (users.length === 0) {
     return (
-      <div className="h-screen items- justify-center">
+      <div className="h-screen items-center justify-center">
         {loading ? <Spinner /> : <p>Algo no está bien.</p>}
       </div>
     );
@@ -247,7 +273,7 @@ const UserRol = () => {
                 </tr>
               </thead>
               <tbody>
-                {getCurrentPageUsers().map((user: IUser) => (
+                {getCurrentPageUsers().map((user: IUsers) => (
                   <tr
                     key={user.id}
                     className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
