@@ -8,8 +8,7 @@ export interface IUser {
   phone: number;
   country: string;
   city: string;
-  condition: boolean;
-  isAdmin: boolean;
+  
 }
 export interface IUserSession {
   userData: {
