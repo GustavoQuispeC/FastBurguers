@@ -1,29 +1,30 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { IoHome } from "react-icons/io5";
 import { MdBorderColor } from "react-icons/md";
 import { FaCartPlus } from "react-icons/fa";
 import Link from "next/link";
 import { userSession } from "@/types";
-import { FcCalendar, FcMoneyTransfer, FcOk } from "react-icons/fc";
+import { FcOk } from "react-icons/fc";
 import Spinner from "@/components/Spinner";
 import axios from "axios";
 import { IOrderList } from "@/interfaces/IOrder";
+import { IRating } from "@/interfaces/IRating";
+import { getRating } from "@/helpers/Reseñas.helper";
+
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
-//!Obtener datos de la sesion
 const Dashboard = () => {
-  //!Obtener datos de la sesion
   const [token, setToken] = useState<userSession>();
   const [loading, setLoading] = useState(true);
   const [orders, setOrders] = useState<IOrderList[]>([]);
+  const [reviews, setReviews] = useState<IRating[]>([]);
 
-  //!Obtener datos de la sesion
   useEffect(() => {
     if (typeof window !== "undefined" && window.localStorage) {
       const userToken = localStorage.getItem("userSession");
-
       setToken(JSON.parse(userToken!));
       !userToken && redirect("/login");
     }
@@ -45,21 +46,18 @@ const Dashboard = () => {
     }
   };
 
-  //!Obtener las ordenes
   useEffect(() => {
     if (userId) {
       listOrders(userId).then(setOrders);
+      getRating().then(setReviews);
     }
   }, [userId]);
-  console.log(orders);
 
-  //!Formatear la fecha
   function formatDate(dateString: string) {
     const date = new Date(dateString);
     return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
   }
 
-  //! Spinner de carga
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -67,17 +65,18 @@ const Dashboard = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // if (orders.length === 0) {
-  //   return (
-  //     <div className="h-screen items- justify-center">
-  //       {loading ? <Spinner /> : <p>Algo no esta bien.</p>}
-  //     </div>
-  //   );
-  // }
+  const userReviews = reviews.filter((review) => review.user.id === userId);
+
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-row min-h-screen dark:bg-gray-700">
-      {/* Barra lateral */}
       <div className="bg-gray-900 text-orange-400 w-36 md:w-52">
         <div className="p-1 md:p-4">
           <h2 className="text-xl text-white font-semibold mb-4">Dashboard</h2>
@@ -107,95 +106,202 @@ const Dashboard = () => {
                 &nbsp; Carrito
               </a>
             </li>
-           
           </ul>
         </div>
       </div>
-      {/* Contenido principal */}
-      <div className="flex-1 overflow-y-auto">
-        {/* Barra de navegación */}
-        <div className="bg-gray-200 dark:bg-gray-500 p-1 md:p-4">
-          <h2 className="text-lg font-semibold mb-2 dark:text-white">
-            Datos de Usuario
-          </h2>
-          <div className="bg-gray-50 dark:bg-gray-300 p-4 rounded shadow">
-            <p>
-              <b>Nombre:</b> {token?.userData.data.name}
-            </p>
-            <p>
-              <b>Email:</b> {token?.userData.data.email}
-            </p>
-            <p>
-              <b>Teléfono:</b> {token?.userData.data.phone}
-            </p>
-            <p>
-              <b>Dirección:</b> {token?.userData.data.address}
-            </p>
-            <p>
-              <b>País:</b> {token?.userData.data.country}
-            </p>
-            <p>
-              <b>Ciudad:</b> {token?.userData.data.city}
-            </p>
-          </div>
-        </div>
-        {/* Sección de datos de usuario y órdenes */}
-        <div className="p-1 md:p-4">
-          <h2 className="text-lg font-semibold mb-2 dark:text-white">
-            Historial de Ordenes
-          </h2>
-          <div className="bg-gray-200 p-4 rounded shadow">
-            {orders.length > 0 ? (
-              <div>
-                {orders.map((order, index) => (
-                  <div key={index} className="mb-4">
-                    <h3 className="font-bold">Orden ID: {order.id}</h3>
-                    <div className="flex items-center mb-2">
-                      <FcCalendar className="mr-2" />
-                      <p>Fecha: {formatDate(order.date)}</p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold">Productos:</h4>
-                      {order.orderDetails.products.map(
-                        (product, productIndex) => (
-                          <div className="flex items-center" key={productIndex}>
-                            <p className="mr-2">-{product.name}</p>
-                            <p>${product.price}</p>
-                          </div>
-                        )
-                      )}
-                    </div>
-                    <div>
-                      <h4 className="font-semibold">Manejo de pedido:</h4>
-                      {order.orderDetails.statushistory.map(
-                        (status, statusIndex) => (
-                          <div key={statusIndex} className="flex items-center">
-                            <FcOk className="mr-2" />
-                            <p>
-                              {status.status}
-                              {" - "}
-                              {formatDate(status.timestamp)}
-                            </p>
-                          </div>
-                        )
-                      )}
-                    </div>
-                    <div>
-                      <h4 className="font-semibold">Total pagado:</h4>
-                      <div
-                        className="flex items-center"
-                        style={{ marginBottom: "0.5rem" }}
-                      >
-                        <FcMoneyTransfer className="mr-2" />
-                        <p>${order.orderDetails.price}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+      <div className="flex-1 overflow-y-auto p-3 sm:p-5 antialiased h-screen">
+        <div className="mx-auto max-w-screen-2xl px-4 lg:px-12">
+          <div className="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 md:space-x-4 p-4 bg-gray-900">
+              <div className="flex-1 flex items-center space-x-2">
+                <h5>
+                  <span className="text-orange-400">Datos de Usuario</span>
+                </h5>
               </div>
-            ) : (
-              <p>No hay órdenes disponibles.</p>
-            )}
+            </div>
+            <div className="p-4">
+              <div className="bg-gray-50 dark:bg-gray-300 p-4 rounded shadow mb-4">
+                <p>
+                  <b>Nombre:</b> {token?.userData.data.name}
+                </p>
+                <p>
+                  <b>Email:</b> {token?.userData.data.email}
+                </p>
+                <p>
+                  <b>Teléfono:</b> {token?.userData.data.phone}
+                </p>
+                <p>
+                  <b>Dirección:</b> {token?.userData.data.address}
+                </p>
+                <p>
+                  <b>País:</b> {token?.userData.data.country}
+                </p>
+                <p>
+                  <b>Ciudad:</b> {token?.userData.data.city}
+                </p>
+              </div>
+              <h2 className="text-lg font-semibold mb-2 dark:text-white">
+                Historial de Ordenes
+              </h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                      <th scope="col" className="p-4">
+                        Fecha
+                      </th>
+                      <th scope="col" className="p-4">
+                        Productos
+                      </th>
+                      <th scope="col" className="p-4">
+                        Estado
+                      </th>
+                      <th scope="col" className="p-4">
+                        Total pagado
+                      </th>
+                      <th scope="col" className="p-4">
+                        Reseña
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orders.length > 0 ? (
+                      orders.map((order, index) => {
+                        const orderReview = userReviews.find(
+                          (review) => review.order.id === order.id
+                        );
+                        return (
+                          <tr
+                            key={index}
+                            className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+                          >
+                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white  ">
+                              {formatDate(order.date)}
+                            </td>
+                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {order.orderDetails.products.map(
+                                (product, productIndex) => (
+                                  <div
+                                    key={productIndex}
+                                    className="mb-2 text-start"
+                                  >
+                                    <img
+                                      src={product.imgUrl}
+                                      alt={product.name}
+                                      className="w-10 h-10 inline-block mr-2 rounded-full"
+                                    />
+                                    <span>{product.name}</span>
+                                  </div>
+                                )
+                              )}
+                            </td>
+                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {order.orderDetails.statushistory.map(
+                                (status, statusIndex) => (
+                                  <div
+                                    key={statusIndex}
+                                    className="flex items-center"
+                                  >
+                                    <FcOk className="mr-2" />
+                                    <p>{status.status}</p>
+                                  </div>
+                                )
+                              )}
+                            </td>
+                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              ${order.orderDetails.price}
+                            </td>
+                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {orderReview ? (
+                                <div>
+                                  <div className="flex items-center mb-2">
+                                    <p className="mr-2">
+                                      Estrellas:{" "}
+                                      {Array.from({
+                                        length: orderReview.rating,
+                                      }).map((_, starIndex) => (
+                                        <span key={starIndex}>⭐</span>
+                                      ))}
+                                    </p>
+                                  </div>
+                                  <p className="text-start">
+                                    Comentario: {orderReview.comment}
+                                  </p>
+                                </div>
+                              ) : (
+                                <p>No hay reseña.</p>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan={6}
+                          className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          No hay órdenes disponibles.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+              {/* <h2 className="text-lg font-semibold mb-2 mt-4 dark:text-white">
+                Reseñas Realizadas
+              </h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                      <th scope="col" className="p-4">
+                        Orden
+                      </th>
+                      <th scope="col" className="p-4">
+                        Estrellas
+                      </th>
+                      <th scope="col" className="p-4">
+                        Comentario
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userReviews.length > 0 ? (
+                      userReviews.map((review, reviewIndex) => (
+                        <tr
+                          key={reviewIndex}
+                          className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        >
+                          <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {review.order.id}
+                          </td>
+                          <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {Array.from({ length: review.rating }).map(
+                              (_, starIndex) => (
+                                <span key={starIndex}>⭐</span>
+                              )
+                            )}
+                          </td>
+                          <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {review.comment}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan={3}
+                          className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                        >
+                          No hay reseñas disponibles.
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div> */}
+            </div>
           </div>
         </div>
       </div>
