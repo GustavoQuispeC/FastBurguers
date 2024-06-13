@@ -7,12 +7,14 @@ import { OrderDetails } from 'src/entities/orderdetails.entity';
 import { Users } from 'src/entities/users.entity';
 import { Products } from 'src/entities/products.entity';
 import { StatusHistoriesModule } from '../status-histories/status-histories.module';
+import { OrderDetailsProducts } from 'src/entities/ordersdetailsProduct.entity';
+import { OrdersQuery } from './orders.queries';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Orders, OrderDetails, Users, Products]),StatusHistoriesModule],
+  imports: [TypeOrmModule.forFeature([Orders, OrderDetails, Users, Products, OrderDetailsProducts]),StatusHistoriesModule],
   controllers: [OrdersController],
-  providers: [OrdersService],
+  providers: [OrdersService,OrdersQuery],
   exports:[OrdersService]
 })
 export class OrdersModule {}
