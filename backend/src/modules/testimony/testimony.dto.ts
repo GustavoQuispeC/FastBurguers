@@ -36,6 +36,6 @@ export class CreateTestimonyDto {
   @IsNumber()
   @Type(()=> Number)
   @IsPositive()
-  puntuation: number;
+  punctuation: number;
 
 }

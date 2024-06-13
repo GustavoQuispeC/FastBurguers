@@ -49,7 +49,7 @@ export class ProductsService {
 
     async getById(id:string){
         const product = await this.productsRepository.findOne({
-            where: { id:id, is_deleted:false},
+            where: { id:id, is_deleted:false, condition:true},
             relations: {
                 category: true,
             },
@@ -76,6 +76,7 @@ export class ProductsService {
         .innerJoinAndSelect('products.category', 'categories')
         .where('categories.id IN (:...categoriaIds)', { categoriaIds })
         .andWhere('products.is_deleted = :isDeleted', { isDeleted: false })
+        .andWhere('products.condition = :iscondition', { iscondition: true })
         .getMany();
 
 

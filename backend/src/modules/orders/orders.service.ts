@@ -63,7 +63,7 @@ export class OrdersService {
         // creamos OrderDetail y la insertamos en BD:
         const orderDetails = new OrderDetails()
 
-        orderDetails.price = Number(Number(total).toFixed(2)) // numero con 2 decimales
+        orderDetails.amount = Number(Number(total).toFixed(2)) // numero con 2 decimales
         orderDetails.products = productsArray
         orderDetails.order = newOrder
         await this.orderDetailsRepository.save(orderDetails)
