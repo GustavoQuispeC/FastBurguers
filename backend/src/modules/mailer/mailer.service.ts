@@ -12,7 +12,7 @@ export class MailerService {
             secure:false,
             auth: {
                 user:process.env.MAIL,
-                pass:'pmfx rcvv dwwg wzih'
+                pass:process.env.PASSMAIL
             },
         });
     }
