@@ -4,13 +4,15 @@ import { Users } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './users.dto';
-import { copyFileSync } from 'fs';
+import { UsersQuery } from './users.query';
+
 
 @Injectable()
 export class UsersService {
     
     constructor(
-        @InjectRepository(Users) private userRepository: Repository<Users>
+        @InjectRepository(Users) private userRepository: Repository<Users>,
+        private readonly userQuery: UsersQuery
     ){}
 
     async getAll(page:string, limit:string){
@@ -40,10 +42,7 @@ export class UsersService {
     }
 
     async getById(id:string){
-        const user = await this.userRepository.findOne({
-            where:{id ,is_deleted:false},
-            relations:['orders','orders.orderDetails', 'orders.orderDetails.products' , 'orders.orderDetails.statushistory']
-        })
+        const user = await this.userQuery.getUser(id)
         if(!user) throw new BadRequestException(`No se encontro usario con ${id}`)
         const {password, isAdmin, isSuperAdmin, ...userInfoPublic} = user;
         return userInfoPublic;
