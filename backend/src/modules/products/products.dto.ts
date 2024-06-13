@@ -75,13 +75,6 @@ export class CreateProductdto{
     @IsBoolean()
     condition: boolean
 
-    /**
-     * Must be a boolean valor, optional value
-     * @example 'true'
-     */
-    @IsOptional()
-    @IsBoolean()
-    deleted:boolean
 }
 
 
@@ -162,14 +155,6 @@ export class UpdatedProductdto {
     @IsOptional()
     @IsBoolean()
     condition: boolean
-
-    /**
-     * Must be a boolean valor, optional value
-     * @example 'true'
-     */
-    @IsOptional()
-    @IsBoolean()
-    deleted:boolean
 }
 
 export class GetByCategoriesDto {
