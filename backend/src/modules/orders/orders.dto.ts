@@ -27,14 +27,6 @@ export class OrdersDto {
     @ArrayMinSize(1)
     products: Partial<Products[]>
 
-    /**
-    *Must be a array int quantity
-    *@example '"quantity": [4, 2, 1]'
-    */
-    @IsNotEmpty()
-    @IsArray()
-    quantity: number[]
-
 }
 
 export class dateOrdersDto{ 
