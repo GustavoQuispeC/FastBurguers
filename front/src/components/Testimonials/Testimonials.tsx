@@ -1,36 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-
-const testimonialData = [
-  {
-    id: 1,
-    name: 'Carlos Herrera',
-    text: 'Las mejores hamburguesas que he probado en mucho tiempo. Ingredientes de primera y un sabor inigualable.',
-    img: 'https://picsum.photos/101/101',
-  },
-  {
-    id: 2,
-    name: 'Jessica Pearson',
-    text: '¡Simplemente fenomenal! La experiencia gourmet es evidente en cada bocado. Recomiendo altamente la hamburguesa de trufa.',
-    img: 'https://picsum.photos/102/102', 
-  },
-  {
-    id: 3,
-    name: 'Mark Johnson',
-    text: 'Servicio excelente y la calidad de las hamburguesas es superba. ¡La hamburguesa de carne Wagyu es imprescindible!',
-    img: 'https://picsum.photos/103/103', 
-  },
-  {
-    id: 4,
-    name: 'Samantha Reed',
-    text: 'Me encantan los sabores únicos y los ingredientes frescos y locales que utilizan. El ambiente es simplemente perfecto para un lugar de hamburguesas gourmet.',
-    img: 'https://picsum.photos/104/104', 
-  },
-];
+import axios from 'axios';
 
 const Testimonials = () => {
+  const [testimonials, setTestimonials] = useState([]);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/testimony/');
+        setTestimonials(response.data);
+      } catch (error) {
+        console.error('Error fetching testimonials:', error);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
+
   const settings = {
     dots: true,
     arrows: false,
@@ -87,18 +76,16 @@ const Testimonials = () => {
         {/* Tarjetas de testimonios */}
         <div>
           <Slider {...settings}>
-            {testimonialData.map((data) => (
-              <div key={data.id} className="my-6">
+            {testimonials.map((data, index) => (
+              <div key={index} className="my-6">
                 <div className="flex flex-col gap-4 shadow-lg py-8 px-6 mx-4 rounded-xl bg-white relative">
-                  <div className="mb-4">
-                    <img src={data.img} alt={data.name} className="rounded-full w-20 h-20 border-2 border-gray-300" />
-                  </div>
                   <div className="flex flex-col items-center gap-4">
                     <div className="space-y-3">
-                      <p className="text-xs text-gray-600">{data.text}</p>
+                      <p className="text-xs text-gray-600">{data.description}</p>
                       <h1 className="text-xl font-bold text-gray-800">
                         {data.name}
                       </h1>
+                      <p className="text-xs text-gray-500">{`Puntuación: ${data.punctuation}`}</p>
                     </div>
                   </div>
                   <p className="text-gray-200 text-9xl font-serif absolute top-0 right-0">
