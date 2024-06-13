@@ -1,5 +1,3 @@
-import { IProduct } from "./IProduct";
-
 export interface IOrderUser {
   name: string;
   id: string;
@@ -18,13 +16,23 @@ export interface IOrderList {
 }
 
 export interface IOrderDetails {
-  id: string;
-  price: string;
-  products: IProduct[];
+  // id: string;
+  amount: string;
+  orderDetailsProducts: [
+    {
+      quantity: number;
+      products: {
+        name: string;
+        price: string;
+        discount: string;
+      };
+    }
+  ];
+
   statushistory: IStatushistory[];
 }
 export interface IStatushistory {
-  id: string;
+  // id: string;
   status: string;
   timestamp: string;
 }
