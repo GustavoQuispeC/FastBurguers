@@ -6,6 +6,7 @@ import { Products } from "src/entities/products.entity";
 import { Users } from "src/entities/users.entity";
 import { Repository } from "typeorm";
 import { CreateMultipleProductRatingsDto, CreateProductRatingDto } from "./productrating.dto";
+import { OrderDetailsProducts } from "src/entities/ordersdetailsProduct.entity";
 
 @Injectable()
 export class ProductRatingsService {
@@ -14,6 +15,7 @@ export class ProductRatingsService {
         @InjectRepository(Products) private productsRepository: Repository<Products>,
         @InjectRepository(Users) private usersRepository: Repository<Users>,
         @InjectRepository(OrderDetails) private orderDetailsRepository: Repository<OrderDetails>,
+        @InjectRepository(OrderDetailsProducts) private orderDetailsProductRepository: Repository<OrderDetailsProducts>
     ){}
 
     async create(createProductRatingDto: CreateProductRatingDto): Promise<ProductRating> {
@@ -21,12 +23,16 @@ export class ProductRatingsService {
 
         const user = await this.usersRepository.findOne({ where: { id: userId}});
         const product = await this.productsRepository.findOne({where: {id:productId}});
+        const orderProducts = await this.orderDetailsProductRepository.findOne({where: {products: {id: productId}}})
         const orderdetails = await this.orderDetailsRepository.findOne({
-            where: { products: {id: productId}, order: {user: { id: userId}}},
-            relations: ['order', 'order.user', 'products'],
+            where: { order: {user: { id: userId}}},
+            relations: ['order', 'order.user'],
         });
 
-        if(!user || !product || !orderdetails) throw new BadRequestException('User has not purchased this product');
+        console.log(orderProducts);
+        
+
+        if(!user || !product || !orderdetails || !orderProducts) throw new BadRequestException('User has not purchased this product');
 
         const productRating = this.productRatingsRepository.create({
             rating, comment, user, product
@@ -47,12 +53,15 @@ export class ProductRatingsService {
         for(const ratingDto of ratings) {
             const { productId, rating, comment } = ratingDto;
             const product = await this.productsRepository.findOne({where: {id: productId}});
+            const orderProducts = await this.orderDetailsProductRepository.findOne({where: {products: {id: productId}}})
             const orderDetails = await this.orderDetailsRepository.findOne({
-                where: { products: {id: productId}, order: { user: {id: userId}}},
-                relations: ['order', 'order.user', 'products'],
+                where: { order: { user: {id: userId}}},
+                relations: ['order', 'order.user'],
             });
 
-            if(!product || !orderDetails) throw new BadRequestException(`User has not pruchased the prodcut with ID ${productId}`);
+            console.log(orderProducts);
+
+            if(!product || !orderDetails || !orderProducts) throw new BadRequestException(`User has not pruchased the prodcut with ID ${productId}`);
 
             const productRating = this.productRatingsRepository.create({
                 rating, comment, user, product
