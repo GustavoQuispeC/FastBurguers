@@ -13,6 +13,9 @@ export class Orders {
     @Column({type: 'date'})
     date: Date;
 
+    @Column({default:false})
+    is_deleted:boolean;
+
     @ManyToOne(() => Users, (user) => user.orders)
     @JoinColumn({name: 'user_id'})
     user: Users;

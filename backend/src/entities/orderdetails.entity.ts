@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Orders } from "./orders.entity";
-import { Products } from "./products.entity";
 import { StatusHistory } from "./statushistory.entity";
+import { OrderDetailsProducts} from "./ordersdetailsProduct.entity";
 
 @Entity({
     name: 'orderdetails'
@@ -17,21 +17,8 @@ export class OrderDetails {
     @JoinColumn({name: 'order_id'})
     order: Orders;
 
-    @ManyToMany(() => Products)
-    @JoinTable(
-        {
-        name: 'orderdetails_products',
-        joinColumn: {
-            name: 'product_id',
-            referencedColumnName: 'id'
-        },
-        inverseJoinColumn: {
-            name: 'orderdetails_id',
-            referencedColumnName: 'id'
-        }
-    }
-)
-    products: Products[];
+    @OneToMany(() => OrderDetailsProducts, (orderDetailsProducts) => orderDetailsProducts.orderDetails)
+    orderDetailsProducts: OrderDetailsProducts[];
 
     @OneToMany(() => StatusHistory, (statushistory) => statushistory.orderdetails)
     @JoinColumn()
