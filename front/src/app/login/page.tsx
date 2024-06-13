@@ -70,6 +70,8 @@ const Login = () => {
     }));
   };
 
+  console.log(dataUser)
+
   //? Manejar submit del formulario
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -87,9 +89,9 @@ const Login = () => {
     } catch (error: any) {
       Swal.fire({
         icon: "error",
-        title: "Usuario o contraseña incorrecta",
-        showConfirmButton: false,
-        timer: 1500,
+        title: "El usuario o la contraseña son incorrectos",
+        showConfirmButton: true,
+        //timer: 1500,
       });
     }
   };
