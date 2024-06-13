@@ -2,21 +2,46 @@
 
 import { useEffect, useState } from "react";
 import { IOrderList } from "@/interfaces/IOrder";
-import Image from "next/image";
 import { getOrdersByID } from "@/helpers/orders.helper";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import { postRating } from "@/helpers/Reseñas.helper";
 
 const Rating: React.FC = () => {
   const [order, setOrder] = useState<IOrderList | null>(null);
   const [rating, setRating] = useState<number | null>(null);
   const [selectedStars, setSelectedStars] = useState<number | null>(null);
+  const [comment, setComment] = useState<string>("");
+  const router = useRouter();
 
   const handleRating = (rate: number) => {
     setRating(rate);
   };
 
-  const handleSendReview = () => {
-    if (selectedStars !== null) {
-      console.log("Enviando reseña al backend:", selectedStars);
+  const handleSendReview = async () => {
+    if (selectedStars !== null && order) {
+      try {
+        const userSession = JSON.parse(
+          localStorage.getItem("userSession") || "{}"
+        );
+        const userId = userSession?.userData?.data?.userid || "";
+
+        await postRating(selectedStars, comment, order.id, userId);
+        Swal.fire({
+          title: "Gracias por su reseña!",
+          text: "Tu reseña ha sido enviada con éxito.",
+          icon: "success",
+        }).then(() => {
+          router.push("/home");
+        });
+      } catch (error) {
+        console.error("Error sending review:", error);
+        Swal.fire({
+          title: "Error",
+          text: "Hubo un error al enviar tu reseña. Por favor, inténtalo de nuevo.",
+          icon: "error",
+        });
+      }
     }
   };
 
@@ -36,18 +61,19 @@ const Rating: React.FC = () => {
     <div className="mx-5 text-center my-10">
       <h1 className="text-2xl font-bold mb-4">Reseñas</h1>
       {order && (
-        <div className="p-4 border rounded-lg mb-4 mx-5 flex">
+        <div className="p-4 border border-orange-300 rounded-lg mb-4 mx-5 flex flex-col items-center">
           <div>
             <h3 className="text-lg font-bold mb-2">Order ID: {order.id}</h3>
             {order.orderDetails.products.map((product) => (
-              <div key={product.id} className="flex p-3 justify-around">
+              <div
+                key={product.id}
+                className="flex p-3 justify-around mb-4 w-full"
+              >
                 <div className="flex items-center">
-                  <Image
+                  <img
                     src={product.imgUrl}
                     alt={product.name}
-                    width={64}
-                    height={64}
-                    className="w-16 h-16 mr-4"
+                    className="w-20 h-20 mr-4 rounded-xl"
                   />
                   <div>
                     <h2 className="text-lg font-bold">{product.name}</h2>
@@ -55,28 +81,34 @@ const Rating: React.FC = () => {
                     <p className="font-bold">${product.price}</p>
                   </div>
                 </div>
-                <div className="mt-4">
-                  <div className="mx-5 flex">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <button
-                        key={star}
-                        className={`text-2xl ${
-                          star <= (rating || 0)
-                            ? "text-yellow-500"
-                            : "text-gray-400"
-                        }`}
-                        onClick={() => {
-                          handleRating(star);
-                          setSelectedStars(star);
-                        }}
-                      >
-                        ★
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>
             ))}
+            <div className="flex flex-col items-center">
+              <textarea
+                className="mb-2 p-2 border rounded w-full"
+                placeholder="Deja tu comentario"
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+              />
+              <div className="mx-5 flex">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    className={`text-2xl ${
+                      star <= (rating || 0)
+                        ? "text-yellow-500"
+                        : "text-gray-400"
+                    }`}
+                    onClick={() => {
+                      handleRating(star);
+                      setSelectedStars(star);
+                    }}
+                  >
+                    ★
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       )}
