@@ -111,21 +111,9 @@ export class PreloadService implements OnModuleInit {
 
     async onModuleInit() {
 
-        const defaultAdmin = {
-            email: "adminTest@gmail.com",
-            name: "Admin01",
-            password: "1234aA#abc",
-            isAdmin:true,
-            isSuperAdmin:true,
-            phone: 123456789,
-            country: "España",
-            address: "EnriqueDelgado",
-            city:"Madrid",
-        }
-    
-        const defaultUser =  {
-            email: "adminTest@gmail.com",
-            name: "Admin01",
+        const defaultSuperAdmin = {
+            email: "superAdminTest@gmail.com",
+            name: "SuperAdmin01",
             password: "1234aA#abc",
             isAdmin:true,
             isSuperAdmin:true,
@@ -135,11 +123,36 @@ export class PreloadService implements OnModuleInit {
             city:"Madrid",
         }
 
+        const defaultAdmin =  {
+            email: "adminTest@gmail.com",
+            name: "Admin01",
+            password: "1234aA#abc",
+            isAdmin:true,
+            isSuperAdmin:false,
+            phone: 123456789,
+            country: "España",
+            address: "EnriqueDelgado",
+            city:"Madrid",
+        }
+    
+        const defaultUser =  {
+            email: "userTest@gmail.com",
+            name: "User01",
+            password: "1234aA#abc",
+            isAdmin:false,
+            isSuperAdmin:false,
+            phone: 123456789,
+            country: "España",
+            address: "EnriqueDelgado",
+            city:"Madrid",
+        }
+
         await this.addDefaultCategories();
         await this.delay(1000); 
-        await this.addDefaultUser(defaultUser);
+        await this.addDefaultUser(defaultSuperAdmin);
         await this.addDefaultProducts()
         await this.addDefaultUser(defaultAdmin);
         await this.addDefaultOrder();
+        await this.addDefaultUser(defaultUser);
     }
 }

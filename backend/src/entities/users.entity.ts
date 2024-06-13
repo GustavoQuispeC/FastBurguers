@@ -25,6 +25,9 @@ export class Users {
     @Column({default:true})
     condition: boolean;
 
+    @Column({default:false})
+    is_deleted:boolean;
+
     @Column({ type: 'int', nullable: true })
     phone: number;
 

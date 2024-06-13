@@ -14,8 +14,9 @@ export class AuthService {
     async signIn(email: string, password: string){ // iniciar sesion
         // verificar si existe el usuario
         const user = await this.usersService.getByEmail(email)
-        if(!user) throw new BadRequestException('Credenciales incorrectas')
 
+        if(!user) throw new BadRequestException('Credenciales incorrectas')
+        if(!user.condition) throw new UnauthorizedException('Usuario Inhabilitado')
         // comparamos contraseñas
         const validPassword = await bcrypt.compare(password, user.password)
         if(!validPassword) throw new BadRequestException('Credenciales incorrectas')
