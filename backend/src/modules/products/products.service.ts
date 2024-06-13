@@ -16,11 +16,14 @@ export class ProductsService {
 
 
     async getAll(){
-        return await this.productsRepository.find({
+         return await this.productsRepository.find({
             relations:{
                 category:true
+            },
+            where:{
+                is_deleted:false
             }
-        });
+        }); 
     }
 
     async getAllPage(page:string, limit:string){
@@ -34,6 +37,9 @@ export class ProductsService {
                 skip: (npage-1)*nlimit,
                 relations:{
                     category:true
+                },
+                where:{
+                    is_deleted:false
                 }
             });
         } catch (error) {
@@ -43,7 +49,7 @@ export class ProductsService {
 
     async getById(id:string){
         const product = await this.productsRepository.findOne({
-            where: { id },
+            where: { id:id, is_deleted:false},
             relations: {
                 category: true,
             },
@@ -55,7 +61,7 @@ export class ProductsService {
     async getProductByCategory(arrayCategories: string[]){
         
         const categorias = await this.categoriesRepository.find({
-            where: { name: In(arrayCategories) }
+            where: { name: In(arrayCategories)}
         });
         
         
@@ -66,12 +72,27 @@ export class ProductsService {
             return [];
         }
         
-        
         const productos = await this.productsRepository.createQueryBuilder('products')
         .innerJoinAndSelect('products.category', 'categories')
         .where('categories.id IN (:...categoriaIds)', { categoriaIds })
+        .andWhere('products.is_deleted = :isDeleted', { isDeleted: false })
         .getMany();
+
+
         return productos;
+    }
+
+    async getAvailableProducts(){
+        return await this.productsRepository.find({
+            relations:{
+                category:true
+            },
+            where:{
+                is_deleted:false,
+                condition:true
+            }
+        });
+
     }
 
     async createProduct(product:CreateProductdto
@@ -151,7 +172,8 @@ export class ProductsService {
     async deleteProduct(id:string){
         const productfound = await this.productsRepository.findOneBy({id})
         if(!productfound) throw new NotFoundException(`No se encontro producto con ${id}`)
-        await this.productsRepository.remove(productfound)
+
+        await this.productsRepository.update(id,{is_deleted:true})    
         return {
             message:`Producto ${id} eliminado con exito` 
         }

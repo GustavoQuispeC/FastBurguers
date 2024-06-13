@@ -45,6 +45,11 @@ export class ProductsController {
     return this.productService.getAllPage('1', '10');
   }
 
+  @Get('/available')
+  getDeletedProducts(){
+    return this.productService.getAvailableProducts();
+  }
+
   @Get(':id')
   getProduct(@Param('id', ParseUUIDPipe) id: string) {
     return this.productService.getById(id);
