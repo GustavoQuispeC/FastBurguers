@@ -2,10 +2,13 @@ import { Body, Controller, Delete, Get, Param, ParseUUIDPipe, Post, Put, UseGuar
 import { OrdersService } from './orders.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuards } from 'src/guards/auth.guard';
-import { OrdersDto, dateOrdersDto } from './orders.dto';
+import { AddOrderDto, dateOrdersDto } from './orders.dto';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Role } from 'src/enum/roles.enum';
 import { Roles } from 'src/decorators/roles.decorator';
+import { copyFileSync } from 'fs';
+import { Products } from 'src/entities/products.entity';
+
 
 @ApiTags('orders')
 @Controller('orders')
@@ -30,10 +33,11 @@ export class OrdersController {
 
     @ApiBearerAuth()
     @Post()
-    // @UseGuards(AuthGuards)
-    addOrder(@Body() orders: OrdersDto){  
-        const {userId, products} = orders
-        return this.ordersService.addOrder(userId, products)
+    @UseGuards(AuthGuards)
+    addOrder(@Body() ordersInfo: AddOrderDto){
+        const {userId,products} = ordersInfo
+        return this.ordersService.addOrder(userId,products)
+
     }
 
     @ApiBearerAuth()
