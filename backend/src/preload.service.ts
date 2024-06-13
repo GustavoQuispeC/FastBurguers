@@ -27,8 +27,12 @@ export class PreloadService implements OnModuleInit {
     async addDefaultOrder(){
         const users = await this.usersRepository.find()
         const products = await this.productsRepository.find()
-        await this.ordersService.addOrder(users[0].id,[{id:products[0].id}, {id:products[1].id}]);
-        console.log("Precarga de Orders")
+
+        await this.ordersService.addOrder(users[0].id,
+            [{id:products[0].id,quantity:2}, 
+            {id:products[2].id,quantity:2}]
+        );
+        console.log("Precarga de Order")
     }
 
     async addDefaultUser(defaultUser:  any){
