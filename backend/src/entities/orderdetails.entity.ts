@@ -11,7 +11,7 @@ export class OrderDetails {
     id: string;
 
     @Column({type: 'decimal', precision: 10, scale: 2})
-    price: number;
+    amount: number;
 
     @OneToOne(() => Orders, (order) => order.orderDetails)
     @JoinColumn({name: 'order_id'})
