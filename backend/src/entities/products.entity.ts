@@ -32,6 +32,9 @@ export class Products {
     @Column({default:true})
     condition: boolean;
 
+    @Column({default:false})
+    is_deleted: boolean;
+
     @ManyToOne(() => Categories, (category) => category.products)
     category: Categories;
 

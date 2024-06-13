@@ -19,6 +19,8 @@ import { MorganMiddleware } from './middlewares/morgan.middleware';
 import { TestimonyModule } from './modules/testimony/testimony.module';
 import { PaymentsModule } from './paypal/payments.module';
 import { StatusHistoriesModule } from './modules/status-histories/status-histories.module';
+import { MailerModule } from './modules/mailer/mailer.module';
+import { OrderRatingsModule } from './modules/ordersrating/orderrating.module';
 
 @Module({
   imports: [
@@ -47,6 +49,8 @@ import { StatusHistoriesModule } from './modules/status-histories/status-histori
     TestimonyModule,
     StatusHistoriesModule,
     PaymentsModule,
+    MailerModule,
+    OrderRatingsModule
   ],
   controllers: [AppController],
   providers: [AppService, PreloadService],
