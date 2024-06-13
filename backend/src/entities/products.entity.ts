@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, OneToMany, PrimaryGeneratedColumn} from "typeorm";
 import { Categories } from "./categories.entity";
 import { SizeProduct } from "src/enum/sizeProduct.enum";
+import { ProductRating } from "./productrating.entity";
 import { OrderDetailsProducts } from "./ordersdetailsProduct.entity";
 
 @Entity({name: 'products'})
@@ -40,4 +41,7 @@ export class Products {
 
     @OneToMany(() => OrderDetailsProducts, (orderDetailsProducts) => orderDetailsProducts.products)
     orderDetailsProducts: OrderDetailsProducts[];
+
+    @OneToMany(() => ProductRating, (productRatings) => productRatings.product)
+    productRatings: ProductRating;
 }
