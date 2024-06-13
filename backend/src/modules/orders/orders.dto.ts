@@ -1,7 +1,18 @@
-import { Products } from "src/entities/products.entity";
-import {IsNotEmpty, IsUUID, IsArray, ArrayMinSize, ArrayNotEmpty} from "class-validator"
+import {IsNotEmpty, IsUUID, IsArray, ArrayMinSize, ArrayNotEmpty, IsInt, Min, ValidateNested} from "class-validator"
+import { Type } from "class-transformer";
 
-export class OrdersDto {
+
+
+export class ProductInfo{
+  @IsUUID()
+  id: string;
+
+  @IsInt()
+  @Min(1)
+  quantity: number;
+}
+
+export class AddOrderDto {
 
     /**
     *Must be a String idUser
@@ -13,20 +24,23 @@ export class OrdersDto {
 
     /**
     *Must be a array objects idProducts
-    *@example '  "products": [
+    *@example '  "InfoProducts": [
       {
-        "id": "cb32ed0d-fd05-4297-9815-67f07bdfcf07"
+        "id": "cb32ed0d-fd05-4297-9815-67f07bdfcf07",
+        "quantity": 2
       },
       {
-        "id": "3d7fb611-855a-4e0e-b9ec-83119ef11067"
+        "id": "3d7fb611-855a-4e0e-b9ec-83119ef11067",
+        "quantity": 3
       }
     ]'
     */
     @IsArray()
     @ArrayNotEmpty()
     @ArrayMinSize(1)
-    products: Partial<Products[]>
-
+    @ValidateNested({ each: true })
+    @Type(() => ProductInfo)
+    products: ProductInfo[]
 }
 
 export class dateOrdersDto{ 
