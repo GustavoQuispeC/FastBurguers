@@ -32,6 +32,7 @@ const Rating: React.FC = () => {
           text: "Tu reseña ha sido enviada con éxito.",
           icon: "success",
         }).then(() => {
+          localStorage.removeItem("Order");
           router.push("/home");
         });
       } catch (error) {
@@ -48,20 +49,24 @@ const Rating: React.FC = () => {
   useEffect(() => {
     const storedOrderId = localStorage.getItem("Order");
 
-    if (storedOrderId) {
-      const parsedOrder = JSON.parse(storedOrderId);
-
-      getOrdersByID(parsedOrder[0].id)
-        .then((data) => setOrder(data))
-        .catch((error) => console.error("Error fetching order:", error));
+    if (!storedOrderId) {
+      // Si no existe el localStorage "Order", redirecciona a la página de inicio
+      router.push("/home");
+      return; // Detiene la ejecución del useEffect
     }
+
+    const parsedOrder = JSON.parse(storedOrderId);
+
+    getOrdersByID(parsedOrder[0].id)
+      .then((data) => setOrder(data))
+      .catch((error) => console.error("Error fetching order:", error));
   }, []);
 
   return (
     <div className="mx-5 text-center my-10">
       <h1 className="text-2xl font-bold mb-4">Reseñas</h1>
       {order && (
-        <div className="p-4 border border-orange-300 rounded-lg mb-4 mx-5 flex flex-col items-center">
+        <div className="p-4  border-orange-400 border-2 rounded-lg mb-4 mx-5 flex flex-col items-center">
           <div>
             <h3 className="text-lg font-bold mb-2">Order ID: {order.id}</h3>
             {order.orderDetails.products.map((product) => (

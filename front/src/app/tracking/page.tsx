@@ -1,5 +1,7 @@
 "use client";
 import MapWithDirections from "@/components/Maps/MapWithDirections";
+import Spinner from "@/components/Spinner";
+import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { FaCheck, FaClipboardCheck } from "react-icons/fa";
 import {
@@ -49,6 +51,7 @@ const OrderStatus = () => {
   const [error, setError] = useState<string | null>(null);
   const [orderId, setOrderId] = useState<string | null>(null);
   const [orderDate, setOrderDate] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const orderDataArray = JSON.parse(localStorage.getItem("Order") || "[]");
@@ -87,6 +90,12 @@ const OrderStatus = () => {
 
               const stepIndex = data.length - 1;
               setCurrentStep(stepIndex);
+
+              if (data[stepIndex].status === "entregado") {
+                // Si es 'entregado', redirecciona a la página de rating
+                router.push("/rating");
+              }
+
               setLoading(false);
             } catch (err) {
               setError("Error al obtener el estado de la orden");
@@ -112,7 +121,12 @@ const OrderStatus = () => {
     }
   }, []);
 
-  if (loading) return <p className="text-center">Cargando...</p>;
+  if (loading)
+    return (
+      <p className="text-center">
+        <Spinner />
+      </p>
+    );
   if (error) return <p className="text-center">{error}</p>;
 
   return (
