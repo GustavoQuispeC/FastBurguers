@@ -74,6 +74,7 @@ export class CreateProductdto{
     @IsOptional()
     @IsBoolean()
     condition: boolean
+
 }
 
 

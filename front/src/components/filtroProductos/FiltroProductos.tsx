@@ -7,13 +7,13 @@ import { getProductsByCategory } from "@/helpers/categories.helper";
 import Spinner from "../Spinner";
 
 interface GridProductsProps {
-  categoryId: number;
+  categoryName: string;
   minPrice: number;
   maxPrice: number;
 }
 
 const FiltroProductos: React.FC<GridProductsProps> = ({
-  categoryId,
+  categoryName,
   minPrice,
   maxPrice,
 }) => {
@@ -24,7 +24,6 @@ const FiltroProductos: React.FC<GridProductsProps> = ({
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const categoryName = getCategoryName(categoryId);
         const fetchedProducts = await getProductsByCategory(categoryName);
         const filteredProducts = fetchedProducts.filter(
           (product) => product.price >= minPrice && product.price <= maxPrice
@@ -37,26 +36,7 @@ const FiltroProductos: React.FC<GridProductsProps> = ({
     };
 
     fetchProducts();
-  }, [categoryId, minPrice, maxPrice]);
-
-  const getCategoryName = (categoryId: number): string => {
-    switch (categoryId) {
-      case 1:
-        return "Hamburguesas";
-      case 2:
-        return "Sandwiches";
-      case 3:
-        return "Complementos";
-      case 4:
-        return "Bebidas";
-      case 5:
-        return "Postres";
-      case 6:
-        return "Ensaladas";
-      default:
-        return "";
-    }
-  };
+  }, [categoryName, minPrice, maxPrice]);
 
   if (loading) {
     return <Spinner />;

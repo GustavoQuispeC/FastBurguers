@@ -4,6 +4,7 @@ import { Users } from 'src/entities/users.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './users.dto';
+import { copyFileSync } from 'fs';
 
 @Injectable()
 export class UsersService {
@@ -20,7 +21,10 @@ export class UsersService {
 
             const users = await this.userRepository.find({
                 take: nlimit,
-                skip: (npage-1)*nlimit
+                skip: (npage-1)*nlimit,
+                where:{
+                    is_deleted:false
+                }
             });
 
             const publicUsers = users.map((user)=>{
@@ -37,7 +41,7 @@ export class UsersService {
 
     async getById(id:string){
         const user = await this.userRepository.findOne({
-            where:{id},
+            where:{id ,is_deleted:false},
             relations:['orders','orders.orderDetails', 'orders.orderDetails.products' , 'orders.orderDetails.statushistory']
         })
         if(!user) throw new BadRequestException(`No se encontro usario con ${id}`)
@@ -46,7 +50,7 @@ export class UsersService {
     }
 
     async getByEmail(email:string){
-        return  await this.userRepository.findOneBy({email});       
+        return  await this.userRepository.findOneBy({email,is_deleted:false});       
     }
 
     async updateUser(id:string,newUser: Partial<Users>){
@@ -73,15 +77,18 @@ export class UsersService {
     }
 
     async deleteUser(id:string){
+
         const user = await this.userRepository.findOneBy({id})
-        if(!user) new BadRequestException(`No se encontro usario con ${id}`)
-        await this.userRepository.remove(user)
-        const {password, isAdmin, isSuperAdmin, ...userInfoPublic} = user;
-        return userInfoPublic;
+        console.log(!user)
+        if(!user) throw new BadRequestException(`No se encontro usario con ${id}`)
+        await this.userRepository.update(id,{is_deleted:true})
+        return {
+            message:`Usuario ${id} eliminado con exito`
+        }
     }
 
     async makeAdmin(id:string){
-        const user = await this.userRepository.findOneBy({id})
+        const user = await this.userRepository.findOneBy({id,is_deleted:false})
         if(!user) new BadRequestException(`No se encontro usario con ${id}`)
         await this.userRepository.update(id,{isAdmin:true,isSuperAdmin:false})
         return {
@@ -90,7 +97,7 @@ export class UsersService {
     }
 
     async makeSuperAdmin(id:string){
-        const user = await this.userRepository.findOneBy({id})
+        const user = await this.userRepository.findOneBy({id,is_deleted:false})
         if(!user) new BadRequestException(`No se encontro usario con ${id}`)
         await this.userRepository.update(id,{isSuperAdmin:true,isAdmin:true})
         return{

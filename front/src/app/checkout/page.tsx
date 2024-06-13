@@ -5,11 +5,22 @@ import PayPalButton from "@/components/PayPalButton/PayPalButton";
 import { TextInput } from "flowbite-react";
 import { IProductCart } from "@/interfaces/IProduct";
 import { useRouter } from "next/navigation";
+import PlaceSearch from "@/components/Maps/PlaceSearch";
 
 const Checkout = () => {
+  const router = useRouter();
   const [cart, setCart] = useState<IProductCart[]>([]);
   const [userSessionExists, setUserSessionExists] = useState(false);
-  const router = useRouter();
+  const [user, setUser] = useState<{ name: string; email: string }>({
+    name: "",
+    email: "",
+  });
+
+  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(
+    null
+  );
+  const [address, setAddress] = useState<string | null>(null);
+  const [allFieldsCompleted, setAllFieldsCompleted] = useState(false);
 
   useEffect(() => {
     const cartData = JSON.parse(
@@ -23,9 +34,27 @@ const Checkout = () => {
     if (!userSession) {
       router.push("/cart");
     } else {
+      const userData = JSON.parse(userSession);
+      setUser(userData.userData.data);
       setUserSessionExists(true);
     }
   }, []);
+
+  useEffect(() => {
+    const allFieldsFilled = Boolean(
+      user.name && user.email && location && address
+    );
+    setAllFieldsCompleted(allFieldsFilled);
+  }, [user, location, address]);
+
+  useEffect(() => {
+    if (location && address) {
+      localStorage.setItem(
+        "userLocation",
+        JSON.stringify({ location, address })
+      );
+    }
+  }, [location, address]);
 
   const calculateDiscountAmount = (price: number, discount: number) => {
     const validPrice = price || 0;
@@ -58,6 +87,20 @@ const Checkout = () => {
     return null;
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+  };
+
+  const handlePlaceSelected = (
+    location: { lat: number; lng: number },
+    address: string
+  ) => {
+    setLocation(location);
+    setAddress(address);
+    localStorage.setItem("userLocation", JSON.stringify({ location, address }));
+  };
+
   return (
     <div className="font-[sans-serif] bg-white pt-6">
       <div className="max-lg:max-w-xl mx-auto w-full">
@@ -76,24 +119,26 @@ const Checkout = () => {
                 <div className="grid grid-cols-2 gap-6 mt-8">
                   <TextInput
                     type="text"
+                    name="name"
                     placeholder="Nombre"
                     className="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none"
+                    onChange={handleChange}
+                    value={user.name}
+                    required
                   />
                   <TextInput
                     type="email"
+                    name="email"
                     placeholder="Correo"
                     className="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none"
+                    onChange={handleChange}
+                    value={user.email}
+                    required
                   />
-                  <TextInput
-                    type="text"
-                    placeholder="Dirección"
-                    className="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none"
-                  />
-                  <TextInput
-                    type="text"
-                    placeholder="Distrito"
-                    className="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none"
-                  />
+
+                  <div>
+                    <PlaceSearch onPlaceSelected={handlePlaceSelected} />
+                  </div>
                 </div>
               </div>
 
@@ -101,7 +146,7 @@ const Checkout = () => {
                 <h2 className="text-2xl font-extrabold text-gray-800 my-5">
                   Método de Pago
                 </h2>
-                <PayPalButton />
+                <PayPalButton allFieldsCompleted={allFieldsCompleted} />
               </div>
             </form>
           </div>
