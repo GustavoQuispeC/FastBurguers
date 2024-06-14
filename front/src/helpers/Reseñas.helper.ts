@@ -34,7 +34,7 @@ export async function postProductRating(
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId, rating: productRatings }),
+      body: JSON.stringify({ userId, ratings: productRatings }),
     });
 
     const data = await res.json();
