@@ -58,8 +58,8 @@ import { StorageModule } from './modules/storage/storage.module';
     ProductRatingsModule,
     StorageModule
   ],
-  controllers: [AppController, StorageController],
-  providers: [AppService, PreloadService, StorageService],
+  controllers: [AppController,],
+  providers: [AppService, PreloadService,],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

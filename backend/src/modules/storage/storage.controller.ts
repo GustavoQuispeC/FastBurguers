@@ -1,4 +1,15 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Delete, Get, Post } from '@nestjs/common';
 
 @Controller('storage')
-export class StorageController {}
+export class StorageController {
+
+
+    @Get()
+    getStorageOrders(){}
+
+    @Post()
+    createOrder(){}
+
+    @Delete()
+    delelteOrder(){}
+}
