@@ -1,0 +1,38 @@
+[   {
+        "defaultSuperAdmin" :{
+            "email": "superAdminTest@gmail.com",
+            "name": "SuperAdmin01",
+            "password": "1234aA#abc",
+            "isAdmin":true,
+            "isSuperAdmin":true,
+            "phone": 123456789,
+            "country": "España",
+            "address": "EnriqueDelgado",
+            "city":"Madrid"
+            },
+    
+        "defaultAdmin" :  {
+            "email": "adminTest@gmail.com",
+            "name": "Admin01",
+            "password": "1234aA#abc",
+            "isAdmin":true,
+            "isSuperAdmin":false,
+            "phone": 123456789,
+            "country": "España",
+            "address": "EnriqueDelgado",
+            "city":"Madrid"
+            },
+
+        "defaultUser" :  {
+            "email": "userTest@gmail.com",
+            "name": "User01",
+            "password": "1234aA#abc",
+            "isAdmin":false,
+            "isSuperAdmin":false,
+            "phone": 123456789,
+            "country": "España",
+            "address": "EnriqueDelgado",
+            "city":"Madrid"
+            }
+    }
+]
