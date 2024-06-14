@@ -132,7 +132,10 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
         if (transaction.status === "COMPLETED") {
           const order = {
             userId,
-            products: currentCart.map((item) => ({ id: String(item.id) })),
+            products: currentCart.map((item) => ({
+              id: String(item.id),
+              quantity: item.quantity || 1,
+            })),
           };
 
           const createOrderResponse = await createOrder(order, userToken);

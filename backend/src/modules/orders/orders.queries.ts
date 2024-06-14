@@ -29,6 +29,7 @@ export class OrdersQuery {
         'products.name',
         'products.price',
         'products.discount',
+        'products.imgUrl'
         ])
         .getOne();
     }
@@ -51,6 +52,7 @@ export class OrdersQuery {
         'products.name',
         'products.price',
         'products.discount',
+        'products.imgUrl'
         ])
         .getMany();
     }

@@ -7,7 +7,6 @@ import { IOrderList } from "@/interfaces/IOrder";
 const PedidosList = () => {
   const [pedidos, setPedidos] = useState<IOrderList[]>([]);
   const [loading, setLoading] = useState(true);
-  //asdasds
 
   const fetchPedidos = async (token: string) => {
     const pedidos = await GetPedidos(token);
