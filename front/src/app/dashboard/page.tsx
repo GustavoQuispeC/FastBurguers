@@ -39,6 +39,7 @@ const Dashboard = () => {
           Authorization: `Bearer ${token?.userData.token}`,
         },
       });
+      console.log(data.orders);
       return data.orders;
     } catch (error: any) {
       console.error(error);
@@ -179,7 +180,7 @@ const Dashboard = () => {
                               {formatDate(order.date)}
                             </td>
                             <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                              {order.orderDetails.products.map(
+                              {order.orderDetails.orderDetailsProducts.map(
                                 (product, productIndex) => (
                                   <div
                                     key={productIndex}
@@ -190,7 +191,7 @@ const Dashboard = () => {
                                       alt={product.name}
                                       className="w-10 h-10 inline-block mr-2 rounded-full"
                                     />
-                                    <span>{product.name}</span>
+                                    <span>{product.products.name}</span>
                                   </div>
                                 )
                               )}
