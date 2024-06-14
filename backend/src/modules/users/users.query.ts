@@ -32,6 +32,7 @@ export class UsersQuery {
             'products.name',
             'products.price',
             'products.discount',
+            'products.imgUrl'
         ])
         .getOne();
 
