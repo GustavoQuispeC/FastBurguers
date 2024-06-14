@@ -57,10 +57,9 @@ const OrderStatus = () => {
     const orderDataArray = JSON.parse(localStorage.getItem("Order") || "[]");
     console.log("Order data from local storage:", orderDataArray);
 
-    if (orderDataArray.length > 0) {
-      const orderData = orderDataArray[0];
-      const orderId = orderData.id;
-      const orderDate = orderData.date;
+    if (orderDataArray) {
+      const orderId = orderDataArray.id;
+      const orderDate = orderDataArray.date;
       setOrderId(orderId);
       setOrderDate(orderDate);
       console.log("Order ID:", orderId);
@@ -121,12 +120,7 @@ const OrderStatus = () => {
     }
   }, []);
 
-  if (loading)
-    return (
-      <p className="text-center">
-        <Spinner />
-      </p>
-    );
+  if (loading) return <Spinner />;
   if (error) return <p className="text-center">{error}</p>;
 
   return (

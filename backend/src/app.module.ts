@@ -21,6 +21,10 @@ import { PaymentsModule } from './paypal/payments.module';
 import { StatusHistoriesModule } from './modules/status-histories/status-histories.module';
 import { MailerModule } from './modules/mailer/mailer.module';
 import { OrderRatingsModule } from './modules/ordersrating/orderrating.module';
+import { ProductRatingsModule } from './modules/productrating/productrating.module';
+import { StorageController } from './modules/storage/storage.controller';
+import { StorageService } from './modules/storage/storage.service';
+import { StorageModule } from './modules/storage/storage.module';
 
 @Module({
   imports: [
@@ -50,10 +54,12 @@ import { OrderRatingsModule } from './modules/ordersrating/orderrating.module';
     StatusHistoriesModule,
     PaymentsModule,
     MailerModule,
-    OrderRatingsModule
+    OrderRatingsModule,
+    ProductRatingsModule,
+    StorageModule
   ],
-  controllers: [AppController],
-  providers: [AppService, PreloadService],
+  controllers: [AppController,],
+  providers: [AppService, PreloadService,],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

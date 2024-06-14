@@ -39,6 +39,7 @@ const Dashboard = () => {
           Authorization: `Bearer ${token?.userData.token}`,
         },
       });
+      console.log(data.orders);
       return data.orders;
     } catch (error: any) {
       console.error(error);
@@ -151,6 +152,9 @@ const Dashboard = () => {
                         Fecha
                       </th>
                       <th scope="col" className="p-4">
+                        Cantidad
+                      </th>
+                      <th scope="col" className="p-4">
                         Productos
                       </th>
                       <th scope="col" className="p-4">
@@ -179,18 +183,30 @@ const Dashboard = () => {
                               {formatDate(order.date)}
                             </td>
                             <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                              {order.orderDetails.products.map(
+                              {order.orderDetails.orderDetailsProducts.map(
+                                (product, productIndex) => (
+                                  <div
+                                    key={productIndex}
+                                    className="my-8 text-center"
+                                  >
+                                    {product.quantity}
+                                  </div>
+                                )
+                              )}
+                            </td>
+                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {order.orderDetails.orderDetailsProducts.map(
                                 (product, productIndex) => (
                                   <div
                                     key={productIndex}
                                     className="mb-2 text-start"
                                   >
                                     <img
-                                      src={product.imgUrl}
-                                      alt={product.name}
+                                      src={product.products.imgUrl}
+                                      alt={product.products.name}
                                       className="w-10 h-10 inline-block mr-2 rounded-full"
                                     />
-                                    <span>{product.name}</span>
+                                    <span>{product.products.name}</span>
                                   </div>
                                 )
                               )}
@@ -209,7 +225,7 @@ const Dashboard = () => {
                               )}
                             </td>
                             <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                              ${order.orderDetails.price}
+                              ${order.orderDetails.amount}
                             </td>
                             <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               {orderReview ? (
@@ -248,59 +264,6 @@ const Dashboard = () => {
                   </tbody>
                 </table>
               </div>
-              {/* <h2 className="text-lg font-semibold mb-2 mt-4 dark:text-white">
-                Reseñas Realizadas
-              </h2>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm text-center text-gray-500 dark:text-gray-400">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                      <th scope="col" className="p-4">
-                        Orden
-                      </th>
-                      <th scope="col" className="p-4">
-                        Estrellas
-                      </th>
-                      <th scope="col" className="p-4">
-                        Comentario
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {userReviews.length > 0 ? (
-                      userReviews.map((review, reviewIndex) => (
-                        <tr
-                          key={reviewIndex}
-                          className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
-                        >
-                          <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {review.order.id}
-                          </td>
-                          <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {Array.from({ length: review.rating }).map(
-                              (_, starIndex) => (
-                                <span key={starIndex}>⭐</span>
-                              )
-                            )}
-                          </td>
-                          <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            {review.comment}
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td
-                          colSpan={3}
-                          className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                        >
-                          No hay reseñas disponibles.
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div> */}
             </div>
           </div>
         </div>

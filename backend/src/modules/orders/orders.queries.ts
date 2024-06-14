@@ -26,9 +26,11 @@ export class OrdersQuery {
         'statushistory.status',
         'statushistory.timestamp',
         'orderDetailsProducts.quantity',
+        'products.id',
         'products.name',
         'products.price',
         'products.discount',
+        'products.imgUrl'
         ])
         .getOne();
     }
@@ -48,9 +50,11 @@ export class OrdersQuery {
         'statushistory.status',
         'statushistory.timestamp',
         'orderDetailsProducts.quantity',
+        'products.id',
         'products.name',
         'products.price',
         'products.discount',
+        'products.imgUrl'
         ])
         .getMany();
     }

@@ -10,9 +10,9 @@ export class CreateOrderRatingDto {
     @IsString()
     comment?: string;
 
-    @IsUUID()
+    // @IsUUID()
     orderId: string;
 
-    @IsUUID()
+    // @IsUUID()
     userId: string;
 }
