@@ -45,7 +45,20 @@ export class ProductRatingsService {
             productRatings.push(productRating);
         }
 
-        return this.productRatingsRepository.save(productRatings);
+        await this.productRatingsRepository.save(productRatings);
+
+        for(const ratingDto of ratings){
+            await this.updateProductAverageRating(ratingDto.productId);
+        }
+
+        return productRatings;
+    }
+
+    private async updateProductAverageRating(productId: string): Promise<void> {
+        const productRatings = await this.productRatingsRepository.find({where: { product: {id: productId}}});
+        const averageRating = productRatings.reduce((sum, rating) => sum + rating.rating, 0) / productRatings.length;
+
+        await this.productsRepository.update(productId, { averageRating});
     }
 
     async findAll(): Promise<ProductRating[]> {

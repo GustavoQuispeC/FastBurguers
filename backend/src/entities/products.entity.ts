@@ -36,6 +36,9 @@ export class Products {
     @Column({default:false})
     is_deleted: boolean;
 
+    @Column({ type: 'decimal', precision: 3, scale:2, default: 0})
+    averageRating:number;
+
     @ManyToOne(() => Categories, (category) => category.products)
     category: Categories;
 
