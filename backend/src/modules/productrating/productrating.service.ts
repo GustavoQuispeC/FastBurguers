@@ -18,29 +18,6 @@ export class ProductRatingsService {
         @InjectRepository(OrderDetailsProducts) private orderDetailsProductRepository: Repository<OrderDetailsProducts>
     ){}
 
-    async create(createProductRatingDto: CreateProductRatingDto): Promise<ProductRating> {
-        const { productId, userId, rating, comment } = createProductRatingDto;
-
-        const user = await this.usersRepository.findOne({ where: { id: userId}});
-        const product = await this.productsRepository.findOne({where: {id:productId}});
-        const orderProducts = await this.orderDetailsProductRepository.findOne({where: {products: {id: productId}}})
-        const orderdetails = await this.orderDetailsRepository.findOne({
-            where: { order: {user: { id: userId}}},
-            relations: ['order', 'order.user'],
-        });
-
-        console.log(orderProducts);
-        
-
-        if(!user || !product || !orderdetails || !orderProducts) throw new BadRequestException('User has not purchased this product');
-
-        const productRating = this.productRatingsRepository.create({
-            rating, comment, user, product
-        });
-
-        return this.productRatingsRepository.save(productRating);
-    }
-
     async createMultipleProducts(createMultipleProductRatingsDto: CreateMultipleProductRatingsDto): Promise<ProductRating[]>{
         const {userId, ratings } = createMultipleProductRatingsDto;
 
@@ -58,8 +35,6 @@ export class ProductRatingsService {
                 where: { order: { user: {id: userId}}},
                 relations: ['order', 'order.user'],
             });
-
-            console.log(orderProducts);
 
             if(!product || !orderDetails || !orderProducts) throw new BadRequestException(`User has not pruchased the prodcut with ID ${productId}`);
 

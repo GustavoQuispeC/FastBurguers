@@ -6,11 +6,6 @@ import { CreateMultipleProductRatingsDto, CreateProductRatingDto } from "./produ
 export class ProductRatingsController{
     constructor( private readonly productRatingsService: ProductRatingsService) {}
 
-    @Post('single')
-    create(@Body() createProductRatingDto: CreateProductRatingDto){
-        return this.productRatingsService.create(createProductRatingDto)
-    }
-
     @Post()
     createMultipleProducts(@Body() createMultipleProductRatinsgDto: CreateMultipleProductRatingsDto){
         return this.productRatingsService.createMultipleProducts(createMultipleProductRatinsgDto)
