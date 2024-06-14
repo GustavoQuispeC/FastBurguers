@@ -13,7 +13,12 @@ const Rating: React.FC = () => {
   const [selectedStars, setSelectedStars] = useState<number | null>(null);
   const [comment, setComment] = useState<string>("");
   const [productRatings, setProductRatings] = useState<
-    { productId: string; rating: number; comment: string }[]
+    {
+      productId: string;
+      rating: number;
+      comment: string;
+      leaveComment: boolean;
+    }[]
   >([]);
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
   const router = useRouter();
@@ -49,6 +54,15 @@ const Rating: React.FC = () => {
       setComment(newComment);
       checkEnableButton(rating, newComment);
     }
+  };
+
+  const handleLeaveCommentChange = (productId: string) => {
+    const updatedProductRatings = productRatings.map((productRating) =>
+      productRating.productId === productId
+        ? { ...productRating, leaveComment: !productRating.leaveComment }
+        : productRating
+    );
+    setProductRatings(updatedProductRatings);
   };
 
   const checkEnableButton = (stars: number | null, comment: string) => {
@@ -107,6 +121,7 @@ const Rating: React.FC = () => {
             productId: product.products.id,
             rating: 0,
             comment: "",
+            leaveComment: false,
           }));
         setProductRatings(initialProductRatings);
       })
@@ -135,18 +150,41 @@ const Rating: React.FC = () => {
                 </div>
               </div>
               <div className="flex flex-col items-center">
-                <textarea
-                  className="mb-2 p-2 border rounded w-full"
-                  placeholder="Deja tu comentario"
-                  value={
-                    productRatings.find(
-                      (productRating) =>
-                        productRating.productId === product.products.id
-                    )?.comment || ""
-                  }
-                  onChange={(e) => handleCommentChange(e, product.products.id)}
-                  required
-                />
+                <label className="flex items-center mb-2">
+                  ¿Desea dejar su opinión?
+                  <input
+                    type="checkbox"
+                    className="ml-2"
+                    checked={
+                      productRatings.find(
+                        (productRating) =>
+                          productRating.productId === product.products.id
+                      )?.leaveComment || false
+                    }
+                    onChange={() =>
+                      handleLeaveCommentChange(product.products.id)
+                    }
+                  />
+                </label>
+                {productRatings.find(
+                  (productRating) =>
+                    productRating.productId === product.products.id
+                )?.leaveComment && (
+                  <textarea
+                    className="mb-2 p-2 border rounded w-full"
+                    placeholder="Deja tu comentario"
+                    value={
+                      productRatings.find(
+                        (productRating) =>
+                          productRating.productId === product.products.id
+                      )?.comment || ""
+                    }
+                    onChange={(e) =>
+                      handleCommentChange(e, product.products.id)
+                    }
+                    required
+                  />
+                )}
                 <div className="mx-5 flex">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <button
