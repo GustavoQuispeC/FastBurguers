@@ -2,7 +2,7 @@
 import Swal from "sweetalert2";
 import { IProduct } from "@/interfaces/IProduct";
 import { useState, useEffect } from "react";
-import { getProductsById } from "@/helpers/products.helper"; // Importar la función para obtener productos por categoría
+import { getProductsById } from "@/helpers/products.helper";
 import { getProductsByCategory } from "@/helpers/categories.helper";
 import { useRouter } from "next/navigation";
 import { FaCartPlus } from "react-icons/fa";
@@ -14,7 +14,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
   const [producto, setProducto] = useState<IProduct>();
   const [tamaño, setTamaño] = useState("Mediana");
   const [bebida, setBebida] = useState<string | null>(null);
-  const [precioBebida, setPrecioBebida] = useState<number>(0); // Estado para almacenar el precio de la bebida
+  const [precioBebida, setPrecioBebida] = useState<number>(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -67,7 +67,6 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
         producto.price,
         producto.discount
       );
-
       return precioDescuento;
     }
     return null;
@@ -109,6 +108,14 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
     }
   };
 
+  const renderStars = (averageRating: number) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(<span key={i}>{i < averageRating ? "★" : "☆"}</span>);
+    }
+    return stars;
+  };
+
   return (
     <div className="font-sans my-10 dark:bg-gray-700">
       <div className="p-4 max-w-6xl max-md:max-w-xl mx-auto">
@@ -122,9 +129,15 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
           </div>
 
           <div>
-            <h2 className="text-3xl max-sm:text-2xl font-bold text-orange-500">
+            <h2 className="text-3xl mt-6 max-sm:text-2xl font-bold text-orange-500">
               {producto?.name}
             </h2>
+            {producto?.averageRating &&
+              parseInt(producto.averageRating) > 0 && (
+                <div className="text-yellow-500 mt-2 text-2xl">
+                  {renderStars(Number(producto.averageRating))}
+                </div>
+              )}
             <div className="flex flex-wrap gap-4 mt-8">
               {producto?.discount && producto.discount > 0 ? (
                 <>
@@ -298,7 +311,6 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
 
             <ul className="space-y-3 list-disc pl-4 text-sm text-gray-800 mt-8">
               <li>{producto?.description}</li>
-
               <li>¡Pídela ya con delivery!</li>
             </ul>
           </div>

@@ -91,7 +91,7 @@ const TopVentas: React.FC = () => {
       pedidos.forEach((pedido) => {
         const date = new Date(pedido.date);
         const day = date.getDay();
-        sales[day] += parseFloat(pedido.orderDetails.price);
+        sales[day] += parseFloat(pedido.orderDetails.amount);
       });
 
       setChartData((prevData) => ({
