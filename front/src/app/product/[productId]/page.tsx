@@ -73,7 +73,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
     return null;
   };
 
-  const handleBuyClickAgregar = () => {
+  const handleBuyClickAgregar = async () => {
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
     const existingProduct = currentCart.find(
       (item: any) => item.id === params.productId
@@ -105,7 +105,57 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
 
       currentCart.push(newProduct);
       localStorage.setItem("cart", JSON.stringify(currentCart));
-      router.push("/home");
+
+      // Lógica para enviar la solicitud POST
+      const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
+      const userId = userSession?.userData?.data?.userId;
+      const products = currentCart.map((item: any) => ({
+        id: item.id,
+        quantity: item.quantity || 1,
+      }));
+
+      if (userId) {
+        try {
+          const response = await fetch("http://localhost:3001/storage", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userSession?.userData?.token}`,
+            },
+            body: JSON.stringify({
+              userId,
+              products,
+            }),
+          });
+
+          if (response.ok) {
+            Swal.fire({
+              title: "¡Éxito!",
+              text: "El producto se ha agregado al carrito y guardado correctamente.",
+              icon: "success",
+              confirmButtonText: "OK",
+            }).then(() => {
+              router.push("/home");
+            });
+          } else {
+            throw new Error("Error en la solicitud POST");
+          }
+        } catch (error) {
+          Swal.fire({
+            title: "Error",
+            text: "Hubo un problema al guardar el carrito. Por favor, inténtelo de nuevo.",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
+        }
+      } else {
+        Swal.fire({
+          title: "Error",
+          text: "No se pudo obtener la información del usuario. Por favor, inicie sesión nuevamente.",
+          icon: "error",
+          confirmButtonText: "OK",
+        });
+      }
     }
   };
 
