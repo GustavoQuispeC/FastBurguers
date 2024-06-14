@@ -26,6 +26,7 @@ import { StorageController } from './modules/storage/storage.controller';
 import { StorageService } from './modules/storage/storage.service';
 import { StorageModule } from './modules/storage/storage.module';
 import { Testimony } from './entities/testimony.entity';
+import { ChatbotModule } from './chatbot/chatbot.module';
 
 @Module({
   imports: [
@@ -57,7 +58,8 @@ import { Testimony } from './entities/testimony.entity';
     MailerModule,
     OrderRatingsModule,
     ProductRatingsModule,
-    StorageModule
+    StorageModule,
+    ChatbotModule
   ],
   controllers: [AppController,],
   providers: [AppService, PreloadService,],
