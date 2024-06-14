@@ -152,6 +152,9 @@ const Dashboard = () => {
                         Fecha
                       </th>
                       <th scope="col" className="p-4">
+                        Cantidad
+                      </th>
+                      <th scope="col" className="p-4">
                         Productos
                       </th>
                       <th scope="col" className="p-4">
@@ -186,9 +189,21 @@ const Dashboard = () => {
                                     key={productIndex}
                                     className="mb-2 text-start"
                                   >
+                                    {product.quantity}
+                                  </div>
+                                )
+                              )}
+                            </td>
+                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                              {order.orderDetails.orderDetailsProducts.map(
+                                (product, productIndex) => (
+                                  <div
+                                    key={productIndex}
+                                    className="mb-2 text-start"
+                                  >
                                     <img
                                       src={product.imgUrl}
-                                      alt={product.name}
+                                      alt={product.products.name}
                                       className="w-10 h-10 inline-block mr-2 rounded-full"
                                     />
                                     <span>{product.products.name}</span>
