@@ -23,6 +23,7 @@ export interface IOrderDetails {
       quantity: number;
       products: {
         name: string;
+        imgUrl: string;
         price: string;
         discount: string;
       };

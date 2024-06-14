@@ -187,7 +187,7 @@ const Dashboard = () => {
                                 (product, productIndex) => (
                                   <div
                                     key={productIndex}
-                                    className="mb-2 text-start"
+                                    className="my-8 text-center"
                                   >
                                     {product.quantity}
                                   </div>
@@ -202,7 +202,7 @@ const Dashboard = () => {
                                     className="mb-2 text-start"
                                   >
                                     <img
-                                      src={product.imgUrl}
+                                      src={product.products.imgUrl}
                                       alt={product.products.name}
                                       className="w-10 h-10 inline-block mr-2 rounded-full"
                                     />
