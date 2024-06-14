@@ -41,7 +41,7 @@ export class ProductRatingsService {
         return this.productRatingsRepository.save(productRating);
     }
 
-    async createMultiple(createMultipleProductRatingsDto: CreateMultipleProductRatingsDto): Promise<ProductRating[]>{
+    async createMultipleProducts(createMultipleProductRatingsDto: CreateMultipleProductRatingsDto): Promise<ProductRating[]>{
         const {userId, ratings } = createMultipleProductRatingsDto;
 
         const user = await this.usersRepository.findOne({ where: {id: userId}});
