@@ -5,7 +5,7 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 //! Get all products
 export async function getProducts() {
   try {
-    const res = await fetch(`${apiURL}/products`);
+    const res = await fetch(`${apiURL}/products/available`);
 
     const products: IProduct[] = await res.json();
     return products;
@@ -13,7 +13,6 @@ export async function getProducts() {
     throw new Error(error);
   }
 }
-
 
 //! Get product by ID
 export async function getProductsById(id: number): Promise<IProduct> {
@@ -33,8 +32,3 @@ export async function getProductsById(id: number): Promise<IProduct> {
     throw new Error(error);
   }
 }
-
-
-
-
-
