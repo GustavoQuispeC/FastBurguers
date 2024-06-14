@@ -1,200 +1,131 @@
-"use client";
-import { TextInput } from "flowbite-react";
-import { HiMail } from "react-icons/hi";
-import { FaEye } from "react-icons/fa";
+"use client"
+import React, { useState } from "react";
+import { TextInput, Textarea } from "flowbite-react";
+import RatingStars from "@/components/ratingStars/ratingStars"; // Asegúrate de que la ruta sea correcta
+import axios from 'axios';
+import { useRouter } from 'next/router';
 
-import Link from "next/link";
-import Swal from "sweetalert2";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { LoginErrorProps, LoginProps, LoginTerceros } from "../../types";
-import { validateLoginForm } from "../../utils/loginFormValidation";
-import { FaEyeSlash } from "react-icons/fa6";
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
-import Image from "next/image";
-import { signIn } from "next-auth/react";
-import { LoginUser } from "@/helpers/Autenticacion.helper";
+const Contacto: React.FC = () => {
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [punctuation, setPunctuation] = useState<number>(0);
 
-const Login = () => {
-  const Router = useRouter();
+  const router = useRouter();
 
-  const [dataUser, setDataUser] = useState<LoginProps>({
-    email: "",
-    password: "",
-  });
-
-  const [error, setError] = useState<LoginErrorProps>({
-    email: "",
-    password: "",
-  });
-
-  const [touched, setTouched] = useState<
-    Partial<Record<keyof LoginErrorProps, boolean>>
-  >({
-    email: false,
-    password: false,
-  });
-
-  const GoogleOnClick = async () => {
-    await signIn("google", {
-      callbackUrl: "http://localhost:3000/home",
-      redirect: true,
-    });
-  };
-  const FacebookOnClick = async () => {
-    await signIn("facebook", {
-      callbackUrl: "http://localhost:3000/home",
-      redirect: true,
-    });
+  const handleCambioDeCalificacion = (calificacion: number) => {
+    setPunctuation(calificacion);
   };
 
-  //! Mostrar u ocultar contraseña
-  const [showPassword, setShowPassword] = useState<boolean>(false);
-  const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  //! Manejar cambios en los inputs
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { name, value } = e.target;
+    const review = {
+      name,
+      email,
+      description,
+      punctuation
+    };
 
-    setDataUser((prevDataUser) => ({
-      ...prevDataUser,
-      [name]: value,
-    }));
-
-    setTouched((prevTouched) => ({
-      ...prevTouched,
-      [name]: true,
-    }));
-  };
-
-  //? Manejar submit del formulario
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
     try {
-      const user = await LoginUser(dataUser);
+      const res = await fetch(`${apiURL}/testimony/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(review),
+      });
 
-      localStorage.setItem("userSession", JSON.stringify({ userData: user }));
-      Swal.fire({
-        icon: "success",
-        title: "¡Bienvenido a FastBurgers!",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-      Router.push("/home");
+      if (!res.ok) {
+        const errorDetails = await res.json();
+        throw new Error(`Error creando review: ${res.status} - ${errorDetails.message}`);
+      }
+
+      alert('Review creada correctamente');
+      setName('');
+      setEmail('');
+      setDescription('');
+      setPunctuation(0);
+      router.push('/');
     } catch (error: any) {
-      Swal.fire({
-        icon: "error",
-        title: "Usuario o contraseña incorrecta",
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      console.error('Error creando review:', error);
+      alert('No se pudo crear la review');
     }
   };
 
-  //! Validar formulario
-  useEffect(() => {
-    const errors = validateLoginForm(dataUser);
-    setError(errors);
-  }, [dataUser]);
-
   return (
-    <div className="font-[sans-serif] text-gray-900 flex items-center justify-center md:h-screen p-4 dark:bg-gray-800">
-      <div className="shadow-2xl max-w-6xl rounded-md p-6 bg-white dark:text-white dark:bg-gray-600">
-        <div className="grid md:grid-cols-2 items-center gap-8">
-          <div className="max-md:order-1">
-            <img
-              src="/LogoFastBurgers.png"
-              className="lg:w-11/12 w-full h-96 object-cover"
-              alt="login-image"
-            />
-          </div>
-          <form onSubmit={handleSubmit} className="max-w-md w-full mx-auto">
-            <div className="mb-12">
-              <h3 className="text-4xl font-extrabold text-gray-900 dark:text-white">
-                Iniciar sesión
-              </h3>
-            </div>
-            <div>
-              <div className="relative flex items-center">
-                <TextInput
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={dataUser.email}
-                  onChange={handleChange}
-                  placeholder="nombre@ejemplo.com"
-                  required
-                  className="w-full pr-10"
-                />
-                <HiMail className="text-gray-900 dark:text-gray-200 absolute right-2" />
-              </div>
-              {touched.email && error.email && (
-                <p style={{ color: "red" }}>{error.email}</p>
-              )}
-            </div>
-            <div className="mb-4 mt-3">
-              <div className="relative flex items-center">
-                <TextInput
-                  type={showPassword ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  value={dataUser.password}
-                  onChange={handleChange}
-                  required
-                  className="w-full pr-10"
-                  placeholder="Ingrese su contraseña"
-                />
-                <button
-                  type="button"
-                  onClick={handleTogglePassword}
-                  className="absolute right-2"
-                >
-                  {showPassword ? <FaEye /> : <FaEyeSlash />}
-                </button>
-              </div>
-              {touched.password && error.password && (
-                <p className="text-red-500 text-sm">{error.password}</p>
-              )}
-            </div>
-            <div className="mt-12">
-              <button
-                type="submit"
-                className="w-96 shadow-xl py-2.5 px-4 text-sm font-semibold  rounded-full text-orange-500 dark:bg-gray-400 bg-gray-900 hover:bg-gray-700 focus:outline-none"
-              >
-                Ingresar
-              </button>
-              <p className="text-sm text-center mt-8">
-                No tienes una cuenta{" "}
-                <Link
-                  href="/user"
-                  className="text-orange-500 font-semibold hover:underline ml-1 whitespace-nowrap"
-                >
-                  Registrate aquí
-                </Link>
-              </p>
-            </div>
-            <hr className="my-6 border-gray-300" />
-            <div className="flex justify-around items-center">
-              <button onClick={GoogleOnClick}>
-                <Image src="/google.png" alt="google" width={30} height={30} />
-              </button>
-              <button onClick={FacebookOnClick}>
-                <Image
-                  src="/facebook.png"
-                  alt="facebook"
-                  width={35}
-                  height={35}
-                />
-              </button>
-            </div>
-          </form>
+    <div>
+      <section className="text-gray-600 body-font relative">
+        <div className="absolute inset-0 bg-gray-300">
+          <iframe
+            src="https://www.google.com/maps/d/u/0/embed?mid=1kew-d7XLDgB5lY5pFufQQpq5unMj4r0&ehbc=2E312F&noprof=1"
+            width="100%"
+            height="100%"
+            frameBorder="0"
+            marginHeight={0}
+            marginWidth={0}
+            title="mapa"
+            scrolling="no"
+            style={{ filter: 'grayscale(1) contrast(1.2) opacity(0.4)' }}
+          ></iframe>
         </div>
-      </div>
+        <div className="container px-5 py-24 mx-auto flex">
+          <div className="lg:w-1/3 md:w-1/2 bg-white rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10 shadow-md">
+            <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">Danos tu Opinion!</h2>
+            <p className="leading-relaxed mb-5 text-gray-600">Valoramos tus comentarios y preocupaciones. Por favor, háznos saber cómo fue tu experiencia de compra y cómo podemos mejorar nuestros servicios.</p>
+            <form onSubmit={handleSubmit}>
+              <div className="relative mb-4">
+                <label htmlFor="name" className="leading-7 text-sm text-gray-600">Tu Nombre</label>
+                <TextInput 
+                  id="name" 
+                  name="name" 
+                  placeholder="Ingresa tu nombre" 
+                  required 
+                  value={name}
+                  onChange={(e) => setName(e.target.value)} 
+                />
+              </div>
+              <div className="relative mb-4">
+                <label htmlFor="email" className="leading-7 text-sm text-gray-600">Tu Correo Electrónico</label>
+                <TextInput 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  placeholder="Ingresa tu correo electrónico" 
+                  required 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)} 
+                />
+              </div>
+              <div className="relative mb-4">
+                <label htmlFor="message" className="leading-7 text-sm text-gray-600">Tu Mensaje</label>
+                <Textarea 
+                  id="message" 
+                  name="message" 
+                  placeholder="Ingresa tu mensaje" 
+                  required 
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)} 
+                />
+              </div>
+              <div className="relative mb-4">
+                <label htmlFor="rating" className="leading-7 text-sm text-gray-600">Calificación</label>
+                <RatingStars onChange={handleCambioDeCalificacion} />
+              </div>
+              <button 
+                type="submit"
+                className="text-white bg-orange-500 border-0 py-2 px-6 focus:outline-none hover:bg-orange-800 rounded text-lg"
+              >
+                Enviar Opinion
+              </button>
+            </form>
+            <p className="text-xs text-gray-500 mt-3">¡Gracias por ayudarnos a mejorar tus futuras experiencias!</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
 
-export default Login;
+export default Contacto;
