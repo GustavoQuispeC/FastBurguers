@@ -8,10 +8,10 @@ export class Storage {
     id: string
 
     @Column()
-    id_user: string
+    idUser: string
 
     @Column()
-    id_product: string
+    idProduct: string
 
     @Column()
     quantity: number
