@@ -18,30 +18,7 @@ export class ProductRatingsService {
         @InjectRepository(OrderDetailsProducts) private orderDetailsProductRepository: Repository<OrderDetailsProducts>
     ){}
 
-    async create(createProductRatingDto: CreateProductRatingDto): Promise<ProductRating> {
-        const { productId, userId, rating, comment } = createProductRatingDto;
-
-        const user = await this.usersRepository.findOne({ where: { id: userId}});
-        const product = await this.productsRepository.findOne({where: {id:productId}});
-        const orderProducts = await this.orderDetailsProductRepository.findOne({where: {products: {id: productId}}})
-        const orderdetails = await this.orderDetailsRepository.findOne({
-            where: { order: {user: { id: userId}}},
-            relations: ['order', 'order.user'],
-        });
-
-        console.log(orderProducts);
-        
-
-        if(!user || !product || !orderdetails || !orderProducts) throw new BadRequestException('User has not purchased this product');
-
-        const productRating = this.productRatingsRepository.create({
-            rating, comment, user, product
-        });
-
-        return this.productRatingsRepository.save(productRating);
-    }
-
-    async createMultiple(createMultipleProductRatingsDto: CreateMultipleProductRatingsDto): Promise<ProductRating[]>{
+    async createMultipleProducts(createMultipleProductRatingsDto: CreateMultipleProductRatingsDto): Promise<ProductRating[]>{
         const {userId, ratings } = createMultipleProductRatingsDto;
 
         const user = await this.usersRepository.findOne({ where: {id: userId}});
@@ -59,8 +36,6 @@ export class ProductRatingsService {
                 relations: ['order', 'order.user'],
             });
 
-            console.log(orderProducts);
-
             if(!product || !orderDetails || !orderProducts) throw new BadRequestException(`User has not pruchased the prodcut with ID ${productId}`);
 
             const productRating = this.productRatingsRepository.create({
@@ -70,7 +45,20 @@ export class ProductRatingsService {
             productRatings.push(productRating);
         }
 
-        return this.productRatingsRepository.save(productRatings);
+        await this.productRatingsRepository.save(productRatings);
+
+        for(const ratingDto of ratings){
+            await this.updateProductAverageRating(ratingDto.productId);
+        }
+
+        return productRatings;
+    }
+
+    private async updateProductAverageRating(productId: string): Promise<void> {
+        const productRatings = await this.productRatingsRepository.find({where: { product: {id: productId}}});
+        const averageRating = productRatings.reduce((sum, rating) => sum + rating.rating, 0) / productRatings.length;
+
+        await this.productsRepository.update(productId, { averageRating});
     }
 
     async findAll(): Promise<ProductRating[]> {

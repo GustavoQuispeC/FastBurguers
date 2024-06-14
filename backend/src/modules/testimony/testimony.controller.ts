@@ -18,5 +18,4 @@ export class TestimonyController {
     createTestimony(@Body() testimony: CreateTestimonyDto){
         return this.testimonyService.createTestimony(testimony)
     }
-
 }

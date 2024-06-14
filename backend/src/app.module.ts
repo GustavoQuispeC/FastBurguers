@@ -22,6 +22,11 @@ import { StatusHistoriesModule } from './modules/status-histories/status-histori
 import { MailerModule } from './modules/mailer/mailer.module';
 import { OrderRatingsModule } from './modules/ordersrating/orderrating.module';
 import { ProductRatingsModule } from './modules/productrating/productrating.module';
+import { StorageController } from './modules/storage/storage.controller';
+import { StorageService } from './modules/storage/storage.service';
+import { StorageModule } from './modules/storage/storage.module';
+import { Testimony } from './entities/testimony.entity';
+import { ChatbotModule } from './chatbot/chatbot.module';
 
 @Module({
   imports: [
@@ -40,7 +45,7 @@ import { ProductRatingsModule } from './modules/productrating/productrating.modu
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '60m' },
     }),
-    TypeOrmModule.forFeature([Products, Categories, Users]),
+    TypeOrmModule.forFeature([Products, Categories, Users,Testimony]),
     UsersModule,
     CategoriesModule,
     ProductsModule,
@@ -52,10 +57,12 @@ import { ProductRatingsModule } from './modules/productrating/productrating.modu
     PaymentsModule,
     MailerModule,
     OrderRatingsModule,
-    ProductRatingsModule
+    ProductRatingsModule,
+    StorageModule,
+    ChatbotModule
   ],
-  controllers: [AppController],
-  providers: [AppService, PreloadService],
+  controllers: [AppController,],
+  providers: [AppService, PreloadService,],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

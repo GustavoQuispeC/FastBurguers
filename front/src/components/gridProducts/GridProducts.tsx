@@ -26,6 +26,14 @@ const GridProducts: React.FC<GridProductsProps> = ({ products }) => {
     return (price - price * discount).toFixed(2);
   };
 
+  const renderStars = (averageRating: number) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(<span key={i}>{i < averageRating ? "★" : "☆"}</span>);
+    }
+    return stars;
+  };
+
   return (
     <div className="mx-auto p-4">
       <div className="flex justify-end mb-4">
@@ -95,6 +103,12 @@ const GridProducts: React.FC<GridProductsProps> = ({ products }) => {
                     </span>
                   ) : null}
                 </div>
+                {product.averageRating &&
+                  parseInt(product.averageRating) > 0 && (
+                    <div className="text-yellow-500 mt-2 text-xl">
+                      {renderStars(Number(product.averageRating))}
+                    </div>
+                  )}
                 <Link href={`/product/${product.id}`} key={product.id}>
                   <button className="bg-orange-500 rounded-xl p-2 px-10 mt-2 text-white font-bold border-none">
                     Ver más

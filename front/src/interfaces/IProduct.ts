@@ -8,9 +8,9 @@ export interface IProduct {
   size: string;
   discount: number;
   category: string;
+  averageRating?: string;
   valune?: number;
   quantity?: number;
- 
 }
 
 export interface IProductCart extends IProduct {
@@ -49,4 +49,3 @@ export interface IProducErrorProps {
   discount: string;
   categoryID: string;
 }
-

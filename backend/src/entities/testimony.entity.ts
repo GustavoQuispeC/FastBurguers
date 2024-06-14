@@ -8,7 +8,7 @@ export class Testimony {
   @Column({ type: 'varchar', length: 40, nullable: false })
   name: string;
 
-  @Column({ type: 'varchar', length: 40, unique: true, nullable: false })
+  @Column({ type: 'varchar', length: 40, nullable: false })
   email: string;
 
   @Column({ type: 'text', nullable: false })

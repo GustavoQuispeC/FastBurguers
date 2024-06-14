@@ -1,36 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import axios from 'axios';
 
-const testimonialData = [
-  {
-    id: 1,
-    name: 'Carlos Herrera',
-    text: 'Las mejores hamburguesas que he probado en mucho tiempo. Ingredientes de primera y un sabor inigualable.',
-    img: 'https://picsum.photos/101/101',
-  },
-  {
-    id: 2,
-    name: 'Jessica Pearson',
-    text: '¡Simplemente fenomenal! La experiencia gourmet es evidente en cada bocado. Recomiendo altamente la hamburguesa de trufa.',
-    img: 'https://picsum.photos/102/102', 
-  },
-  {
-    id: 3,
-    name: 'Mark Johnson',
-    text: 'Servicio excelente y la calidad de las hamburguesas es superba. ¡La hamburguesa de carne Wagyu es imprescindible!',
-    img: 'https://picsum.photos/103/103', 
-  },
-  {
-    id: 4,
-    name: 'Samantha Reed',
-    text: 'Me encantan los sabores únicos y los ingredientes frescos y locales que utilizan. El ambiente es simplemente perfecto para un lugar de hamburguesas gourmet.',
-    img: 'https://picsum.photos/104/104', 
-  },
-];
+interface Testimonial {
+  id: string;
+  name: string;
+  email: string;
+  description: string;
+  punctuation: number;
+}
 
-const Testimonials = () => {
+const Testimonials: React.FC = () => {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const response = await axios.get<Testimonial[]>(`${process.env.NEXT_PUBLIC_API_URL}/testimony/`);
+        setTestimonials(response.data);
+      } catch (error) {
+        console.error('Error fetching testimonials:', error);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
+
   const settings = {
     dots: true,
     arrows: false,
@@ -71,44 +68,42 @@ const Testimonials = () => {
 
   return (
     <div className="py-10 mb-10">
-        {/* Sección de encabezado */}
-        <div className="text-center mb-10 max-w-lg mx-auto">
-          <p className="text-sm text-primary font-semibold">
-            Lo que nuestros clientes están diciendo
-          </p>
-          <h1 className="text-3xl font-bold text-gray-800">
-            Testimonios
-          </h1>
-          <p className="text-xs text-gray-500">
-            ¡Descubre por qué a nuestros invitados les encantan nuestras hamburguesas gourmet!
-          </p>
-        </div>
+      {/* Sección de encabezado */}
+      <div className="text-center mb-10 max-w-lg mx-auto">
+        <p className="text-sm text-primary font-semibold">
+          Lo que nuestros clientes están diciendo
+        </p>
+        <h1 className="text-3xl font-bold text-gray-800">
+          Testimonios
+        </h1>
+        <p className="text-xs text-gray-500">
+          ¡Descubre por qué a nuestros invitados les encantan nuestras hamburguesas gourmet!
+        </p>
+      </div>
 
-        {/* Tarjetas de testimonios */}
-        <div>
-          <Slider {...settings}>
-            {testimonialData.map((data) => (
-              <div key={data.id} className="my-6">
-                <div className="flex flex-col gap-4 shadow-lg py-8 px-6 mx-4 rounded-xl bg-white relative">
-                  <div className="mb-4">
-                    <img src={data.img} alt={data.name} className="rounded-full w-20 h-20 border-2 border-gray-300" />
+      {/* Tarjetas de testimonios */}
+      <div>
+        <Slider {...settings}>
+          {testimonials.map((data) => (
+            <div key={data.id} className="my-6">
+              <div className="flex flex-col gap-4 shadow-lg py-8 px-6 mx-4 rounded-xl bg-white relative">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="space-y-3">
+                    <p className="text-xs text-gray-600">{data.description}</p>
+                    <h1 className="text-xl font-bold text-gray-800">
+                      {data.name}
+                    </h1>
+                    <p className="text-xs text-gray-500">{`Puntuación: ${data.punctuation}`}</p>
                   </div>
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="space-y-3">
-                      <p className="text-xs text-gray-600">{data.text}</p>
-                      <h1 className="text-xl font-bold text-gray-800">
-                        {data.name}
-                      </h1>
-                    </div>
-                  </div>
-                  <p className="text-gray-200 text-9xl font-serif absolute top-0 right-0">
-                    “
-                  </p>
                 </div>
+                <p className="text-gray-200 text-9xl font-serif absolute top-0 right-0">
+                  “
+                </p>
               </div>
-            ))}
-          </Slider>
-        </div>
+            </div>
+          ))}
+        </Slider>
+      </div>
     </div>
   );
 };
