@@ -22,6 +22,7 @@ export interface IOrderDetails {
     {
       quantity: number;
       products: {
+        id: string;
         name: string;
         imgUrl: string;
         price: string;

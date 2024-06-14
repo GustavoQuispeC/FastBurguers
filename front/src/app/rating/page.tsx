@@ -5,26 +5,50 @@ import { IOrderList } from "@/interfaces/IOrder";
 import { getOrdersByID } from "@/helpers/orders.helper";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
-import { postRating } from "@/helpers/Reseñas.helper";
+import { postRating, postProductRating } from "@/helpers/Reseñas.helper";
 
 const Rating: React.FC = () => {
   const [order, setOrder] = useState<IOrderList | null>(null);
   const [rating, setRating] = useState<number | null>(null);
   const [selectedStars, setSelectedStars] = useState<number | null>(null);
   const [comment, setComment] = useState<string>("");
-  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true); // Estado para deshabilitar el botón
+  const [productRatings, setProductRatings] = useState<
+    { productId: string; rating: number; comment: string }[]
+  >([]);
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
   const router = useRouter();
 
-  const handleRating = (rate: number) => {
-    setRating(rate);
-    setSelectedStars(rate);
-    checkEnableButton(rate, comment); // Verifica si se puede habilitar el botón
+  const handleRating = (rate: number, productId?: string) => {
+    if (productId) {
+      const updatedProductRatings = productRatings.map((productRating) =>
+        productRating.productId === productId
+          ? { ...productRating, rating: rate }
+          : productRating
+      );
+      setProductRatings(updatedProductRatings);
+    } else {
+      setRating(rate);
+      setSelectedStars(rate);
+      checkEnableButton(rate, comment);
+    }
   };
 
-  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleCommentChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+    productId?: string
+  ) => {
     const newComment = e.target.value;
-    setComment(newComment);
-    checkEnableButton(rating, newComment); // Verifica si se puede habilitar el botón
+    if (productId) {
+      const updatedProductRatings = productRatings.map((productRating) =>
+        productRating.productId === productId
+          ? { ...productRating, comment: newComment }
+          : productRating
+      );
+      setProductRatings(updatedProductRatings);
+    } else {
+      setComment(newComment);
+      checkEnableButton(rating, newComment);
+    }
   };
 
   const checkEnableButton = (stars: number | null, comment: string) => {
@@ -39,7 +63,14 @@ const Rating: React.FC = () => {
         );
         const userId = userSession?.userData?.data?.userid || "";
 
-        await postRating(selectedStars, comment, order.id, userId);
+        if (order) {
+          await postRating(selectedStars, comment, order.id, userId);
+        }
+
+        if (productRatings.length > 0) {
+          await postProductRating(userId, productRatings);
+        }
+
         Swal.fire({
           title: "Gracias por su reseña!",
           text: "Tu reseña ha sido enviada con éxito.",
@@ -63,16 +94,22 @@ const Rating: React.FC = () => {
     const storedOrderId = localStorage.getItem("Order");
 
     if (!storedOrderId) {
-      // Si no existe el localStorage "Order", redirecciona a la página de inicio
       router.push("/home");
-      return; // Detiene la ejecución del useEffect
+      return;
     }
 
     const parsedOrder = JSON.parse(storedOrderId);
-    console.log(parsedOrder);
-
     getOrdersByID(parsedOrder.id)
-      .then((data) => setOrder(data))
+      .then((data) => {
+        setOrder(data);
+        const initialProductRatings =
+          data.orderDetails.orderDetailsProducts.map((product: any) => ({
+            productId: product.products.id,
+            rating: 0,
+            comment: "",
+          }));
+        setProductRatings(initialProductRatings);
+      })
       .catch((error) => console.error("Error fetching order:", error));
   }, []);
 
@@ -80,53 +117,77 @@ const Rating: React.FC = () => {
     <div className="mx-5 text-center my-10">
       <h1 className="text-2xl font-bold mb-4">Reseñas</h1>
       {order && (
-        <div className="p-4  border-orange-500 border-2 rounded-lg mb-4 mx-5 flex flex-col items-center">
-          <div>
-            {/* <h3 className="text-lg font-bold mb-2">Order ID: {order.id}</h3> */}
-            {order.orderDetails.orderDetailsProducts.map((product) => (
-              <div
-                key={product.products.name}
-                className="flex p-3 justify-around mb-4 w-full"
-              >
-                <div className="flex items-center">
-                  <img
-                    src={product.products.imgUrl}
-                    alt={product.products.name}
-                    className="w-20 h-20 mr-4 rounded-xl"
-                  />
-                  <div>
-                    <h2 className="text-lg font-bold">
-                      {product.products.name}
-                    </h2>
-                    <p className="font-bold">${product.products.price}</p>
-                  </div>
+        <div className="p-4 border-orange-500 border-2 rounded-lg mb-4 mx-5 flex flex-col items-center">
+          {order.orderDetails.orderDetailsProducts.map((product) => (
+            <div
+              key={product.products.id}
+              className="flex p-3 justify-around mb-4 w-full"
+            >
+              <div className="flex items-center">
+                <img
+                  src={product.products.imgUrl}
+                  alt={product.products.name}
+                  className="w-20 h-20 mr-4 rounded-xl"
+                />
+                <div>
+                  <h2 className="text-lg font-bold">{product.products.name}</h2>
+                  <p className="font-bold">${product.products.price}</p>
                 </div>
               </div>
-            ))}
-            <div className="flex flex-col items-center">
-              <textarea
-                className="mb-2 p-2 border rounded w-full"
-                placeholder="Deja tu comentario"
-                value={comment}
-                onChange={handleCommentChange}
-                required
-              />
-              <div className="mx-5 flex">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <button
-                    key={star}
-                    className={`text-2xl ${
-                      star <= (rating || 0)
-                        ? "text-yellow-500"
-                        : "text-gray-400"
-                    }`}
-                    onClick={() => handleRating(star)}
-                  >
-                    ★
-                  </button>
-                ))}
+              <div className="flex flex-col items-center">
+                <textarea
+                  className="mb-2 p-2 border rounded w-full"
+                  placeholder="Deja tu comentario"
+                  value={
+                    productRatings.find(
+                      (productRating) =>
+                        productRating.productId === product.products.id
+                    )?.comment || ""
+                  }
+                  onChange={(e) => handleCommentChange(e, product.products.id)}
+                  required
+                />
+                <div className="mx-5 flex">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <button
+                      key={star}
+                      className={`text-2xl ${
+                        star <=
+                        (productRatings.find(
+                          (productRating) =>
+                            productRating.productId === product.products.id
+                        )?.rating || 0)
+                          ? "text-yellow-500"
+                          : "text-gray-400"
+                      }`}
+                      onClick={() => handleRating(star, product.products.id)}
+                    >
+                      ★
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
+          ))}
+          <textarea
+            className="mb-2 p-2 border rounded w-full"
+            placeholder="Deja tu comentario general"
+            value={comment}
+            onChange={(e) => handleCommentChange(e)}
+            required
+          />
+          <div className="mx-5 flex">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button
+                key={star}
+                className={`text-2xl ${
+                  star <= (rating || 0) ? "text-yellow-500" : "text-gray-400"
+                }`}
+                onClick={() => handleRating(star)}
+              >
+                ★
+              </button>
+            ))}
           </div>
         </div>
       )}
