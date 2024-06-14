@@ -12,10 +12,23 @@ const Rating: React.FC = () => {
   const [rating, setRating] = useState<number | null>(null);
   const [selectedStars, setSelectedStars] = useState<number | null>(null);
   const [comment, setComment] = useState<string>("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true); // Estado para deshabilitar el botón
   const router = useRouter();
 
   const handleRating = (rate: number) => {
     setRating(rate);
+    setSelectedStars(rate);
+    checkEnableButton(rate, comment); // Verifica si se puede habilitar el botón
+  };
+
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newComment = e.target.value;
+    setComment(newComment);
+    checkEnableButton(rating, newComment); // Verifica si se puede habilitar el botón
+  };
+
+  const checkEnableButton = (stars: number | null, comment: string) => {
+    setIsButtonDisabled(!(stars !== null && comment.trim() !== ""));
   };
 
   const handleSendReview = async () => {
@@ -56,8 +69,9 @@ const Rating: React.FC = () => {
     }
 
     const parsedOrder = JSON.parse(storedOrderId);
+    console.log(parsedOrder);
 
-    getOrdersByID(parsedOrder[0].id)
+    getOrdersByID(parsedOrder.id)
       .then((data) => setOrder(data))
       .catch((error) => console.error("Error fetching order:", error));
   }, []);
@@ -66,24 +80,25 @@ const Rating: React.FC = () => {
     <div className="mx-5 text-center my-10">
       <h1 className="text-2xl font-bold mb-4">Reseñas</h1>
       {order && (
-        <div className="p-4  border-orange-400 border-2 rounded-lg mb-4 mx-5 flex flex-col items-center">
+        <div className="p-4  border-orange-500 border-2 rounded-lg mb-4 mx-5 flex flex-col items-center">
           <div>
-            <h3 className="text-lg font-bold mb-2">Order ID: {order.id}</h3>
-            {order.orderDetails.products.map((product) => (
+            {/* <h3 className="text-lg font-bold mb-2">Order ID: {order.id}</h3> */}
+            {order.orderDetails.orderDetailsProducts.map((product) => (
               <div
-                key={product.id}
+                key={product.products.name}
                 className="flex p-3 justify-around mb-4 w-full"
               >
                 <div className="flex items-center">
                   <img
-                    src={product.imgUrl}
-                    alt={product.name}
+                    src={product.products.imgUrl}
+                    alt={product.products.name}
                     className="w-20 h-20 mr-4 rounded-xl"
                   />
                   <div>
-                    <h2 className="text-lg font-bold">{product.name}</h2>
-                    <p>{product.description}</p>
-                    <p className="font-bold">${product.price}</p>
+                    <h2 className="text-lg font-bold">
+                      {product.products.name}
+                    </h2>
+                    <p className="font-bold">${product.products.price}</p>
                   </div>
                 </div>
               </div>
@@ -93,7 +108,8 @@ const Rating: React.FC = () => {
                 className="mb-2 p-2 border rounded w-full"
                 placeholder="Deja tu comentario"
                 value={comment}
-                onChange={(e) => setComment(e.target.value)}
+                onChange={handleCommentChange}
+                required
               />
               <div className="mx-5 flex">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -104,10 +120,7 @@ const Rating: React.FC = () => {
                         ? "text-yellow-500"
                         : "text-gray-400"
                     }`}
-                    onClick={() => {
-                      handleRating(star);
-                      setSelectedStars(star);
-                    }}
+                    onClick={() => handleRating(star)}
                   >
                     ★
                   </button>
@@ -119,7 +132,10 @@ const Rating: React.FC = () => {
       )}
       <button
         onClick={handleSendReview}
-        className="bg-orange-500 text-white px-4 py-2 rounded-md mt-4"
+        className={`bg-orange-500 text-white px-4 py-2 rounded-md mt-4 ${
+          isButtonDisabled ? "cursor-not-allowed opacity-50" : ""
+        }`}
+        disabled={isButtonDisabled}
       >
         Enviar reseña
       </button>
