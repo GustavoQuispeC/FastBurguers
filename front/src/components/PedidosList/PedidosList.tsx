@@ -20,7 +20,6 @@ const PedidosList = () => {
       if (userSession) {
         const parsedSession = JSON.parse(userSession);
         const token = parsedSession.userData.token;
-
         fetchPedidos(token);
       }
     }
@@ -48,7 +47,7 @@ const PedidosList = () => {
         if (currentIndex !== -1 && currentIndex < statusOrder.length - 1) {
           const newStatus = statusOrder[currentIndex + 1];
           await ChangeStatus(token, pedidoId, newStatus);
-          fetchPedidos(token); // Aquí se pasa el token como argumento
+          fetchPedidos(token);
         } else {
           console.log("No se puede avanzar al siguiente estado.");
         }
@@ -113,19 +112,18 @@ const PedidosList = () => {
                 </thead>
                 <tbody>
                   {pedidos.map((pedido) => {
+                    const statushistory = pedido.orderDetails.statushistory;
                     const currentStatus =
-                      pedido.orderDetails.statushistory[0].status;
+                      statushistory[statushistory.length - 1]?.status;
 
-                    const statusMapping = {
+                    const statusMapping: { [key: string]: string } = {
                       solicitud_recibida: "Pago Recibido",
                       en_preparacion: "En Preparación",
                       en_camino: "En Camino",
                       entregado: "Entregado",
                     };
                     const displayStatus =
-                      statusMapping[
-                        currentStatus as keyof typeof statusMapping
-                      ] || currentStatus;
+                      statusMapping[currentStatus] || currentStatus;
                     const isDelivered = currentStatus === "entregado";
 
                     const fecha = new Date(pedido.date);
@@ -147,19 +145,24 @@ const PedidosList = () => {
                           {horaStr}
                         </td>
                         <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          {pedido.orderDetails.price}
+                          {pedido.orderDetails.amount}
                         </td>
                         <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          {pedido.orderDetails.products.map((producto) => (
-                            <div key={producto.id} className="mb-2">
-                              <img
-                                src={producto.imgUrl}
-                                alt={producto.name}
-                                className="w-10 h-10 inline-block mr-2 rounded-full"
-                              />
-                              <span>{producto.name}</span>
-                            </div>
-                          ))}
+                          {pedido.orderDetails.orderDetailsProducts.map(
+                            (producto) => (
+                              <div
+                                key={producto.products.name}
+                                className="mb-2"
+                              >
+                                <img
+                                  src={producto.products.imgUrl}
+                                  alt={producto.products.name}
+                                  className="w-10 h-10 inline-block mr-2 rounded-full"
+                                />
+                                <span>{producto.products.name}</span>
+                              </div>
+                            )
+                          )}
                         </td>
                         <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                           <span className="bg-blue-500 text-white px-2 py-1 rounded">
