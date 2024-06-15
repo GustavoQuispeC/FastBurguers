@@ -72,7 +72,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
     return null;
   };
 
-  const handleBuyClickAgregar = async () => {
+  const handleBuyClickAgregar = () => {
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
     const existingProduct = currentCart.find(
       (item: any) => item.id === params.productId
@@ -95,72 +95,16 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
       const newProduct: any = {
         ...producto,
         size: tamaño,
-        drink: bebida,
-        drinkPrice: precioBebida,
-        quantity: 1,
       };
+
+      if (bebida) {
+        newProduct.drink = bebida;
+        newProduct.drinkPrice = precioBebida;
+      }
 
       currentCart.push(newProduct);
       localStorage.setItem("cart", JSON.stringify(currentCart));
-
-      // Lógica para enviar la solicitud POST
-      const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
-      const apiURL = process.env.NEXT_PUBLIC_API_URL;
-      const userId = userSession?.userData?.data?.userid;
-
-      const products = currentCart.map((item: any) => ({
-        id: item.id,
-        quantity: item.quantity || 1,
-        sizeProduct: item.size,
-      }));
-
-      if (userId) {
-        try {
-          const response = await fetch(`${apiURL}/storage`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${userSession?.userData?.token}`,
-            },
-            body: JSON.stringify({
-              userId,
-              products,
-              drink: bebida,
-              drinkPrice: precioBebida,
-            }),
-          });
-console.log(precioBebida)
-console.log(bebida)
-console.log(products)
-console.log(userId)
-          if (response.ok) {
-            Swal.fire({
-              title: "¡Éxito!",
-              text: "El producto se ha agregado al carrito y guardado correctamente.",
-              icon: "success",
-              confirmButtonText: "OK",
-            }).then(() => {
-              router.push("/home");
-            });
-          } else {
-            throw new Error("Error en la solicitud POST");
-          }
-        } catch (error) {
-          Swal.fire({
-            title: "Error",
-            text: "Hubo un problema al guardar el carrito. Por favor, inténtelo de nuevo.",
-            icon: "error",
-            confirmButtonText: "OK",
-          });
-        }
-      } else {
-        Swal.fire({
-          title: "Error",
-          text: "No se pudo obtener la información del usuario. Por favor, inicie sesión nuevamente.",
-          icon: "error",
-          confirmButtonText: "OK",
-        });
-      }
+      router.push("/home");
     }
   };
 

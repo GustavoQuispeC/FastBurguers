@@ -80,7 +80,7 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
       const items = currentCart.map((item) => ({
         name: item.name,
         quantity: item.quantity || 1,
-        price: Number(item.price),
+        price: item.price,
       }));
 
       console.log("Items:", items);
@@ -144,15 +144,6 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
 
           // Guardar la respuesta en localStorage
           localStorage.setItem("Order", JSON.stringify(createOrderResponse));
-
-          // Eliminar el carrito en el servidor
-          await fetch(`${apiURL}/storage/${userId}`, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${userToken}`,
-            },
-          });
 
           localStorage.removeItem("cart");
 

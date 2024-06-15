@@ -188,7 +188,7 @@ const Checkout = () => {
                           <li className="flex flex-wrap gap-4">
                             Producto{" "}
                             <span className="ml-auto">
-                              ${Number(item.price).toFixed(2)}
+                              ${item.price.toFixed(2)}
                             </span>
                           </li>
                           {parseFloat(item.drinkPrice || "0") > 0 && (
