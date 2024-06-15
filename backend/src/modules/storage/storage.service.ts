@@ -17,6 +17,9 @@ export class StorageService {
 
     async getByID(idUser:string){
 
+        const userFound = await this.usersRepository.findOneBy({id:idUser})
+        if(!userFound) throw new NotFoundException(`No se encontro el usuario: ${idUser}`)
+
         const items = await this.storageRepository.find({
             where:{
                 idUser
@@ -68,7 +71,6 @@ export class StorageService {
                 })
             
             )
-        
         // save data
         await Promise.all(
             products.map(async (product)=>{

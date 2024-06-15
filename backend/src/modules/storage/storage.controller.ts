@@ -12,7 +12,7 @@ export class StorageController {
     @Get(':id')
     @UseGuards(AuthGuards)
     getStorageByID(@Param('id', ParseUUIDPipe) id:string){
-       return this.storageService.getByID(id)
+        return this.storageService.getByID(id)
     }
 
     @Post()
