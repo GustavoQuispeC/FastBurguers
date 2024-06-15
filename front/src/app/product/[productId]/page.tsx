@@ -106,7 +106,10 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
       localStorage.setItem("cart", JSON.stringify(currentCart));
 
       // Lógica para enviar la solicitud POST
-      const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
+      const userSession = JSON.parse(
+        localStorage.getItem("userSession") || "{}"
+      );
+      const apiURL = process.env.NEXT_PUBLIC_API_URL;
       const userId = userSession?.userData?.data?.userid;
       const products = currentCart.map((item: any) => ({
         id: item.id,
@@ -115,7 +118,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
 
       if (userId) {
         try {
-          const response = await fetch("http://localhost:3001/storage", {
+          const response = await fetch(`${apiURL}/storage`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

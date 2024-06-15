@@ -10,15 +10,20 @@ const Cart = () => {
   const router = useRouter();
   const [cart, setCart] = useState<IProductCart[]>([]);
   const [userSession, setUserSession] = useState(false);
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     const fetchCartItems = async () => {
-      const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
+      const userSession = JSON.parse(
+        localStorage.getItem("userSession") || "{}"
+      );
       const userId = userSession?.userData?.data?.userid;
 
-      if (userId) {
+      // Verificar si hay datos en el localStorage
+      const localCart = localStorage.getItem("cart");
+      if (userId && !localCart) {
         try {
-          const response = await fetch(`http://localhost:3001/storage/${userId}`, {
+          const response = await fetch(`${apiURL}/storage/${userId}`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -29,19 +34,22 @@ const Cart = () => {
           if (response.ok) {
             const data = await response.json();
             const productRequests = data.map((item: any) =>
-              fetch(`http://localhost:3001/products/${item.idProduct}`, {
+              fetch(`${apiURL}/products/${item.idProduct}`, {
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json",
                   Authorization: `Bearer ${userSession?.userData?.token}`,
                 },
-              }).then((res) => res.json().then((productData) => ({
-                ...productData,
-                quantity: item.quantity,
-              })))
+              }).then((res) =>
+                res.json().then((productData) => ({
+                  ...productData,
+                  quantity: item.quantity,
+                }))
+              )
             );
 
             const products = await Promise.all(productRequests);
+            localStorage.setItem("cart", JSON.stringify(products));
             setCart(products);
           } else {
             throw new Error("Error fetching cart items");
@@ -49,6 +57,9 @@ const Cart = () => {
         } catch (error) {
           console.error("Error fetching cart items:", error);
         }
+      } else if (localCart) {
+        // Si hay datos en el localStorage, establecer el carrito desde allí
+        setCart(JSON.parse(localCart));
       }
 
       const userSessionExists = localStorage.getItem("userSession");
@@ -82,32 +93,58 @@ const Cart = () => {
 
   const updateCartInServer = async (updatedCart: IProductCart[]) => {
     const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
-    const userId = userSession?.userData?.data?.userId;
+    const userId = userSession?.userData?.data?.userid;
+    const token = userSession?.userData?.token;
 
-    if (userId) {
-      try {
-        const response = await fetch("http://localhost:3001/storage", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userSession?.userData?.token}`,
-          },
-          body: JSON.stringify({
-            userId,
-            products: updatedCart.map((item) => ({
-              id: item.id,
-              quantity: item.quantity,
-            })),
-          }),
-        });
+    const products = updatedCart.map((item) => ({
+      id: item.id,
+      quantity: item.quantity,
+    }));
 
-        if (!response.ok) {
-          throw new Error("Error updating cart in server");
-        }
-      } catch (error) {
-        console.error("Error updating cart in server:", error);
+    try {
+      const response = await fetch(`${apiURL}/storage`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          userId,
+          products,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error updating cart in server");
       }
+    } catch (error) {
+      console.error("Error updating cart in server:", error);
     }
+  };
+
+  const removeFromCart = (index: number) => {
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción eliminará el producto del carrito de compras",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const updatedCart = [...cart];
+        await updateCartInServer(updatedCart);
+        updatedCart.splice(index, 1);
+        setCart(updatedCart);
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+        Swal.fire(
+          "Eliminado",
+          "El producto ha sido eliminado del carrito",
+          "success"
+        );
+      }
+    });
   };
 
   const calcularSubtotal = () => {
@@ -140,29 +177,6 @@ const Cart = () => {
   const bebida = calcularBebida();
   const descuento = calcularDescuento();
   const total = calcularTotal();
-
-  const removeFromCart = (index: any) => {
-    Swal.fire({
-      title: "¿Estás seguro?",
-      text: "Esta acción eliminará el producto del carrito de compras",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Sí, eliminar",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const updatedCart = [...cart];
-        updatedCart.splice(index, 1);
-        setCart(updatedCart);
-        updateCartInServer(updatedCart);
-        Swal.fire(
-          "Eliminado",
-          "El producto ha sido eliminado del carrito",
-          "success"
-        );
-      }
-    });
-  };
 
   return (
     <div className="font-sans max-w-4xl mx-auto py-4 h-screen">
