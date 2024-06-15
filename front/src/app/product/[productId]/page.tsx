@@ -108,7 +108,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
 
       // Lógica para enviar la solicitud POST
       const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
-      const userId = userSession?.userData?.data?.userId;
+      const userId = userSession?.userData?.data?.userid;
       const products = currentCart.map((item: any) => ({
         id: item.id,
         quantity: item.quantity || 1,

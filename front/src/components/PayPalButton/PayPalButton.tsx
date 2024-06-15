@@ -145,6 +145,15 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
           // Guardar la respuesta en localStorage
           localStorage.setItem("Order", JSON.stringify(createOrderResponse));
 
+          // Eliminar el carrito en el servidor
+          await fetch(`http://localhost:3001/storage/${userId}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${userToken}`,
+            },
+          });
+
           localStorage.removeItem("cart");
 
           Router.push("/tracking");
