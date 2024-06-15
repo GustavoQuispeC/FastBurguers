@@ -12,14 +12,14 @@ export class StorageController {
     @Get(':id')
     @UseGuards(AuthGuards)
     getStorageByID(@Param('id', ParseUUIDPipe) id:string){
-       return this.storageService.getByID(id)
+        return this.storageService.getByID(id)
     }
 
     @Post()
     @UseGuards(AuthGuards)
     createOrder(@Body() orderInfo:CreateOrderStorageDto){
-        const {userId,products} = orderInfo;
-        return this.storageService.createOrder(userId,products)
+        const {userId,products,...drinkInfo} = orderInfo;
+        return this.storageService.createOrder(userId,products,drinkInfo)
 
     }   
 
