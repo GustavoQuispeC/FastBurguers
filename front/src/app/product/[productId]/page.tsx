@@ -95,25 +95,23 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
       const newProduct: any = {
         ...producto,
         size: tamaño,
+        drink: bebida,
+        drinkPrice: precioBebida,
+        quantity: 1,
       };
-
-      if (bebida) {
-        newProduct.drink = bebida;
-        newProduct.drinkPrice = precioBebida;
-      }
 
       currentCart.push(newProduct);
       localStorage.setItem("cart", JSON.stringify(currentCart));
 
       // Lógica para enviar la solicitud POST
-      const userSession = JSON.parse(
-        localStorage.getItem("userSession") || "{}"
-      );
+      const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
       const apiURL = process.env.NEXT_PUBLIC_API_URL;
       const userId = userSession?.userData?.data?.userid;
+
       const products = currentCart.map((item: any) => ({
         id: item.id,
         quantity: item.quantity || 1,
+        sizeProduct: item.size,
       }));
 
       if (userId) {
@@ -127,9 +125,14 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
             body: JSON.stringify({
               userId,
               products,
+              drink: bebida,
+              drinkPrice: precioBebida,
             }),
           });
-
+console.log(precioBebida)
+console.log(bebida)
+console.log(products)
+console.log(userId)
           if (response.ok) {
             Swal.fire({
               title: "¡Éxito!",
