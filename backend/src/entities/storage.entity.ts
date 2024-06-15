@@ -16,4 +16,12 @@ export class Storage {
     @Column()
     quantity: number
 
+    @Column({type: 'varchar', length: 100})
+    drink:string
+
+    @Column({ type: 'decimal', precision: 10})
+    drinkPrice: number
+
+    @Column({type: 'varchar', length: 100, default:"normal"})
+    sizeProduct:string
 }

@@ -23,15 +23,39 @@ export class StorageService {
             }
         })
         if(!items) throw new NotFoundException(`No se encontro storage del usuario: ${idUser}`) 
-        const publicItems =  items.map((element) =>{
-            const {id,idUser, ...info} = element
-            return info
-        })  
         
-        return publicItems
+        let drinkGlobal="" , drinkPriceGlobal=0;    
+        const publicItems = await Promise.all( items.map(async (element) =>{
+            const {idProduct, quantity,drink,drinkPrice,sizeProduct} = element;
+            const productInfo = await this.productsRepository.createQueryBuilder('products')
+            .leftJoinAndSelect('products.category', 'category')
+            .where('products.id = :id', { id: idProduct })
+            .select([
+                'products.id',
+                'products.name',
+                'products.description',
+                'products.price',
+                'products.stock',
+                'products.imgUrl',
+                'products.discount',
+                'category.name'
+            ])
+            .getOne();
+            drinkGlobal=drink;drinkPriceGlobal=drinkPrice;
+                
+            return {
+                ...productInfo,
+                sizeProduct,
+                quantity
+            }
+            })
+        )
+        
+
+        return {products:publicItems,drink:drinkGlobal,drinkPrice:drinkPriceGlobal}
         
     }
-    async createOrder(idUser:string,products:ProductInfo[]){
+    async createOrder(idUser:string,products:ProductInfo[],drinkInfo:any){
 
         const userFound = await this.usersRepository.findOneBy({id:idUser})
         if(!userFound) throw new NotFoundException(`No existe el usuario: ${idUser}`) 
@@ -54,13 +78,19 @@ export class StorageService {
                 })
                 if(itemFound){
                     await this.storageRepository.update(itemFound.id,{
-                        quantity:product.quantity
+                        quantity:product.quantity,
+                        sizeProduct:product.sizeProduct,
+                        drink:drinkInfo.drink,
+                        drinkPrice:drinkInfo.drinkPrice
                     })
                 }else{
                     const item = this.storageRepository.create({
                         idUser,
                         idProduct:product.id,
-                        quantity:product.quantity
+                        quantity:product.quantity,
+                        sizeProduct:product.sizeProduct,
+                        drink:drinkInfo.drink,
+                        drinkPrice:drinkInfo.drinkPrice
                     })
                     await this.storageRepository.save(item)
                 }

@@ -1,4 +1,4 @@
-import {IsNotEmpty, IsUUID, IsArray, ArrayMinSize, ArrayNotEmpty, IsInt, Min, ValidateNested} from "class-validator"
+import {IsNotEmpty, IsUUID, IsArray, ArrayMinSize, ArrayNotEmpty, IsInt, Min, ValidateNested, IsObject, IsOptional, IsString} from "class-validator"
 import { Type } from "class-transformer";
 
 
@@ -10,6 +10,10 @@ export class ProductInfo{
   @IsInt()
   @Min(1)
   quantity: number;
+
+  @IsOptional()
+  @IsString()
+  sizeProduct?:string
 }
 
 export class AddOrderDto {
