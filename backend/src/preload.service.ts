@@ -1,13 +1,16 @@
-import { Injectable, InternalServerErrorException, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, InternalServerErrorException, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { Users } from './entities/users.entity';
 import { Products } from './entities/products.entity';
 import { Categories } from './entities/categories.entity';
-import * as data from './data/data.json'
+import * as dataProducts from './data/dataProducts.json'
 import { OrdersService } from './modules/orders/orders.service';
-
+import * as dataComentarios from './data/dataComentarios.json'
+import * as dataUsers from './data/dataUsers.json'
+import { Testimony } from './entities/testimony.entity';
+import { copyFileSync } from 'fs';
 
 
 @Injectable()
@@ -16,6 +19,7 @@ export class PreloadService implements OnModuleInit {
         @InjectRepository(Users) private usersRepository: Repository<Users>,
         @InjectRepository(Products) private productsRepository: Repository<Products>,
         @InjectRepository(Categories) private categoriesRepository: Repository<Categories>,
+        @InjectRepository(Testimony) private testimonyRepository: Repository<Testimony>,
         private readonly ordersService: OrdersService,
     ){}
 
@@ -45,7 +49,7 @@ export class PreloadService implements OnModuleInit {
     }
 
     async addDefaultCategories(){
-        data?.map(async (element)=>{
+        dataProducts?.map(async (element)=>{
             await this.categoriesRepository.createQueryBuilder()
                 .insert()
                 .into(Categories)
@@ -59,7 +63,7 @@ export class PreloadService implements OnModuleInit {
     async addDefaultProducts(){
         const categories = await this.categoriesRepository.find();
 
-    const productsToUpsert = data.map((element) => {
+    const productsToUpsert = dataProducts.map((element) => {
         const categoryObject = categories.find(
             (category) => category.name === element.category
         );
@@ -112,44 +116,30 @@ export class PreloadService implements OnModuleInit {
     console.log('Precarga de productos');
     }
 
+    async addDefaultTestimonies(){
+
+        await Promise.all(
+            dataComentarios.map(async(element)=>{
+                const commnet =this.testimonyRepository.create({
+                    name:element.name,
+                    email:element.email,
+                    description:element.description,
+                    punctuation:element.punctuation
+                })
+
+                await this.testimonyRepository.save(commnet)
+            })
+        )
+
+        console.log("Se cargo data de testimonios")
+
+    }
 
     async onModuleInit() {
 
-        const defaultSuperAdmin = {
-            email: "superAdminTest@gmail.com",
-            name: "SuperAdmin01",
-            password: "1234aA#abc",
-            isAdmin:true,
-            isSuperAdmin:true,
-            phone: 123456789,
-            country: "España",
-            address: "EnriqueDelgado",
-            city:"Madrid",
-        }
-
-        const defaultAdmin =  {
-            email: "adminTest@gmail.com",
-            name: "Admin01",
-            password: "1234aA#abc",
-            isAdmin:true,
-            isSuperAdmin:false,
-            phone: 123456789,
-            country: "España",
-            address: "EnriqueDelgado",
-            city:"Madrid",
-        }
-    
-        const defaultUser =  {
-            email: "userTest@gmail.com",
-            name: "User01",
-            password: "1234aA#abc",
-            isAdmin:false,
-            isSuperAdmin:false,
-            phone: 123456789,
-            country: "España",
-            address: "EnriqueDelgado",
-            city:"Madrid",
-        }
+        const defaultSuperAdmin = dataUsers[0].defaultSuperAdmin
+        const defaultAdmin =  dataUsers[0].defaultAdmin
+        const defaultUser =  dataUsers[0].defaultUser
 
         await this.addDefaultCategories();
         await this.delay(1000); 
@@ -158,5 +148,6 @@ export class PreloadService implements OnModuleInit {
         await this.addDefaultUser(defaultAdmin);
         await this.addDefaultOrder();
         await this.addDefaultUser(defaultUser);
+        await this.addDefaultTestimonies();
     }
 }

@@ -25,6 +25,8 @@ import { ProductRatingsModule } from './modules/productrating/productrating.modu
 import { StorageController } from './modules/storage/storage.controller';
 import { StorageService } from './modules/storage/storage.service';
 import { StorageModule } from './modules/storage/storage.module';
+import { Testimony } from './entities/testimony.entity';
+import { ChatbotModule } from './chatbot/chatbot.module';
 
 @Module({
   imports: [
@@ -43,7 +45,7 @@ import { StorageModule } from './modules/storage/storage.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '60m' },
     }),
-    TypeOrmModule.forFeature([Products, Categories, Users]),
+    TypeOrmModule.forFeature([Products, Categories, Users,Testimony]),
     UsersModule,
     CategoriesModule,
     ProductsModule,
@@ -56,7 +58,8 @@ import { StorageModule } from './modules/storage/storage.module';
     MailerModule,
     OrderRatingsModule,
     ProductRatingsModule,
-    StorageModule
+    StorageModule,
+    ChatbotModule
   ],
   controllers: [AppController,],
   providers: [AppService, PreloadService,],

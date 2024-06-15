@@ -1,0 +1,26 @@
+[
+    {
+        "punctuation": 1,
+        "name": "Carlos Herrera",
+        "description": "Las mejores hamburguesas que he probado en mucho tiempo. Ingredientes de primera y un sabor inigualable.",
+        "email": "carlos@gmail.com"
+    },
+    {
+        "punctuation": 2,
+        "name": "Jessica Pearson",
+        "description": "¡Simplemente fenomenal! La experiencia gourmet es evidente en cada bocado. Recomiendo altamente la hamburguesa de trufa.",
+        "email": "Jessica@gmail.com"
+    },
+    {
+        "punctuation": 3,
+        "name": "Mark Johnson",
+        "description": "Servicio excelente y la calidad de las hamburguesas es superba. ¡La hamburguesa de carne Wagyu es imprescindible!",
+        "email": "Mark@gmail.com"
+    },
+    {
+        "punctuation": 4,
+        "name": "Samantha Reed",
+        "description": "Me encantan los sabores únicos y los ingredientes frescos y locales que utilizan. El ambiente es simplemente perfecto para un lugar de hamburguesas gourmet.",
+        "email": "Samantha@gmail.com"
+    }
+]

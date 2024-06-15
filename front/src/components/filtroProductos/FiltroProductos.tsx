@@ -38,6 +38,14 @@ const FiltroProductos: React.FC<GridProductsProps> = ({
     fetchProducts();
   }, [categoryName, minPrice, maxPrice]);
 
+  const renderStars = (averageRating: number) => {
+    const stars = [];
+    for (let i = 0; i < 5; i++) {
+      stars.push(<span key={i}>{i < averageRating ? "★" : "☆"}</span>);
+    }
+    return stars;
+  };
+
   if (loading) {
     return <Spinner />;
   }
@@ -61,6 +69,11 @@ const FiltroProductos: React.FC<GridProductsProps> = ({
           <p className="text-gray-800 text-2xl font-bold mt-2">
             ${product.price}
           </p>
+          {product.averageRating && parseInt(product.averageRating) > 0 && (
+            <div className="text-yellow-500 mt-2 text-xl">
+              {renderStars(Number(product.averageRating))}
+            </div>
+          )}
           <Link href={`/product/${product.id}`} key={product.name}>
             <button className="bg-orange-500 rounded-xl p-2 px-10 mt-2 text-white font-bold border-none">
               Ver más

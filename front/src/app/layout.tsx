@@ -8,6 +8,7 @@ import Provider from "@/context/Provider";
 import Footer from "@/components/footer/Footer";
 import { PayPalContext } from "@/context/PayPalContext";
 import { CategoryProvider } from "@/context/category.context";
+import Chatbot from "@/components/Chatbot/Chatbot";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
             <Provider>
               <Navbar />
               {children}
+              <Chatbot/>
               <Footer />
             </Provider>
           </PayPalContext>
