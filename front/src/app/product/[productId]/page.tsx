@@ -129,7 +129,10 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
               drinkPrice: precioBebida,
             }),
           });
-
+console.log(precioBebida)
+console.log(bebida)
+console.log(products)
+console.log(userId)
           if (response.ok) {
             Swal.fire({
               title: "¡Éxito!",

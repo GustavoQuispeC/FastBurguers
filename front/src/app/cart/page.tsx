@@ -21,46 +21,46 @@ const Cart = () => {
 
       // Verificar si hay datos en el localStorage
       const localCart = localStorage.getItem("cart");
-      if (userId && !localCart) {
-        try {
-          const response = await fetch(`${apiURL}/storage/${userId}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${userSession?.userData?.token}`,
-            },
-          });
+      // if (userId && !localCart) {
+      //   try {
+      //     const response = await fetch(`${apiURL}/storage/${userId}`, {
+      //       method: "GET",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //         Authorization: `Bearer ${userSession?.userData?.token}`,
+      //       },
+      //     });
 
-          if (response.ok) {
-            const data = await response.json();
-            const productRequests = data.map((item: any) =>
-              fetch(`${apiURL}/products/${item.idProduct}`, {
-                method: "GET",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${userSession?.userData?.token}`,
-                },
-              }).then((res) =>
-                res.json().then((productData) => ({
-                  ...productData,
-                  quantity: item.quantity,
-                }))
-              )
-            );
+      //     if (response.ok) {
+      //       const data = await response.json();
+      //       const productRequests = data.map((item: any) =>
+      //         fetch(`${apiURL}/products/${item.idProduct}`, {
+      //           method: "GET",
+      //           headers: {
+      //             "Content-Type": "application/json",
+      //             Authorization: `Bearer ${userSession?.userData?.token}`,
+      //           },
+      //         }).then((res) =>
+      //           res.json().then((productData) => ({
+      //             ...productData,
+      //             quantity: item.quantity,
+      //           }))
+      //         )
+      //       );
 
-            const products = await Promise.all(productRequests);
-            localStorage.setItem("cart", JSON.stringify(products));
-            setCart(products);
-          } else {
-            throw new Error("Error fetching cart items");
-          }
-        } catch (error) {
-          console.error("Error fetching cart items:", error);
-        }
-      } else if (localCart) {
-        // Si hay datos en el localStorage, establecer el carrito desde allí
-        setCart(JSON.parse(localCart));
-      }
+      //       const products = await Promise.all(productRequests);
+      //       localStorage.setItem("cart", JSON.stringify(products));
+      //       setCart(products);
+      //     } else {
+      //       throw new Error("Error fetching cart items");
+      //     }
+      //   } catch (error) {
+      //     console.error("Error fetching cart items:", error);
+      //   }
+      // } else if (localCart) {
+      //   // Si hay datos en el localStorage, establecer el carrito desde allí
+      //   setCart(JSON.parse(localCart));
+      // }
 
       const userSessionExists = localStorage.getItem("userSession");
       setUserSession(!!userSessionExists);
