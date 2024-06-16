@@ -147,11 +147,11 @@ const Cart = () => {
       await deleteStorageBack(token, userId);
     } catch (error) {
       console.error("Error deleting cart in backend:", error);
-      Swal.fire({
-        title: "Error",
-        text: "No se pudo eliminar el carrito en el servidor.",
-        icon: "error",
-      });
+      // Swal.fire({
+      //   title: "Error",
+      //   text: "No se pudo eliminar el carrito en el servidor.",
+      //   icon: "error",
+      // });
     }
   };
 
