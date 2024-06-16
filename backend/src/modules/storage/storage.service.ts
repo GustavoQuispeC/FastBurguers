@@ -60,10 +60,20 @@ export class StorageService {
 
         const userFound = await this.usersRepository.findOneBy({id:idUser})
         if(!userFound) throw new NotFoundException(`No existe el usuario: ${idUser}`) 
-
+        
+        const items =  await this.storageRepository.find({
+                where:{
+                    idUser
+                }
+            })
         //clear before storage
-        await this.delete(idUser)
-            
+        if(items.length !== 0) {
+            await Promise.all(
+                items.map(async(product)=>{
+                    await this.storageRepository.delete(product)
+                })
+            )
+        }
         // check if product exist in database
             await Promise.all(
                 products.map(async (product)=>{
