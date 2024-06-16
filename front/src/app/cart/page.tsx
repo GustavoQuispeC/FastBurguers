@@ -53,12 +53,6 @@ const Cart = () => {
     }, 0);
   };
 
-  const calcularBebida = () => {
-    return cart.reduce((acc, item) => {
-      return acc + item.quantity * (parseFloat(item.drinkPrice || "0") || 0);
-    }, 0);
-  };
-
   const calcularDescuento = () => {
     return cart.reduce((acc, item) => {
       return acc + item.quantity * (item.price * (item.discount || 0));
@@ -67,14 +61,12 @@ const Cart = () => {
 
   const calcularTotal = () => {
     const subtotal = calcularSubtotal();
-    const bebida = calcularBebida();
     const descuento = calcularDescuento();
 
-    return subtotal - descuento + bebida;
+    return subtotal - descuento;
   };
 
   const subtotal = calcularSubtotal();
-  const bebida = calcularBebida();
   const descuento = calcularDescuento();
   const total = calcularTotal();
 
@@ -124,6 +116,9 @@ const Cart = () => {
                   <div>
                     <h3 className="text-base font-bold text-gray-800">
                       {item.name}
+                      {item.size === "Grande" || item.size === "Clásica"
+                        ? ` (${item.size})`
+                        : ""}
                       {item.drink ? ` + ${item.drink}` : ""}
                     </h3>
                     <h6
@@ -158,25 +153,18 @@ const Cart = () => {
                       <h4 className="text-lg font-bold text-gray-800">
                         $
                         {(
-                          item.price * item.quantity * (1 - item.discount) +
-                          (parseFloat(item.drinkPrice) || 0)
+                          item.price *
+                          item.quantity *
+                          (1 - item.discount)
                         ).toFixed(2)}
                       </h4>
                       <h4 className="text-gray-500 line-through">
-                        $
-                        {(
-                          (item.price + (parseFloat(item.drinkPrice) || 0)) *
-                          item.quantity
-                        ).toFixed(2)}
+                        ${(item.price * item.quantity).toFixed(2)}
                       </h4>
                     </div>
                   ) : (
                     <h4 className="text-lg font-bold text-gray-800">
-                      $
-                      {(
-                        (item.price + (parseFloat(item.drinkPrice) || 0)) *
-                        item.quantity
-                      ).toFixed(2)}
+                      ${(item.price * item.quantity).toFixed(2)}
                     </h4>
                   )}
                 </div>
@@ -195,12 +183,7 @@ const Cart = () => {
               Subtotal{" "}
               <span className="ml-auto font-bold">${subtotal.toFixed(2)}</span>
             </li>
-            {bebida > 0 && (
-              <li className="flex flex-wrap gap-4 text-sm">
-                Bebida{" "}
-                <span className="ml-auto font-bold">${bebida.toFixed(2)}</span>
-              </li>
-            )}
+
             {descuento > 0 && (
               <li className="flex flex-wrap gap-4 text-sm">
                 Descuento{" "}

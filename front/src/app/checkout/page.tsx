@@ -65,12 +65,11 @@ const Checkout = () => {
   const calcularTotalConDescuento = () => {
     return cart.reduce((acc, item) => {
       const validPrice = item.price || 0;
-      const validDrinkPrice = parseFloat(item.drinkPrice ?? "0") || 0;
       const validDiscount = item.discount || 0;
       const validQuantity = item.quantity || 1;
 
       const discountedPrice = validPrice - validPrice * validDiscount;
-      const itemTotal = (discountedPrice + validDrinkPrice) * validQuantity;
+      const itemTotal = discountedPrice * validQuantity;
       return acc + itemTotal;
     }, 0);
   };
@@ -191,14 +190,7 @@ const Checkout = () => {
                               ${item.price.toFixed(2)}
                             </span>
                           </li>
-                          {parseFloat(item.drinkPrice || "0") > 0 && (
-                            <li className="flex flex-wrap gap-4">
-                              Bebida{" "}
-                              <span className="ml-auto">
-                                ${parseFloat(item.drinkPrice || "0").toFixed(2)}
-                              </span>
-                            </li>
-                          )}
+
                           {calculateDiscountAmount(item.price, item.discount) >
                             0 && (
                             <li className="flex flex-wrap gap-4">
