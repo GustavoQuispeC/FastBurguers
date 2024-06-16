@@ -14,6 +14,7 @@ import { FaEyeSlash } from "react-icons/fa6";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { LoginUser } from "@/helpers/Autenticacion.helper";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const Router = useRouter();
@@ -70,7 +71,7 @@ const Login = () => {
     }));
   };
 
-  console.log(dataUser)
+  console.log(dataUser);
 
   //? Manejar submit del formulario
   const handleSubmit = async (e: any) => {
@@ -78,14 +79,26 @@ const Login = () => {
     try {
       const user = await LoginUser(dataUser);
 
+      const userWithToken = user as unknown as { token: string };
       localStorage.setItem("userSession", JSON.stringify({ userData: user }));
+
+      const decodedToken = jwtDecode(userWithToken.token) as {
+        isAdmin: boolean;
+        isSuperAdmin: boolean;
+      };
+
       Swal.fire({
         icon: "success",
         title: "¡Bienvenido a FastBurgers!",
         showConfirmButton: false,
         timer: 1500,
       });
-      Router.push("/home");
+
+      if (decodedToken.isAdmin || decodedToken.isSuperAdmin) {
+        Router.push("/dashboardAdmin");
+      } else {
+        Router.push("/home");
+      }
     } catch (error: any) {
       Swal.fire({
         icon: "error",

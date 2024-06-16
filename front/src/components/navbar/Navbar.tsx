@@ -66,7 +66,7 @@ const Navbar = () => {
     }
 
     fetchData();
-  }, [pathname]);
+  }, [pathname, cartItemCount]);
 
   const handleSearch = (event: { target: { value: string } }) => {
     const value = event.target.value.toLowerCase();
@@ -299,25 +299,27 @@ const Navbar = () => {
       </div>
       <style jsx>{`
         .bg-hamburger {
-          background-image: url('/hamburguer.png');
+          background-image: url("/hamburguer.png");
         }
         .bg-fries {
-          background-image: url('/fries.png');
+          background-image: url("/fries.png");
         }
         .bg-delivery {
-          background-image: url('/delivery.png');
+          background-image: url("/delivery.png");
         }
         .animate-bounce {
-          animation:  infinite;
+          animation: infinite;
         }
         @keyframes bounce {
-          0%, 100% {
+          0%,
+          100% {
             transform: translateY(0);
           }
           50% {
             transform: translateY(-20px);
           }
         }
+        //
       `}</style>
     </>
   );
