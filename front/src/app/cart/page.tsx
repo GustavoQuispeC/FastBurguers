@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  deleteStorageBack,
+  getStorageBack,
+  postStorageBack,
+} from "@/helpers/StorageBack.helper";
 import { IProductCart } from "@/interfaces/IProduct";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,16 +17,48 @@ const Cart = () => {
   const [userSession, setUserSession] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.localStorage) {
+    const fetchCart = async () => {
+      const userSession = JSON.parse(
+        localStorage.getItem("userSession") || "{}"
+      );
+      const userId = userSession?.userData?.data?.userid;
+      const token = userSession?.userData?.token;
+
       const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
-      const initializedCartItems = cartItems.map((item: IProductCart) => ({
-        ...item,
-        quantity: item.quantity || 1,
-      }));
-      setCart(initializedCartItems);
+
+      if (cartItems.length === 0) {
+        try {
+          const fetchedCart = await getStorageBack(token, userId);
+          const initializedCartItems = fetchedCart.map(
+            (item: IProductCart) => ({
+              ...item,
+              quantity: item.quantity || 1,
+            })
+          );
+          setCart(initializedCartItems);
+          localStorage.setItem("cart", JSON.stringify(initializedCartItems));
+        } catch (error) {
+          console.error("Error fetching cart from backend:", error);
+          Swal.fire({
+            title: "Error",
+            text: "No se pudo recuperar el carrito desde el servidor.",
+            icon: "error",
+          });
+        }
+      } else {
+        const initializedCartItems = cartItems.map((item: IProductCart) => ({
+          ...item,
+          quantity: item.quantity || 1,
+        }));
+        setCart(initializedCartItems);
+      }
 
       const userSessionExists = localStorage.getItem("userSession");
       setUserSession(!!userSessionExists);
+    };
+
+    if (typeof window !== "undefined" && window.localStorage) {
+      fetchCart();
     }
   }, []);
 
@@ -33,6 +70,7 @@ const Cart = () => {
       return item;
     });
     setCart(newCart);
+    actualizarCarritoBackend(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
@@ -44,6 +82,7 @@ const Cart = () => {
       return item;
     });
     setCart(newCart);
+    actualizarCarritoBackend(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
@@ -62,7 +101,6 @@ const Cart = () => {
   const calcularTotal = () => {
     const subtotal = calcularSubtotal();
     const descuento = calcularDescuento();
-
     return subtotal - descuento;
   };
 
@@ -80,10 +118,17 @@ const Cart = () => {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        const updatedCart = [...cart];
+        let updatedCart = [...cart];
         updatedCart.splice(index, 1);
         setCart(updatedCart);
         localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+        if (updatedCart.length === 0) {
+          eliminarCarritoBackend();
+        } else {
+          actualizarCarritoBackend(updatedCart);
+        }
+
         Swal.fire(
           "Eliminado",
           "El producto ha sido eliminado del carrito",
@@ -91,6 +136,50 @@ const Cart = () => {
         );
       }
     });
+  };
+
+  const eliminarCarritoBackend = async () => {
+    const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
+    const userId = userSession?.userData?.data?.userid;
+    const token = userSession?.userData?.token;
+
+    try {
+      await deleteStorageBack(token, userId);
+    } catch (error) {
+      console.error("Error deleting cart in backend:", error);
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo eliminar el carrito en el servidor.",
+        icon: "error",
+      });
+    }
+  };
+
+  const actualizarCarritoBackend = async (updatedCart: IProductCart[]) => {
+    const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
+    const userId = userSession?.userData?.data?.userid;
+    const token = userSession?.userData?.token;
+
+    try {
+      const promises = updatedCart.map((item) => {
+        return postStorageBack(
+          token,
+          userId,
+          item.id.toString(),
+          item.quantity,
+          item.size
+        );
+      });
+
+      await Promise.all(promises);
+    } catch (error) {
+      console.error("Error updating cart in backend:", error);
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo actualizar el carrito en el servidor.",
+        icon: "error",
+      });
+    }
   };
 
   return (
@@ -202,14 +291,16 @@ const Cart = () => {
               <button
                 type="button"
                 className={`text-sm px-4 py-2.5 w-full font-semibold tracking-wide rounded-md ${
-                  userSession
+                  userSession && cart.length > 0
                     ? "bg-gray-900 hover:bg-gray-700 text-orange-400"
                     : "bg-gray-300 cursor-not-allowed text-gray-500"
                 }`}
-                disabled={!userSession}
+                disabled={!userSession || cart.length === 0}
                 title={
                   !userSession
                     ? "Necesita estar logueado para continuar con el pago"
+                    : cart.length === 0
+                    ? "El carrito está vacío"
                     : ""
                 }
               >

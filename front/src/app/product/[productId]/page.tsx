@@ -60,8 +60,6 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
 
   const handleBuyClickAgregar = async () => {
     const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
-    const userId = userSession?.userData?.data?.userid;
-    const token = userSession?.userData?.token;
 
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
     const existingProduct = currentCart.find(
@@ -71,7 +69,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
     if (existingProduct) {
       Swal.fire({
         title: "¡Producto ya en el carrito!",
-        text: "¿Seleccione?",
+        text: "¿Seleccionar?",
         icon: "info",
         showCancelButton: true,
         confirmButtonText: "Ir al carrito",
@@ -91,23 +89,29 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
       currentCart.push(newProduct);
       localStorage.setItem("cart", JSON.stringify(currentCart));
 
-      // Realizar la solicitud al helper
-      try {
-        await postStorageBack(
-          token,
-          userId,
-          params.productId.toString(),
-          1,
-          tamaño
-        );
-        router.push("/home");
-      } catch (error: any) {
-        Swal.fire({
-          title: "Error",
-          text: `Error agregando producto al carrito: ${error.message}`,
-          icon: "error",
-        });
+      // No realizar la solicitud al helper si el usuario no está autenticado
+      if (userSession && userSession.userData) {
+        const userId = userSession.userData.data.userid;
+        const token = userSession.userData.token;
+
+        try {
+          await postStorageBack(
+            token,
+            userId,
+            params.productId.toString(),
+            1,
+            tamaño
+          );
+        } catch (error: any) {
+          Swal.fire({
+            title: "Error",
+            text: `Error agregando producto al carrito: ${error.message}`,
+            icon: "error",
+          });
+        }
       }
+
+      router.push("/home");
     }
   };
 

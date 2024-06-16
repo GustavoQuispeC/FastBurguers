@@ -3,7 +3,7 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 export async function getStorageBack(token: string, userId: string) {
   try {
     const res = await fetch(`${apiURL}/storage/${userId}`, {
-      method: "POST",
+      method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -44,6 +44,31 @@ export async function postStorageBack(
         userId: userId,
         products: [{ id: id, quantity: quantity, size: size }],
       }),
+    });
+
+    if (!res.ok) {
+      const errorDetails = await res.json();
+      throw new Error(
+        `Error creando orden: ${res.status} - ${errorDetails.message}`
+      );
+    }
+
+    const data = await res.json();
+
+    return data;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+
+export async function deleteStorageBack(token: string, userId: string) {
+  try {
+    const res = await fetch(`${apiURL}/storage/${userId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
 
     if (!res.ok) {

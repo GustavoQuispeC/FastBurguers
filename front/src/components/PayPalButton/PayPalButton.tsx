@@ -1,3 +1,4 @@
+import { deleteStorageBack } from "@/helpers/StorageBack.helper";
 import { createOrder } from "@/helpers/orders.helper";
 import { IProductCart } from "@/interfaces/IProduct";
 import { PayPalButtons } from "@paypal/react-paypal-js";
@@ -145,6 +146,8 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
 
           // Guardar la respuesta en localStorage
           localStorage.setItem("Order", JSON.stringify(createOrderResponse));
+
+          await deleteStorageBack(userToken, userId);
 
           localStorage.removeItem("cart");
 
