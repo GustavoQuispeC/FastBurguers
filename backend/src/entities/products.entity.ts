@@ -27,7 +27,7 @@ export class Products {
     @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 })
     discount: number;
 
-    @Column({ type: 'enum', enum: SizeProduct, default: SizeProduct.PERSONAL })
+    @Column({ type: 'enum', enum: SizeProduct, default: SizeProduct.MEDIANA })
     size: SizeProduct;
 
     @Column({default:true})

@@ -26,10 +26,8 @@ export class StorageService {
             }
         })
         if(!items) throw new NotFoundException(`No se encontro storage del usuario: ${idUser}`) 
-        
-        let drinkGlobal="" , drinkPriceGlobal=0;    
         const publicItems = await Promise.all( items.map(async (element) =>{
-            const {idProduct, quantity,drink,drinkPrice,sizeProduct} = element;
+            const {idProduct, quantity,productSize} = element;
             const productInfo = await this.productsRepository.createQueryBuilder('products')
             .leftJoinAndSelect('products.category', 'category')
             .where('products.id = :id', { id: idProduct })
@@ -41,28 +39,31 @@ export class StorageService {
                 'products.stock',
                 'products.imgUrl',
                 'products.discount',
-                'category.name'
+                'products.size',
+                'category.name',
             ])
             .getOne();
-            drinkGlobal=drink;drinkPriceGlobal=drinkPrice;
                 
             return {
                 ...productInfo,
-                sizeProduct,
+                size:productSize,
                 quantity
             }
             })
         )
         
 
-        return {products:publicItems,drink:drinkGlobal,drinkPrice:drinkPriceGlobal}
+        return publicItems;
         
     }
-    async createOrder(idUser:string,products:ProductInfo[],drinkInfo:any){
+    async addStorage(idUser:string,products:ProductInfo[]){
 
         const userFound = await this.usersRepository.findOneBy({id:idUser})
         if(!userFound) throw new NotFoundException(`No existe el usuario: ${idUser}`) 
 
+        //clear before storage
+        await this.delete(idUser)
+            
         // check if product exist in database
             await Promise.all(
                 products.map(async (product)=>{
@@ -76,23 +77,19 @@ export class StorageService {
             products.map(async (product)=>{
                 const itemFound = await this.storageRepository.findOneBy({
                     idProduct:product.id,
-                    idUser
+                    idUser,
+                    productSize:product.size
                 })
                 if(itemFound){
                     await this.storageRepository.update(itemFound.id,{
                         quantity:product.quantity,
-                        sizeProduct:product.sizeProduct,
-                        drink:drinkInfo.drink,
-                        drinkPrice:drinkInfo.drinkPrice
                     })
                 }else{
                     const item = this.storageRepository.create({
                         idUser,
                         idProduct:product.id,
                         quantity:product.quantity,
-                        sizeProduct:product.sizeProduct,
-                        drink:drinkInfo.drink,
-                        drinkPrice:drinkInfo.drinkPrice
+                        productSize:product.size
                     })
                     await this.storageRepository.save(item)
                 }

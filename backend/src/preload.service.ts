@@ -32,10 +32,10 @@ export class PreloadService implements OnModuleInit {
         const users = await this.usersRepository.find()
         const products = await this.productsRepository.find()
 
-        await this.ordersService.addOrder(users[0].id,
-            [{id:products[0].id,quantity:2}, 
-            {id:products[2].id,quantity:2}]
-        );
+        //await this.ordersService.addOrder(users[0].id,
+        //    [{id:products[0].id,quantity:2}, 
+        //    {id:products[2].id,quantity:2}]
+        //);
         console.log("Precarga de Order")
     }
 
