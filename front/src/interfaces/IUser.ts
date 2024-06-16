@@ -7,7 +7,6 @@ export interface IUser {
   phone: number;
   country: string;
   city: string;
-  
 }
 export interface IUserSession {
   userData: {
