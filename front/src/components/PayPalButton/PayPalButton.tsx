@@ -135,6 +135,7 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
             products: currentCart.map((item) => ({
               id: String(item.id),
               quantity: item.quantity || 1,
+              size: item.size,
             })),
           };
 

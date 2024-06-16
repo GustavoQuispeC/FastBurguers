@@ -1,7 +1,7 @@
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function createOrder(
-  order: { userId: string; products: { id: string }[] },
+  order: { userId: string; products: { id: string; size: string }[] },
   token: string
 ) {
   try {

@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { FaCartPlus } from "react-icons/fa";
 import { LuSandwich } from "react-icons/lu";
 import Link from "next/link";
+import { postStorageBack } from "@/helpers/StorageBack.helper";
 
 const DetalleProduct = ({ params }: { params: { productId: number } }) => {
   const router = useRouter();
@@ -35,7 +36,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
       let newPrice = producto.price;
       if (newSize === "Grande") {
         newPrice = producto.price * 1.1; // Increase price by 10%
-      } else if (newSize === "Clásica") {
+      } else if (newSize === "Clasica") {
         newPrice = producto.price * 0.9; // Decrease price by 10%
       }
       setPrecioFinal(newPrice);
@@ -57,7 +58,11 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
     return null;
   };
 
-  const handleBuyClickAgregar = () => {
+  const handleBuyClickAgregar = async () => {
+    const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
+    const userId = userSession?.userData?.data?.userid;
+    const token = userSession?.userData?.token;
+
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
     const existingProduct = currentCart.find(
       (item: any) => item.id === params.productId
@@ -85,7 +90,24 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
 
       currentCart.push(newProduct);
       localStorage.setItem("cart", JSON.stringify(currentCart));
-      router.push("/home");
+
+      // Realizar la solicitud al helper
+      try {
+        await postStorageBack(
+          token,
+          userId,
+          params.productId.toString(),
+          1,
+          tamaño
+        );
+        router.push("/home");
+      } catch (error: any) {
+        Swal.fire({
+          title: "Error",
+          text: `Error agregando producto al carrito: ${error.message}`,
+          icon: "error",
+        });
+      }
     }
   };
 
@@ -145,10 +167,10 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
                   <input
                     type="radio"
                     name="size"
-                    value="Clásica"
+                    value="Clasica"
                     className="hidden"
                     onChange={handleSizeChange}
-                    checked={tamaño === "Clásica"}
+                    checked={tamaño === "Clasica"}
                   />
                   <div
                     className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${

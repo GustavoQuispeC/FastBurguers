@@ -116,7 +116,7 @@ const Cart = () => {
                   <div>
                     <h3 className="text-base font-bold text-gray-800">
                       {item.name}
-                      {item.size === "Grande" || item.size === "Clásica"
+                      {item.size === "Grande" || item.size === "Clasica"
                         ? ` (${item.size})`
                         : ""}
                       {item.drink ? ` + ${item.drink}` : ""}
