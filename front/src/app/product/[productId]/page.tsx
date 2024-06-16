@@ -102,6 +102,12 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
             1,
             tamaño
           );
+          Swal.fire({
+            title: "¡Éxito!",
+            text: "Pedido enviado al carrito con éxito.",
+            icon: "success",
+            confirmButtonText: "Ok",
+          });
         } catch (error: any) {
           Swal.fire({
             title: "Error",
