@@ -182,6 +182,35 @@ const Cart = () => {
     }
   };
 
+  if (cart.length === 0) {
+    return (
+      <section className="text-gray-600 body-font">
+        <div className="container mx-auto flex px-5 py-24 mt-14 items-center justify-center flex-col">
+          <img
+            className="lg:w-2/6 md:w-3/6 w-5/6 mb-10 object-cover object-center rounded"
+            alt="hero"
+            src="/stop.svg"
+          />
+          <div className="text-center lg:w-2/3 w-full">
+            <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
+              Tu carrito está vacío
+            </h1>
+            <p className="mb-8 leading-relaxed">
+              Parece que aún no has agregado nada a tu carrito. ¡Empieza a comprar ahora!
+            </p>
+            <div className="flex justify-center">
+              <Link href="/home">
+                <button className="inline-flex text-white bg-orange-500 border-0 py-2 px-6 focus:outline-none hover:bg-orange-600 rounded text-lg">
+                  Empezar a comprar
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <div className="font-sans max-w-4xl mx-auto py-4 h-screen">
       <div className="grid md:grid-cols-3 gap-4">

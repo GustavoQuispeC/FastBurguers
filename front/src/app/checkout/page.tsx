@@ -102,7 +102,7 @@ const Checkout = () => {
 
   return (
     <div className="font-[sans-serif] bg-white pt-6">
-      <div className="max-lg:max-w-xl mx-auto w-full">
+      <div className="max-lg:max-w-xl mx-auto w-full relative z-10">
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 max-lg:order-1 p-6 max-w-4xl mx-auto w-full">
             <div className="text-center max-lg:hidden">
@@ -145,7 +145,7 @@ const Checkout = () => {
                 <h2 className="text-2xl font-extrabold text-gray-800 my-5">
                   Método de Pago
                 </h2>
-                <PayPalButton allFieldsCompleted={allFieldsCompleted} />
+                <PayPalButton allFieldsCompleted={allFieldsCompleted}/>
               </div>
             </form>
           </div>
@@ -210,15 +210,17 @@ const Checkout = () => {
                   ))}
                 </div>
               </div>
-              <div className="bg-gray-200 p-4">
-                <h4 className="text-base text-[#333] font-bold">
-                  Envío: ${shippingCost.toFixed(2)}
-                </h4>
-              </div>
-              <div className="bg-gray-200 p-4 mt-2">
-                <h4 className="text-base text-[#333] font-bold">
-                  Total: ${(totalConDescuento + shippingCost).toFixed(2)}
-                </h4>
+              <div className="lg:absolute lg:bottom-0 w-full">
+                <div className="bg-gray-200 lg:p-4 p-2">
+                  <h4 className="text-base text-[#333] font-bold">
+                    Envío: ${shippingCost.toFixed(2)}
+                  </h4>
+                </div>
+                <div className="bg-gray-200 lg:p-4 p-2 lg:mt-0 mt-2">
+                  <h4 className="text-base text-[#333] font-bold">
+                    Total: ${(totalConDescuento + shippingCost).toFixed(2)}
+                  </h4>
+                </div>
               </div>
             </div>
           </div>

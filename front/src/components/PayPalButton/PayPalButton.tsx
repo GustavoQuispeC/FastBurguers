@@ -164,7 +164,7 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
 
   return (
     <>
-      <PayPalButtons
+      <PayPalButtons   className="relative z-20"
         style={{
           shape: "pill",
           layout: "vertical",

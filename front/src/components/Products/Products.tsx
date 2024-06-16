@@ -47,7 +47,7 @@ const Products = () => {
               <div className="product-item text-center">
                 <Rating name="read-only" value={5} readOnly />
                 <h3 className="font-bold">{product.name}</h3>
-                <p className="text-sm text-gray-600">{product.price}</p>
+                <p className="text-sm text-gray-600">${product.price}</p>
 
                 <div className="flex items-center gap-1"></div>
               </div>

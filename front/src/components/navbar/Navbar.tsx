@@ -102,7 +102,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="max-w-[1640px] dark:bg-gray-600 mx-auto flex dark:text-white justify-between items-center p-4">
+      <div className="max-w-[1640px] dark:bg-gray-600 mx-auto flex dark:text-white justify-between items-center p-4 relative z-20">
         <div className="flex items-center">
           <div onClick={() => setNav(!nav)} className="cursor-pointer">
             <AiOutlineMenu size={30} />
@@ -212,8 +212,8 @@ const Navbar = () => {
         <div
           className={
             nav
-              ? "fixed top-0 left-0 w-[300px] h-screen bg-white z-10 duration-300"
-              : "fixed top-0 left-[-100%] w-[300px] h-screen bg-white z-10 duration-300"
+              ? "fixed top-0 left-0 w-[300px] h-screen bg-white z-20 duration-300"
+              : "fixed top-0 left-[-100%] w-[300px] h-screen bg-white z-20 duration-300"
           }
         >
           <AiOutlineClose
