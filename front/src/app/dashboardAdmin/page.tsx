@@ -8,12 +8,11 @@ import CategoriesList from "@/components/CategoriesList/CategoriesList";
 import ProductList from "@/components/ProductList/page";
 import { GiSettingsKnobs } from "react-icons/gi";
 import { HiChartBar, HiClipboardList } from "react-icons/hi";
-import { TbCategoryPlus } from "react-icons/tb";
+import { TbCategoryPlus, TbLogout } from "react-icons/tb";
 import { SiAzureartifacts } from "react-icons/si";
 import PedidosList from "@/components/PedidosList/PedidosList";
 import TopVentas from "@/components/TopVentas/TopVentas";
 import UserRol from "@/components/UserRol/UserRol";
-import { RiFolderSettingsFill } from "react-icons/ri";
 import { FaUsersCog } from "react-icons/fa";
 
 const DashboardAdmin = () => {
@@ -103,6 +102,14 @@ const DashboardAdmin = () => {
               >
                 <FaUsersCog /> &nbsp; Usuarios
               </button>
+              <li className="mb-2 text-yellow-300">
+                <button
+                  onClick={() => setView("users")}
+                  className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-red-700 w-full text-left"
+                >
+                  <TbLogout className="text-white" /> &nbsp; Salir
+                </button>
+              </li>
             </li>
           </ul>
         </div>

@@ -45,6 +45,7 @@ export interface userSession {
       phone: string;
       city: string;
       country: string;
+      isAdmin: true;
     };
   };
 }
