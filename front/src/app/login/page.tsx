@@ -7,7 +7,7 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LoginErrorProps, LoginProps, LoginTerceros } from "../../types";
+import { LoginErrorProps, LoginProps, userSession } from "../../types";
 import { validateLoginForm } from "../../utils/loginFormValidation";
 import { FaEyeSlash } from "react-icons/fa6";
 
@@ -15,8 +15,11 @@ import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { LoginUser } from "@/helpers/Autenticacion.helper";
 
+
 const Login = () => {
-  const Router = useRouter();
+  const router = useRouter();
+
+  
 
   const [dataUser, setDataUser] = useState<LoginProps>({
     email: "",
@@ -35,12 +38,15 @@ const Login = () => {
     password: false,
   });
 
+  //! Iniciar sesión con Google
   const GoogleOnClick = async () => {
     await signIn("google", {
       callbackUrl: "http://localhost:3000/home",
       redirect: true,
     });
   };
+
+  //! Iniciar sesión con Facebook
   const FacebookOnClick = async () => {
     await signIn("facebook", {
       callbackUrl: "http://localhost:3000/home",
@@ -70,9 +76,9 @@ const Login = () => {
     }));
   };
 
-  console.log(dataUser)
+  console.log(dataUser);
 
-  //? Manejar submit del formulario
+  //! Manejar submit del formulario
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
@@ -85,7 +91,7 @@ const Login = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-      Router.push("/home");
+      router.push("/dashboardAdmin");
     } catch (error: any) {
       Swal.fire({
         icon: "error",
