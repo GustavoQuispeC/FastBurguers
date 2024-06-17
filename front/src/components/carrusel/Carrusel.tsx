@@ -3,7 +3,7 @@ import Image from "next/image";
 
 const Carrusel = () => {
   return (
-    <div className="h-56 sm:h-64 xl:h-80 2xl:h-96 overflow-hidden">
+    <div className="h-56 sm:h-64 xl:h-80 2xl:h-96 overflow-hidden ">
       <Carousel>
         {[
           ["/banner1.jpg", "/banner2.jpg"],

@@ -154,22 +154,22 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
             <div className="flex flex-wrap gap-4 mt-8">
               {producto?.discount && producto.discount > 0 ? (
                 <>
-                  <h3 className="text-gray-800 text-4xl max-sm:text-3xl font-bold">
+                  <h3 className="text-gray-800  text-4xl max-sm:text-3xl font-bold">
                     ${getPrecioConDescuento()}
                   </h3>
-                  <h3 className="text-gray-400 text-xl text-center mt-2">
+                  <h3 className="text-gray-400 text-xl text-center mt-2  ">
                     <s>${(precioFinal || producto.price).toFixed(2)}</s>
                   </h3>
                 </>
               ) : (
-                <h3 className="text-gray-800 text-4xl max-sm:text-3xl font-bold">
+                <h3 className="text-gray-800 text-4xl max-sm:text-3xl font-bold dark:text-gray-300">
                   ${precioFinal?.toFixed(2) || producto?.price.toFixed(2)}
                 </h3>
               )}
             </div>
 
             <div className="mt-10">
-              <h3 className="text-lg font-bold text-gray-800">
+              <h3 className="text-lg font-bold text-gray-800 dark:text-gray-300">
                 ELIGE EL TAMAÑO
               </h3>
               <div className="flex flex-wrap gap-4 mt-4">
@@ -183,10 +183,10 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
                     checked={tamaño === "Clasica"}
                   />
                   <div
-                    className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${
+                    className={`w-16 h-11 border-2 font-bold text-xs text-gray-800  rounded-lg flex items-center justify-center shrink-0 ${
                       tamaño === "Clásica"
-                        ? "bg-orange-400 border-gray-800"
-                        : "hover:bg-orange-500 hover:text-white"
+                        ? "bg-orange-500 border-gray-800"
+                        : "hover:bg-orange-400 hover:text-white"
                     }`}
                   >
                     Clásica
@@ -237,7 +237,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
               <button
                 type="button"
                 onClick={handleBuyClickAgregar}
-                className="flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-700 text-orange-500 border border-gray-800 text-base rounded"
+                className="flex items-center justify-center px-8 py-4 bg-gray-900 hover:bg-gray-700 dark:bg-gray-200 text-orange-500 border border-gray-800 text-base rounded hover:dark:bg-gray-400"
               >
                 <FaCartPlus size={20} />
                 &nbsp; Agregar
@@ -246,7 +246,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
               <Link
                 href="/home"
                 type="button"
-                className="flex items-center justify-center px-8 py-4 bg-transparent hover:bg-orange-500 hover:text-white text-gray-800 border border-gray-800 text-base rounded"
+                className="flex items-center justify-center px-8 py-4 bg-transparent hover:bg-orange-500 hover:text-white text-gray-800 border border-gray-800 text-base rounded dark:text-white"
               >
                 <LuSandwich size={20} />
                 &nbsp; Ir a la tienda
@@ -254,12 +254,12 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
             </div>
 
             <ul className="grid grid-cols-2 mt-10">
-              <li className="text-gray-800 font-semibold text-base text-center py-3 border-b-2 px-4 cursor-pointer">
+              <li className="text-gray-800 dark:text-gray-200 font-semibold text-base text-center py-3 border-b-2 px-4 cursor-pointer">
                 Descripción
               </li>
             </ul>
 
-            <ul className="space-y-3 list-disc pl-4 text-sm text-gray-800 mt-8">
+            <ul className="space-y-3 list-disc pl-4 text-sm text-gray-800 dark:text-white mt-8">
               <li>{producto?.description}</li>
               <li>¡Pídela ya con delivery!</li>
             </ul>

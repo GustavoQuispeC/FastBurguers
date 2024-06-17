@@ -59,10 +59,10 @@ const Product = () => {
   };
 
   return (
-    <div className=" py-5">
-      <ul className="flex flex-wrap gap-3 bg-slate-700 mt-10 p-3 justify-around font-bold text-white w-11/12 rounded-lg items-center m-auto">
+    <div className=" py-5 dark:bg-gray-700">
+      <ul className=" flex flex-wrap gap-3 bg-slate-700 dark:bg-gray-300 mt-10 p-3 justify-around font-bold text-white w-11/12 rounded-lg items-center m-auto">
         {categories.map((category) => (
-          <li key={category.id} className="w-full sm:w-auto text-center">
+          <li key={category.id} className="w-full sm:w-auto text-center dark:bg-gray-400 rounded-md dark:text-black">
             <button
               onClick={() => handleCategoryClick(category.id, category.name)}
               className={getButtonClass(category.id)}
@@ -92,7 +92,7 @@ const Product = () => {
         <div>
           <button
             onClick={applyFilter}
-            className="p-2 rounded-xl bg-orange-400 text-white"
+            className="p-2 rounded-xl bg-orange-500 text-white"
           >
             Aplicar Filtro
           </button>
@@ -101,7 +101,7 @@ const Product = () => {
           <div>
             <button
               onClick={clearFilter}
-              className="p-2 rounded-xl bg-red-400 text-white"
+              className="p-2 rounded-xl bg-orange-500 text-white"
             >
               Eliminar Filtro
             </button>

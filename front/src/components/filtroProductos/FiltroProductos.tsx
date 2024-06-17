@@ -55,7 +55,7 @@ const FiltroProductos: React.FC<GridProductsProps> = ({
       {products.map((product) => (
         <div
           key={product.id}
-          className="bg-white rounded-lg shadow-md p-4 text-center flex flex-col items-center justify-center"
+          className="bg-white dark:bg-gray-300 rounded-lg shadow-md p-4 text-center flex flex-col items-center justify-center"
         >
           <Link href={`/product/${product.id}`} key={product.id}>
             <img

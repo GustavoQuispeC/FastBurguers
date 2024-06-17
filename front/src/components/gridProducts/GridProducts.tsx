@@ -35,8 +35,8 @@ const GridProducts: React.FC<GridProductsProps> = ({ products }) => {
   };
 
   return (
-    <div className="mx-auto p-4">
-      <div className="flex justify-end mb-4">
+    <div className="mx-auto p-4 ">
+      <div className="flex justify-end mb-4 ">
         <button onClick={handlePrevClick} disabled={startIndex === 0}>
           <Image
             src="/flecha-izquierda.png"
@@ -60,13 +60,13 @@ const GridProducts: React.FC<GridProductsProps> = ({ products }) => {
           />
         </button>
       </div>
-      <div className="mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 w-11/12 justify-items-center">
+      <div className=" dark:bg-gray-300mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4 w-11/12 justify-items-center">
         {products
           .slice(startIndex, startIndex + itemsPerPage)
           .map((product) => (
             <div
               key={product.id}
-              className="flex flex-col items-center border border-gray-300 overflow-hidden rounded-lg relative w-72"
+              className="flex flex-col items-center border dark:bg-gray-400 border-gray-300 overflow-hidden rounded-lg relative w-72"
             >
               {product.discount > 0 && (
                 <div className="bg-red-600 rounded-xl p-1 px-2 absolute left-10 top-5">
@@ -83,8 +83,8 @@ const GridProducts: React.FC<GridProductsProps> = ({ products }) => {
                 />
               </Link>
               <div className="p-4 text-center">
-                <h2 className="font-bold text-lg mt-2">{product.name}</h2>
-                <p className="text-gray-600 mt-1">{product.description}</p>
+                <h2 className="font-bold text-lg mt-2 ">{product.name}</h2>
+                <p className="text-gray-600 mt-1 dark:text-black">{product.description}</p>
                 <div className="text-2xl font-bold">
                   <span className="mr-2">
                     $

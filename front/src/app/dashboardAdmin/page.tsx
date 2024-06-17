@@ -14,6 +14,7 @@ import PedidosList from "@/components/PedidosList/PedidosList";
 import TopVentas from "@/components/TopVentas/TopVentas";
 import UserRol from "@/components/UserRol/UserRol";
 import { FaUsersCog } from "react-icons/fa";
+import { Spinner } from "flowbite-react/components/Spinner";
 
 const DashboardAdmin = () => {
   const [token, setToken] = useState<userSession>();
@@ -50,9 +51,39 @@ const DashboardAdmin = () => {
     }
   }, [router]);
 
+  const [userSessionData, setUserSessionData] = useState<userSession | null>(
+    null
+  );
+
+  //! Cerrar sesión
+  const handleSignOut = () => {
+    localStorage.removeItem("userSession");
+    setUserSessionData(null);
+    router.push("/home");
+  };
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      localStorage.removeItem("userSession");
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
+
+//!spinner
   if (!token) {
-    return null; // Puedes mostrar un loader o similar mientras se verifica el token
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
   }
+
+
 
   return (
     <div className="flex flex-row min-h-screen dark:bg-gray-700">
@@ -104,7 +135,7 @@ const DashboardAdmin = () => {
               </button>
               <li className="mb-2 text-yellow-300">
                 <button
-                  onClick={() => setView("users")}
+                  onClick={handleSignOut}
                   className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-red-700 w-full text-left"
                 >
                   <TbLogout className="text-white" /> &nbsp; Salir
