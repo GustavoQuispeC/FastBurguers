@@ -1,5 +1,6 @@
-import {IsNotEmpty, IsUUID, IsArray, ArrayMinSize, ArrayNotEmpty, IsInt, Min, ValidateNested, IsObject, IsOptional, IsString} from "class-validator"
+import {IsNotEmpty, IsUUID, IsArray, ArrayMinSize, ArrayNotEmpty, IsInt, Min, ValidateNested, IsObject, IsOptional, IsString, IsEAN, IsEnum} from "class-validator"
 import { Type } from "class-transformer";
+import { SizeProduct } from "src/enum/sizeProduct.enum";
 
 
 
@@ -11,9 +12,8 @@ export class ProductInfo{
   @Min(1)
   quantity: number;
 
-  @IsOptional()
-  @IsString()
-  sizeProduct?:string
+  @IsEnum(SizeProduct,{message:'Size must be one of the following values: Clasica, Grande, Mediana'})
+  size:SizeProduct
 }
 
 export class AddOrderDto {
@@ -31,11 +31,13 @@ export class AddOrderDto {
     *@example '  "InfoProducts": [
       {
         "id": "cb32ed0d-fd05-4297-9815-67f07bdfcf07",
-        "quantity": 2
+        "quantity": 2,
+        "size":mediana
       },
       {
         "id": "3d7fb611-855a-4e0e-b9ec-83119ef11067",
-        "quantity": 3
+        "quantity": 3,
+        "size":mediana
       }
     ]'
     */

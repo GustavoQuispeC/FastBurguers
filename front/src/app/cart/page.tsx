@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  deleteStorageBack,
+  getStorageBack,
+  postStorageBack,
+} from "@/helpers/StorageBack.helper";
 import { IProductCart } from "@/interfaces/IProduct";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,16 +17,48 @@ const Cart = () => {
   const [userSession, setUserSession] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.localStorage) {
+    const fetchCart = async () => {
+      const userSession = JSON.parse(
+        localStorage.getItem("userSession") || "{}"
+      );
+      const userId = userSession?.userData?.data?.userid;
+      const token = userSession?.userData?.token;
+
       const cartItems = JSON.parse(localStorage.getItem("cart") || "[]");
-      const initializedCartItems = cartItems.map((item: IProductCart) => ({
-        ...item,
-        quantity: item.quantity || 1,
-      }));
-      setCart(initializedCartItems);
+
+      if (cartItems.length === 0) {
+        try {
+          const fetchedCart = await getStorageBack(token, userId);
+          const initializedCartItems = fetchedCart.map(
+            (item: IProductCart) => ({
+              ...item,
+              quantity: item.quantity || 1,
+            })
+          );
+          setCart(initializedCartItems);
+          localStorage.setItem("cart", JSON.stringify(initializedCartItems));
+        } catch (error) {
+          console.error("Error fetching cart from backend:", error);
+          Swal.fire({
+            title: "Error",
+            text: "No se pudo recuperar el carrito desde el servidor.",
+            icon: "error",
+          });
+        }
+      } else {
+        const initializedCartItems = cartItems.map((item: IProductCart) => ({
+          ...item,
+          quantity: item.quantity || 1,
+        }));
+        setCart(initializedCartItems);
+      }
 
       const userSessionExists = localStorage.getItem("userSession");
       setUserSession(!!userSessionExists);
+    };
+
+    if (typeof window !== "undefined" && window.localStorage) {
+      fetchCart();
     }
   }, []);
 
@@ -33,6 +70,7 @@ const Cart = () => {
       return item;
     });
     setCart(newCart);
+    actualizarCarritoBackend(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
@@ -44,18 +82,13 @@ const Cart = () => {
       return item;
     });
     setCart(newCart);
+    actualizarCarritoBackend(newCart);
     localStorage.setItem("cart", JSON.stringify(newCart));
   };
 
   const calcularSubtotal = () => {
     return cart.reduce((acc, item) => {
       return acc + item.quantity * item.price;
-    }, 0);
-  };
-
-  const calcularBebida = () => {
-    return cart.reduce((acc, item) => {
-      return acc + item.quantity * (parseFloat(item.drinkPrice || "0") || 0);
     }, 0);
   };
 
@@ -67,14 +100,11 @@ const Cart = () => {
 
   const calcularTotal = () => {
     const subtotal = calcularSubtotal();
-    const bebida = calcularBebida();
     const descuento = calcularDescuento();
-
-    return subtotal - descuento + bebida;
+    return subtotal - descuento;
   };
 
   const subtotal = calcularSubtotal();
-  const bebida = calcularBebida();
   const descuento = calcularDescuento();
   const total = calcularTotal();
 
@@ -88,10 +118,17 @@ const Cart = () => {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        const updatedCart = [...cart];
+        let updatedCart = [...cart];
         updatedCart.splice(index, 1);
         setCart(updatedCart);
         localStorage.setItem("cart", JSON.stringify(updatedCart));
+
+        if (updatedCart.length === 0) {
+          eliminarCarritoBackend();
+        } else {
+          actualizarCarritoBackend(updatedCart);
+        }
+
         Swal.fire(
           "Eliminado",
           "El producto ha sido eliminado del carrito",
@@ -100,6 +137,79 @@ const Cart = () => {
       }
     });
   };
+
+  const eliminarCarritoBackend = async () => {
+    const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
+    const userId = userSession?.userData?.data?.userid;
+    const token = userSession?.userData?.token;
+
+    try {
+      await deleteStorageBack(token, userId);
+    } catch (error) {
+      console.error("Error deleting cart in backend:", error);
+      // Swal.fire({
+      //   title: "Error",
+      //   text: "No se pudo eliminar el carrito en el servidor.",
+      //   icon: "error",
+      // });
+    }
+  };
+
+  const actualizarCarritoBackend = async (updatedCart: IProductCart[]) => {
+    const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
+    const userId = userSession?.userData?.data?.userid;
+    const token = userSession?.userData?.token;
+
+    try {
+      const promises = updatedCart.map((item) => {
+        return postStorageBack(
+          token,
+          userId,
+          item.id.toString(),
+          item.quantity,
+          item.size
+        );
+      });
+
+      await Promise.all(promises);
+    } catch (error) {
+      console.error("Error updating cart in backend:", error);
+      Swal.fire({
+        title: "Error",
+        text: "No se pudo actualizar el carrito en el servidor.",
+        icon: "error",
+      });
+    }
+  };
+
+  if (cart.length === 0) {
+    return (
+      <section className="text-gray-600 body-font">
+        <div className="container mx-auto flex px-5 py-24 mt-14 items-center justify-center flex-col">
+          <img
+            className="lg:w-2/6 md:w-3/6 w-5/6 mb-10 object-cover object-center rounded"
+            alt="hero"
+            src="/stop.svg"
+          />
+          <div className="text-center lg:w-2/3 w-full">
+            <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
+              Tu carrito está vacío
+            </h1>
+            <p className="mb-8 leading-relaxed">
+              Parece que aún no has agregado nada a tu carrito. ¡Empieza a comprar ahora!
+            </p>
+            <div className="flex justify-center">
+              <Link href="/home">
+                <button className="inline-flex text-white bg-orange-500 border-0 py-2 px-6 focus:outline-none hover:bg-orange-600 rounded text-lg">
+                  Empezar a comprar
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <div className="font-sans max-w-4xl mx-auto py-4 h-screen">
@@ -124,6 +234,9 @@ const Cart = () => {
                   <div>
                     <h3 className="text-base font-bold text-gray-800">
                       {item.name}
+                      {item.size === "Grande" || item.size === "Clasica"
+                        ? ` (${item.size})`
+                        : ""}
                       {item.drink ? ` + ${item.drink}` : ""}
                     </h3>
                     <h6
@@ -158,25 +271,18 @@ const Cart = () => {
                       <h4 className="text-lg font-bold text-gray-800">
                         $
                         {(
-                          item.price * item.quantity * (1 - item.discount) +
-                          (parseFloat(item.drinkPrice) || 0)
+                          item.price *
+                          item.quantity *
+                          (1 - item.discount)
                         ).toFixed(2)}
                       </h4>
                       <h4 className="text-gray-500 line-through">
-                        $
-                        {(
-                          (item.price + (parseFloat(item.drinkPrice) || 0)) *
-                          item.quantity
-                        ).toFixed(2)}
+                        ${(item.price * item.quantity).toFixed(2)}
                       </h4>
                     </div>
                   ) : (
                     <h4 className="text-lg font-bold text-gray-800">
-                      $
-                      {(
-                        (item.price + (parseFloat(item.drinkPrice) || 0)) *
-                        item.quantity
-                      ).toFixed(2)}
+                      ${(item.price * item.quantity).toFixed(2)}
                     </h4>
                   )}
                 </div>
@@ -195,12 +301,7 @@ const Cart = () => {
               Subtotal{" "}
               <span className="ml-auto font-bold">${subtotal.toFixed(2)}</span>
             </li>
-            {bebida > 0 && (
-              <li className="flex flex-wrap gap-4 text-sm">
-                Bebida{" "}
-                <span className="ml-auto font-bold">${bebida.toFixed(2)}</span>
-              </li>
-            )}
+
             {descuento > 0 && (
               <li className="flex flex-wrap gap-4 text-sm">
                 Descuento{" "}
@@ -219,14 +320,16 @@ const Cart = () => {
               <button
                 type="button"
                 className={`text-sm px-4 py-2.5 w-full font-semibold tracking-wide rounded-md ${
-                  userSession
+                  userSession && cart.length > 0
                     ? "bg-gray-900 hover:bg-gray-700 text-orange-400"
                     : "bg-gray-300 cursor-not-allowed text-gray-500"
                 }`}
-                disabled={!userSession}
+                disabled={!userSession || cart.length === 0}
                 title={
                   !userSession
                     ? "Necesita estar logueado para continuar con el pago"
+                    : cart.length === 0
+                    ? "El carrito está vacío"
                     : ""
                 }
               >

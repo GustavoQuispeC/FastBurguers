@@ -1,3 +1,4 @@
+import { SizeProduct } from "src/enum/sizeProduct.enum";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({
@@ -13,15 +14,9 @@ export class Storage {
     @Column()
     idProduct: string
 
+    @Column({ type: 'enum', enum: SizeProduct})
+    productSize:SizeProduct
+
     @Column()
     quantity: number
-
-    @Column({type: 'varchar', length: 100,nullable:true})
-    drink:string
-
-    @Column({ type: 'decimal', precision: 10, nullable:true})
-    drinkPrice: number
-
-    @Column({type: 'varchar', length: 100, default:"default"})
-    sizeProduct:string
 }

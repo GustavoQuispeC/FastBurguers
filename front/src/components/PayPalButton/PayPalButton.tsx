@@ -1,3 +1,4 @@
+import { deleteStorageBack } from "@/helpers/StorageBack.helper";
 import { createOrder } from "@/helpers/orders.helper";
 import { IProductCart } from "@/interfaces/IProduct";
 import { PayPalButtons } from "@paypal/react-paypal-js";
@@ -135,6 +136,7 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
             products: currentCart.map((item) => ({
               id: String(item.id),
               quantity: item.quantity || 1,
+              size: item.size,
             })),
           };
 
@@ -144,6 +146,8 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
 
           // Guardar la respuesta en localStorage
           localStorage.setItem("Order", JSON.stringify(createOrderResponse));
+
+          await deleteStorageBack(userToken, userId);
 
           localStorage.removeItem("cart");
 
@@ -160,7 +164,7 @@ const PayPalButton: React.FC<PayPalButtonProps> = ({ allFieldsCompleted }) => {
 
   return (
     <>
-      <PayPalButtons
+      <PayPalButtons   className="relative z-20"
         style={{
           shape: "pill",
           layout: "vertical",

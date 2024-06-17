@@ -66,7 +66,7 @@ const Navbar = () => {
     }
 
     fetchData();
-  }, [pathname]);
+  }, [pathname, cartItemCount]);
 
   const handleSearch = (event: { target: { value: string } }) => {
     const value = event.target.value.toLowerCase();
@@ -102,7 +102,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="max-w-[1640px] dark:bg-gray-600 mx-auto flex dark:text-white justify-between items-center p-4">
+      <div className="max-w-[1640px] dark:bg-gray-600 mx-auto flex dark:text-white justify-between items-center p-4 relative z-20">
         <div className="flex items-center">
           <div onClick={() => setNav(!nav)} className="cursor-pointer">
             <AiOutlineMenu size={30} />
@@ -212,8 +212,8 @@ const Navbar = () => {
         <div
           className={
             nav
-              ? "fixed top-0 left-0 w-[300px] h-screen bg-white z-10 duration-300"
-              : "fixed top-0 left-[-100%] w-[300px] h-screen bg-white z-10 duration-300"
+              ? "fixed top-0 left-0 w-[300px] h-screen bg-white z-20 duration-300"
+              : "fixed top-0 left-[-100%] w-[300px] h-screen bg-white z-20 duration-300"
           }
         >
           <AiOutlineClose
@@ -288,8 +288,39 @@ const Navbar = () => {
               </li>
             </ul>
           </nav>
+          <div className="absolute bottom-0 w-full h-40 overflow-hidden">
+            <div className="relative w-full h-full">
+              <div className="absolute left-0 top-0 w-20 h-20 bg-hamburger bg-contain bg-no-repeat animate-bounce"></div>
+              <div className="absolute left-1/3 top-0 w-20 h-20 bg-fries bg-contain bg-no-repeat animate-bounce delay-150"></div>
+              <div className="absolute left-2/3 top-0 w-20 h-20 bg-delivery bg-contain bg-no-repeat animate-bounce delay-300"></div>
+            </div>
+          </div>
         </div>
       </div>
+      <style jsx>{`
+        .bg-hamburger {
+          background-image: url("/hamburguer.png");
+        }
+        .bg-fries {
+          background-image: url("/fries.png");
+        }
+        .bg-delivery {
+          background-image: url("/delivery.png");
+        }
+        .animate-bounce {
+          animation: infinite;
+        }
+        @keyframes bounce {
+          0%,
+          100% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-20px);
+          }
+        }
+        //
+      `}</style>
     </>
   );
 };
