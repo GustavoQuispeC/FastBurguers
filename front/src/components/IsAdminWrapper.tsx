@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Navbar from "./navbar/Navbar";
@@ -20,8 +20,8 @@ const IsAdminWrapper = ({ children }: { children: React.ReactNode }) => {
       {/* Mostrar Navbar, Chatbot y Footer solo si no es /productAdd, /dashboardAdmin ni /productList/{id} */}
       {!isAddProductPage && !isAdminPage && !isUpdateProductPage && <Navbar />}
       {children}
-      {!isAddProductPage && !isAdminPage && <Chatbot />}
-      {!isAddProductPage && !isAdminPage && <Footer />}
+      {!isAddProductPage && !isAdminPage && !isUpdateProductPage && <Chatbot />}
+      {!isAddProductPage && !isAdminPage && !isUpdateProductPage && <Footer />}
     </>
   );
 };
