@@ -11,6 +11,7 @@ import * as dataComentarios from './data/dataComentarios.json'
 import * as dataUsers from './data/dataUsers.json'
 import { Testimony } from './entities/testimony.entity';
 import { copyFileSync } from 'fs';
+import { SizeProduct } from './enum/sizeProduct.enum';
 
 
 @Injectable()
@@ -33,8 +34,8 @@ export class PreloadService implements OnModuleInit {
         const products = await this.productsRepository.find()
 
         await this.ordersService.addOrder(users[0].id,
-            [{id:products[0].id,quantity:2}, 
-            {id:products[2].id,quantity:2}]
+            [{id:products[0].id,quantity:2,size:SizeProduct.CLASICA}, 
+            {id:products[2].id,quantity:2,size:SizeProduct.MEDIANA}]
         );
         console.log("Precarga de Order")
     }

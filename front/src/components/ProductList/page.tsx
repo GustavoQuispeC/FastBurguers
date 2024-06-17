@@ -2,7 +2,7 @@
 import { MdEdit } from "react-icons/md";
 import { IoSearchSharp } from "react-icons/io5";
 import { RiDeleteBin6Fill, RiAddLargeFill } from "react-icons/ri";
-import { Button, Pagination, Tooltip } from "flowbite-react";
+import { Pagination, Tooltip } from "flowbite-react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import React from "react";

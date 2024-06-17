@@ -7,19 +7,17 @@ import Link from "next/link";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { LoginErrorProps, LoginProps, userSession } from "../../types";
+import { LoginErrorProps, LoginProps, LoginTerceros } from "../../types";
 import { validateLoginForm } from "../../utils/loginFormValidation";
 import { FaEyeSlash } from "react-icons/fa6";
 
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { LoginUser } from "@/helpers/Autenticacion.helper";
-
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
-  const router = useRouter();
-
-  
+  const Router = useRouter();
 
   const [dataUser, setDataUser] = useState<LoginProps>({
     email: "",
@@ -38,15 +36,12 @@ const Login = () => {
     password: false,
   });
 
-  //! Iniciar sesión con Google
   const GoogleOnClick = async () => {
     await signIn("google", {
       callbackUrl: "http://localhost:3000/home",
       redirect: true,
     });
   };
-
-  //! Iniciar sesión con Facebook
   const FacebookOnClick = async () => {
     await signIn("facebook", {
       callbackUrl: "http://localhost:3000/home",
@@ -78,20 +73,32 @@ const Login = () => {
 
   console.log(dataUser);
 
-  //! Manejar submit del formulario
+  //? Manejar submit del formulario
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
       const user = await LoginUser(dataUser);
 
+      const userWithToken = user as unknown as { token: string };
       localStorage.setItem("userSession", JSON.stringify({ userData: user }));
+
+      const decodedToken = jwtDecode(userWithToken.token) as {
+        isAdmin: boolean;
+        isSuperAdmin: boolean;
+      };
+
       Swal.fire({
         icon: "success",
         title: "¡Bienvenido a FastBurgers!",
         showConfirmButton: false,
         timer: 1500,
       });
-      router.push("/dashboardAdmin");
+
+      if (decodedToken.isAdmin || decodedToken.isSuperAdmin) {
+        Router.push("/dashboardAdmin");
+      } else {
+        Router.push("/home");
+      }
     } catch (error: any) {
       Swal.fire({
         icon: "error",

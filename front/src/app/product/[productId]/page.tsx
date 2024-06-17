@@ -3,24 +3,24 @@ import Swal from "sweetalert2";
 import { IProduct } from "@/interfaces/IProduct";
 import { useState, useEffect } from "react";
 import { getProductsById } from "@/helpers/products.helper";
-import { getProductsByCategory } from "@/helpers/categories.helper";
 import { useRouter } from "next/navigation";
 import { FaCartPlus } from "react-icons/fa";
 import { LuSandwich } from "react-icons/lu";
 import Link from "next/link";
+import { postStorageBack } from "@/helpers/StorageBack.helper";
 
 const DetalleProduct = ({ params }: { params: { productId: number } }) => {
   const router = useRouter();
   const [producto, setProducto] = useState<IProduct>();
   const [tamaño, setTamaño] = useState("Mediana");
-  const [bebida, setBebida] = useState<string | null>(null);
-  const [precioBebida, setPrecioBebida] = useState<number>(0);
+  const [precioFinal, setPrecioFinal] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const product = await getProductsById(params.productId);
         setProducto(product);
+        setPrecioFinal(product.price); // Set initial price
       } catch (error) {
         console.error("Error fetching product:", error);
       }
@@ -29,32 +29,18 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
     fetchProduct();
   }, [params.productId]);
 
-  useEffect(() => {
-    const fetchBebidaPrice = async () => {
-      if (bebida) {
-        try {
-          const bebidas = await getProductsByCategory("Bebidas");
-          const bebidaSeleccionada = bebidas.find(
-            (b: IProduct) => b.name === bebida
-          );
-          if (bebidaSeleccionada) {
-            setPrecioBebida(bebidaSeleccionada.price);
-          }
-        } catch (error) {
-          console.error("Error fetching bebidas:", error);
-        }
-      }
-    };
-
-    fetchBebidaPrice();
-  }, [bebida]);
-
   const handleSizeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTamaño(e.target.value);
-  };
-
-  const handleDrinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setBebida(e.target.value);
+    const newSize = e.target.value;
+    setTamaño(newSize);
+    if (producto) {
+      let newPrice = producto.price;
+      if (newSize === "Grande") {
+        newPrice = producto.price * 1.1; // Increase price by 10%
+      } else if (newSize === "Clasica") {
+        newPrice = producto.price * 0.9; // Decrease price by 10%
+      }
+      setPrecioFinal(newPrice);
+    }
   };
 
   const calculateDiscountedPrice = (price: number, discount: number) => {
@@ -64,7 +50,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
   const getPrecioConDescuento = (): string | null => {
     if (producto && producto.discount && producto.discount > 0) {
       const precioDescuento = calculateDiscountedPrice(
-        producto.price,
+        precioFinal || producto.price,
         producto.discount
       );
       return precioDescuento;
@@ -72,7 +58,9 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
     return null;
   };
 
-  const handleBuyClickAgregar = () => {
+  const handleBuyClickAgregar = async () => {
+    const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
+
     const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
     const existingProduct = currentCart.find(
       (item: any) => item.id === params.productId
@@ -81,7 +69,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
     if (existingProduct) {
       Swal.fire({
         title: "¡Producto ya en el carrito!",
-        text: "¿Seleccione?",
+        text: "¿Seleccionar?",
         icon: "info",
         showCancelButton: true,
         confirmButtonText: "Ir al carrito",
@@ -95,15 +83,40 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
       const newProduct: any = {
         ...producto,
         size: tamaño,
+        price: precioFinal, // Include the final price
       };
-
-      if (bebida) {
-        newProduct.drink = bebida;
-        newProduct.drinkPrice = precioBebida;
-      }
 
       currentCart.push(newProduct);
       localStorage.setItem("cart", JSON.stringify(currentCart));
+
+      // No realizar la solicitud al helper si el usuario no está autenticado
+      if (userSession && userSession.userData) {
+        const userId = userSession.userData.data.userid;
+        const token = userSession.userData.token;
+
+        try {
+          await postStorageBack(
+            token,
+            userId,
+            params.productId.toString(),
+            1,
+            tamaño
+          );
+          Swal.fire({
+            title: "¡Éxito!",
+            text: "Pedido enviado al carrito con éxito.",
+            icon: "success",
+            confirmButtonText: "Ok",
+          });
+        } catch (error: any) {
+          Swal.fire({
+            title: "Error",
+            text: `Error agregando producto al carrito: ${error.message}`,
+            icon: "error",
+          });
+        }
+      }
+
       router.push("/home");
     }
   };
@@ -145,12 +158,12 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
                     ${getPrecioConDescuento()}
                   </h3>
                   <h3 className="text-gray-400 text-xl text-center mt-2">
-                    <s>${producto.price.toFixed(2)}</s>
+                    <s>${(precioFinal || producto.price).toFixed(2)}</s>
                   </h3>
                 </>
               ) : (
                 <h3 className="text-gray-800 text-4xl max-sm:text-3xl font-bold">
-                  ${producto?.price.toFixed(2)}
+                  ${precioFinal?.toFixed(2) || producto?.price.toFixed(2)}
                 </h3>
               )}
             </div>
@@ -164,10 +177,10 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
                   <input
                     type="radio"
                     name="size"
-                    value="Clásica"
+                    value="Clasica"
                     className="hidden"
                     onChange={handleSizeChange}
-                    checked={tamaño === "Clásica"}
+                    checked={tamaño === "Clasica"}
                   />
                   <div
                     className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${
@@ -215,69 +228,6 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
                     }`}
                   >
                     Grande
-                  </div>
-                </label>
-              </div>
-            </div>
-
-            <div className="mt-10">
-              <h3 className="text-lg font-bold text-gray-900">AÑADIR BEBIDA</h3>
-              <div className="flex flex-wrap gap-4 mt-4">
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="drink"
-                    value="Coca-Cola"
-                    className="hidden"
-                    onChange={handleDrinkChange}
-                    checked={bebida === "Coca-Cola"}
-                  />
-                  <div
-                    className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${
-                      bebida === "Coca-Cola"
-                        ? "bg-orange-400 border-gray-800"
-                        : "hover:bg-orange-500 hover:text-white"
-                    }`}
-                  >
-                    Coca Cola
-                  </div>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="drink"
-                    value="Inka Cola"
-                    className="hidden"
-                    onChange={handleDrinkChange}
-                    checked={bebida === "Inka Cola"}
-                  />
-                  <div
-                    className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${
-                      bebida === "Inka Cola"
-                        ? "bg-orange-400 border-gray-800"
-                        : "hover:bg-orange-500 hover:text-white"
-                    }`}
-                  >
-                    Inka Kola
-                  </div>
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="drink"
-                    value="Pepsi"
-                    className="hidden"
-                    onChange={handleDrinkChange}
-                    checked={bebida === "Pepsi"}
-                  />
-                  <div
-                    className={`w-16 h-11 border-2 font-bold text-xs text-gray-800 rounded-lg flex items-center justify-center shrink-0 ${
-                      bebida === "Pepsi"
-                        ? "bg-orange-400 border-gray-800"
-                        : "hover:bg-orange-500 hover:text-white"
-                    }`}
-                  >
-                    Pepsi
                   </div>
                 </label>
               </div>

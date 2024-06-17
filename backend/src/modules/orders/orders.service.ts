@@ -10,6 +10,7 @@ import { StatusHistoriesService } from "../status-histories/status-histories.ser
 import { OrderStatus } from "src/enum/orderstatus.enum";
 import { OrderDetailsProducts } from "src/entities/ordersdetailsProduct.entity";
 import { OrdersQuery } from "./orders.queries";
+import { SizeProduct } from "src/enum/sizeProduct.enum";
 
 
 
@@ -46,9 +47,13 @@ export class OrdersService {
                 
                 //validamos stock
                 if(product.stock<=0) throw new BadRequestException(`Producto id ${product.stock} fuera en stoc`)
-                
+
                 // calculamos el monto total:
-                total += (Number(product.price)*Number(element.quantity)*Number(1-product.discount))
+                let factor = 1;
+                if(element.size === SizeProduct.CLASICA) factor = 0.9
+                else if(element.size === SizeProduct.GRANDE) factor = 1.1
+
+                total += (factor * Number(product.price)*Number(element.quantity)*Number(1-product.discount))
                 // actualizamos el stock:
                 await this.productsRepository.update(
                     {id: element.id},
@@ -69,6 +74,7 @@ export class OrdersService {
         // order detail products tabla intermedia
         await Promise.all(
             products_info.map(async (element) => {
+                await this.productsRepository.update(element.id,{size:element.size})
                 const product = await this.productsRepository.findOneBy({id: element.id})
                 const orDetaProd = this.ordDetailProdRepository.create({
                     products: product,

@@ -51,8 +51,7 @@ import { ThemeModeScript } from "flowbite-react";
 import Provider from "@/context/Provider";
 import { PayPalContext } from "@/context/PayPalContext";
 import { CategoryProvider } from "@/context/category.context";
-import ClientWrapper from "@/components/ClientWrapper";
-import ProductAddWrapper from "@/components/ProductAddWrapper";
+import IsAdminWrapper from "@/components/IsAdminWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -75,9 +74,7 @@ export default function RootLayout({
         <CategoryProvider>
           <PayPalContext>
             <Provider>
-              
-                <ClientWrapper>{children}</ClientWrapper>
-              
+              <IsAdminWrapper>{children}</IsAdminWrapper>
             </Provider>
           </PayPalContext>
         </CategoryProvider>
