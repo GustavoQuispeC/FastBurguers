@@ -1,7 +1,7 @@
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Server,Socket} from "socket.io";
 
-@WebSocketGateway({
+@WebSocketGateway(3002,{
     cors:{
         origin:'*'
     }
@@ -12,7 +12,7 @@ export class ChatsocketGateway implements OnGatewayConnection, OnGatewayDisconne
     server:Server;
     
     afterInit(server: any) {
-        console.log('Socket service funcionando')
+        console.log('Socket service funcionando en puerto 3002')
     }
 
     handleConnection(client: Socket) {
