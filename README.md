@@ -57,7 +57,7 @@ npm run dev
 # Dentro del directorio backend
 npm run start
 
-#Contribución
+##Contribución
 
 ¡Las contribuciones son bienvenidas! Si deseas contribuir a FastBurgers, sigue estos pasos:
 
