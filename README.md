@@ -4,17 +4,17 @@ FastBurgers es una plataforma web para la venta de hamburguesas que ofrece segui
 
 ## Características
 
-- **Seguimiento de Pedidos en Mapas:** Los usuarios pueden realizar un seguimiento en tiempo real del estado de sus pedidos mediante la visualización en mapas.
+- *Seguimiento de Pedidos en Mapas:* Los usuarios pueden realizar un seguimiento en tiempo real del estado de sus pedidos mediante la visualización en mapas.
 
-- **Autenticación de Terceros:** La plataforma permite a los usuarios iniciar sesión utilizando cuentas de terceros como Google, Facebook, etc.
+- *Autenticación de Terceros:* La plataforma permite a los usuarios iniciar sesión utilizando cuentas de terceros como Google, Facebook, etc.
 
-- **Integración de Pagos con PayPal:** Los usuarios pueden realizar pagos de forma segura utilizando PayPal.
+- *Integración de Pagos con PayPal:* Los usuarios pueden realizar pagos de forma segura utilizando PayPal.
 
-- **Chatbot:** Un chatbot ofrece asistencia automatizada para los usuarios, respondiendo preguntas frecuentes y ayudando en el proceso de pedido.
+- *Chatbot:* Un chatbot ofrece asistencia automatizada para los usuarios, respondiendo preguntas frecuentes y ayudando en el proceso de pedido.
 
-- **Chat Admin/Usuario:** Los administradores y usuarios pueden comunicarse a través de un chat integrado en la plataforma.
+- *Chat Admin/Usuario:* Los administradores y usuarios pueden comunicarse a través de un chat integrado en la plataforma.
 
-- **Envío de Detalles de Pedido por Correo Electrónico:** Después de realizar un pedido, los detalles se envían automáticamente al correo electrónico del usuario utilizando Nodemailer.
+- *Envío de Detalles de Pedido por Correo Electrónico:* Después de realizar un pedido, los detalles se envían automáticamente al correo electrónico del usuario utilizando Nodemailer.
 
 ## Tecnologías Utilizadas
 
@@ -27,6 +27,9 @@ FastBurgers es una plataforma web para la venta de hamburguesas que ofrece segui
 ### Backend
 - Nest.js
 - Docker
+- PostgreSQL
+- SocketIO
+- Jwt
 
 ### Otras Tecnologías
 - Nodemailer
@@ -56,7 +59,6 @@ npm run dev
 
 # Dentro del directorio backend
 npm run start
-
 
 ## Contribución
 
