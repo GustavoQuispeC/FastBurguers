@@ -16,8 +16,7 @@ const Chat: React.FC<ChatProps> = ({ room }) => {
   useEffect(() => {
     socket.emit("join", room);
 
-    socket.on("mensaje", (message: string) => {
-      // Recibimos el evento mensaje del servidor
+    socket.on("message", (message: string) => {
       setMessages((prevMessages) => [
         ...prevMessages,
         { text: message, isUser: false },
@@ -25,15 +24,14 @@ const Chat: React.FC<ChatProps> = ({ room }) => {
     });
 
     return () => {
-      // Nos desconectamos del socket cuando el componente se desmonta
-      socket.off("mensaje");
+      socket.off("message");
     };
   }, [room]);
 
   const sendMessage = () => {
     if (message.trim()) {
-      socket.emit("mensaje", message);
-      setMessages([...messages, { text: message, isUser: true }]);
+      socket.emit("message", { room, message });
+      // setMessages([...messages, { text: message, isUser: true }]);
       setMessage("");
     }
   };

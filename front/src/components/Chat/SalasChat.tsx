@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
+import Chat from "./Chat";
 
 const adminSocket: Socket = io("http://localhost:3002/admin");
 
 const SalasChat: React.FC = () => {
   const [rooms, setRooms] = useState<string[]>([]);
+  const [currentRoom, setCurrentRoom] = useState<string | null>(null);
 
   useEffect(() => {
     adminSocket.on("new_room", (room: string) => {
-      // Escuchamos el evento new_room del servidor para recibir el nombre de la sala
+      console.log(`New room received: ${room}`);
       setRooms((prevRooms) => {
-        if (!prevRooms.includes(room)) {
+        if (room && !prevRooms.includes(room)) {
           return [...prevRooms, room];
         }
         return prevRooms;
@@ -23,8 +25,10 @@ const SalasChat: React.FC = () => {
   }, []);
 
   const joinRoom = (room: string) => {
-    // Función para unirnos a una sala
-    adminSocket.emit("join", room);
+    if (room && room.trim() !== "") {
+      adminSocket.emit("join", room);
+      setCurrentRoom(room);
+    }
   };
 
   return (
@@ -48,6 +52,7 @@ const SalasChat: React.FC = () => {
           </li>
         ))}
       </ul>
+      {currentRoom && <Chat room={currentRoom} />}
     </>
   );
 };

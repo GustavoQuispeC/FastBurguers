@@ -1,12 +1,22 @@
 "use client";
 
-import ChatUsers from "@/components/Chat/Chat";
+import React, { useEffect, useState } from "react";
+import Chat from "@/components/Chat/Chat";
 
-const Chat = () => {
-  const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
-  const userId = userSession?.userData?.data?.userid || "";
+const ChatContainer: React.FC = () => {
+  const [userSession, setUserSession] = useState("");
 
-  return <ChatUsers room={userId} />;
+  useEffect(() => {
+    const userSessionData = JSON.parse(
+      localStorage.getItem("userSession") || "{}"
+    );
+    const userId = userSessionData?.userData?.data?.userid || "";
+    if (userId && userId.trim() !== "") {
+      setUserSession(userId);
+    }
+  }, []);
+
+  return <Chat room={userSession} />; // Indicamos que no es el admin
 };
 
-export default Chat;
+export default ChatContainer;
