@@ -3,13 +3,19 @@ import { io, Socket } from "socket.io-client";
 
 const socket: Socket = io("http://localhost:3002");
 
-const Chat: React.FC = () => {
+interface ChatProps {
+  room: string;
+}
+
+const Chat: React.FC<ChatProps> = ({ room }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<{ text: string; isUser: boolean }[]>(
     []
   );
 
   useEffect(() => {
+    socket.emit("join", room);
+
     socket.on("mensaje", (message: string) => {
       // Recibimos el evento mensaje del servidor
       setMessages((prevMessages) => [
@@ -22,7 +28,7 @@ const Chat: React.FC = () => {
       // Nos desconectamos del socket cuando el componente se desmonta
       socket.off("mensaje");
     };
-  }, []);
+  }, [room]);
 
   const sendMessage = () => {
     if (message.trim()) {

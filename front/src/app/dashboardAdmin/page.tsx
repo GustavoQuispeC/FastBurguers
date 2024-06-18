@@ -14,11 +14,13 @@ import PedidosList from "@/components/PedidosList/PedidosList";
 import TopVentas from "@/components/TopVentas/TopVentas";
 import UserRol from "@/components/UserRol/UserRol";
 import { FaUsersCog } from "react-icons/fa";
+import { BiChat } from "react-icons/bi";
 import { Spinner } from "flowbite-react/components/Spinner";
+import SalasChat from "@/components/Chat/SalasChat";
 
 const DashboardAdmin = () => {
   const [token, setToken] = useState<userSession>();
-  const [view, setView] = useState<string>("modifyProducts"); // Estado para la vista actual, por defecto "pedidos"
+  const [view, setView] = useState<string>("modifyProducts");
   const router = useRouter();
 
   useEffect(() => {
@@ -35,18 +37,16 @@ const DashboardAdmin = () => {
           };
 
           if (!decodedToken.isAdmin && !decodedToken.isSuperAdmin) {
-            // Si no es admin o superadmin, redirigir a home
             router.push("/home");
           } else {
-            // Si es admin o superadmin, guardar el token en el estado
             setToken(parsedToken);
           }
         } catch (error) {
           console.error("Error decoding token:", error);
-          router.push("/home"); // En caso de error decodificando, redirigir a home
+          router.push("/home");
         }
       } else {
-        router.push("/home"); // Si no hay token, redirigir a home
+        router.push("/home");
       }
     }
   }, [router]);
@@ -55,7 +55,6 @@ const DashboardAdmin = () => {
     null
   );
 
-  //! Cerrar sesión
   const handleSignOut = () => {
     localStorage.removeItem("userSession");
     setUserSessionData(null);
@@ -74,7 +73,6 @@ const DashboardAdmin = () => {
     };
   }, []);
 
-//!spinner
   if (!token) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -83,11 +81,8 @@ const DashboardAdmin = () => {
     );
   }
 
-
-
   return (
     <div className="flex flex-row min-h-screen dark:bg-gray-700">
-      {/* Barra lateral */}
       <div className="bg-gray-900 text-orange-400 w-36 md:w-52">
         <div className="p-1 md:p-4">
           <p className="text-xl text-white font-semibold mb-4 flex items-center">
@@ -133,27 +128,32 @@ const DashboardAdmin = () => {
               >
                 <FaUsersCog /> &nbsp; Usuarios
               </button>
-              <li className="mb-2 text-yellow-300">
-                <button
-                  onClick={handleSignOut}
-                  className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-red-700 w-full text-left"
-                >
-                  <TbLogout className="text-white" /> &nbsp; Salir
-                </button>
-              </li>
+            </li>
+            <li className="mb-2">
+              <button
+                onClick={() => setView("chat")}
+                className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-teal-700 w-full text-left"
+              >
+                <BiChat /> &nbsp; Chat
+              </button>
+            </li>
+            <li className="mb-2 text-yellow-300">
+              <button
+                onClick={handleSignOut}
+                className="flex flex-row items-center py-2 md:px-4 rounded hover:bg-red-700 w-full text-left"
+              >
+                <TbLogout className="text-white" /> &nbsp; Salir
+              </button>
             </li>
           </ul>
         </div>
       </div>
-      {/* Contenido principal */}
       <div className="flex-1 overflow-y-auto">
-        {/* Barra de navegación */}
         <div className="bg-gray-200 p-1 md:p-4 dark:bg-gray-500">
           <h2 className="text-lg font-semibold mb-2 dark:text-white">
             Bienvenido usuario Administrador
           </h2>
           <div className="bg-gray-50 p-4 rounded shadow dark:bg-gray-300">
-            {/* Aquí irían los datos del usuario */}
             <p>
               <b>Nombre:</b> {token?.userData.data.name}
             </p>
@@ -181,14 +181,12 @@ const DashboardAdmin = () => {
               <ProductList />
             </div>
           )}
-
           {view === "pedidos" && (
             <div>
               <h2 className="text-lg font-semibold mb-2">Pedidos</h2>
               <PedidosList />
             </div>
           )}
-
           {view === "categories" && (
             <div>
               <h2 className="text-lg font-semibold mb-2">
@@ -197,7 +195,6 @@ const DashboardAdmin = () => {
               <CategoriesList />
             </div>
           )}
-
           {view === "topVentas" && (
             <div>
               <h2 className="text-lg font-semibold mb-2">Top Ventas</h2>
@@ -206,8 +203,14 @@ const DashboardAdmin = () => {
           )}
           {view === "users" && (
             <div>
-              <h2 className="text-lg font-semibold mb-2"></h2>
+              <h2 className="text-lg font-semibold mb-2">Usuarios</h2>
               <UserRol />
+            </div>
+          )}
+          {view === "chat" && (
+            <div>
+              <h2 className="text-lg font-semibold mb-2">Salas de Chat</h2>
+              <SalasChat />
             </div>
           )}
         </div>
