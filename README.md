@@ -34,6 +34,7 @@ FastBurgers es una plataforma web para la venta de hamburguesas que ofrece segui
 ### Otras Tecnologías
 - Nodemailer
 
+
 ## Instalación
 
 1. Clona el repositorio:
@@ -65,11 +66,12 @@ npm run start
 
 ¡Las contribuciones son bienvenidas! Si deseas contribuir a FastBurgers, sigue estos pasos:
 
-Haz un fork del repositorio.
-Crea una rama para tu función: git checkout -b mi-nueva-funcion.
-Realiza tus cambios y haz commit de ellos: git commit -m 'Agrega una nueva función'.
-Sube tus cambios a la rama: git push origin mi-nueva-funcion.
-Abre una solicitud de extracción en GitHub.
+1. Haz un fork del repositorio.
+2. Crea una rama para tu función: `git checkout -b mi-nueva-funcion`.
+3. Realiza tus cambios y haz commit de ellos: `git commit -m 'Agrega una nueva función'`.
+4. Sube tus cambios a la rama: `git push origin mi-nueva-funcion`.
+5. Abre una solicitud de extracción en GitHub.
 
-Licencia
+
+### Licencia
 Este proyecto está bajo la Licencia MIT.
