@@ -44,26 +44,35 @@ const Footer: React.FC = (): React.ReactElement => {
       className="bg-black text-slate-200 text-sm"
     >
       <Container>
-        <div className="flex flex-col md:flex-row justify-between pt-16 pb-8">
+        <div className="flex flex-col md:flex-row justify-around  pt-16 pb-8">
+          <Link href="/product">
           <FooterList>
-            <h3 className=" text-base text-orange-500 font-bold mb-2">
-              Categorías del Menú
+            <h3 className=" text-base text-orange-500 font-bold mb-3">
+           Menu
             </h3>
 
-            <div>Hamburguesas Clásicas</div>
-            <div>Hamburguesas con Queso</div>
-            <div>Hamburguesas Vegetarianas</div>
-            <div>Hamburguesas Especiales</div>
+            <div>Hamburguesas </div>
+            <div>Postres</div>
+            <div>Bebidas</div>
+            <div>Sandwiches</div>
           </FooterList>
+</Link>
           <FooterList>
             <h3 className=" text-base text-orange-500 font-bold mb-2">
               Servicio al Cliente
             </h3>
-
+<Link href="/contact">
             <div>Contáctanos</div>
+</Link>
+<Link href="/politica">
             <div>Política de Entrega</div>
+</Link>
+<Link href="/devoluciones">
             <div>Devoluciones y Cambios</div>
+</Link>
+<Link href="/faq">
             <div>Preguntas Frecuentes</div>
+</Link>
           </FooterList>
 
           <div className=" w-full md:w-1/3 mb-6 md:mb-0">

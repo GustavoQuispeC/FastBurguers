@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { useCategory } from "@/context/category.context"; // Ajusta la ruta según tu estructura de carpetas
+import { useCategory } from "@/context/category.context"; 
 
 function HeadlineCards() {
   const { setSelectedCategory } = useCategory();
@@ -11,9 +11,9 @@ function HeadlineCards() {
 
   return (
     <div className='max-w-[1640px] mx-auto p-4 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
-      {/* Tarjetas Principales */}
+
       <div className='rounded-xl relative'>
-        {/* Capa de Superposición */}
+ 
         <div className='absolute w-full h-full bg-black/50 rounded-xl text-white flex flex-col justify-center items-center p-4'>
           <p className='font-bold text-xl sm:text-2xl px-2'>Menú de Fast Burger</p>
           <p className='px-2 text-center'>¡Comienza tu pedido ahora!</p>
@@ -25,7 +25,7 @@ function HeadlineCards() {
       </div>
 
       <div className='rounded-xl relative'>
-        {/* Capa de Superposición */}
+       
         <div className='absolute w-full h-full bg-black/50 rounded-xl text-white flex flex-col justify-center items-center p-4'>
           <p className='font-bold text-xl sm:text-2xl px-2'>Nuevos Restaurantes</p>
           <p className='px-2 text-center'>Nos estamos expandiendo!</p>
@@ -37,7 +37,7 @@ function HeadlineCards() {
       </div>
 
       <div className='rounded-xl relative'>
-        {/* Capa de Superposición */}
+      
         <div className='absolute w-full h-full bg-black/50 rounded-xl text-white flex flex-col justify-center items-center p-4'>
           <p className='font-bold text-xl sm:text-2xl px-2'>Entregamos Postres</p>
           <p className='px-2 text-center'>Dulces Delicias</p>
