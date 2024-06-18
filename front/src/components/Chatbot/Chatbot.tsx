@@ -157,6 +157,7 @@ const Chatbot: React.FC = () => {
   const [input, setInput] = useState<string>("");
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const toggleChatbot = () => {
     setIsOpen(!isOpen);
@@ -167,6 +168,12 @@ const Chatbot: React.FC = () => {
       inputRef.current.focus();
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const sendMessage = async () => {
     if (!input) return;
@@ -256,6 +263,7 @@ const Chatbot: React.FC = () => {
                   )}
                 </div>
               ))}
+              <div ref={messagesEndRef} />
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
               <input
