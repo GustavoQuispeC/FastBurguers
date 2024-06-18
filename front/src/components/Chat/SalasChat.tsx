@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import Chat from "./Chat";
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
-const adminSocket: Socket = io("http://localhost:3002/admin");
+const adminSocket: Socket = io(`${apiURL}/admin`);
 
 const SalasChat: React.FC = () => {
   const [rooms, setRooms] = useState<string[]>([]);
