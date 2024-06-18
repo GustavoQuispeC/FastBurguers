@@ -1,3 +1,4 @@
+import { Logger } from "@nestjs/common";
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Server,Socket} from "socket.io";
 
@@ -11,21 +12,31 @@ export class ChatsocketGateway implements OnGatewayConnection, OnGatewayDisconne
     @WebSocketServer()
     server:Server;
     
-    afterInit(server: any) {
+    private logger: Logger = new Logger('AppGateway');
+
+    afterInit(server: Server) {
         console.log('Socket service funcionando en puerto 3002')
     }
 
     handleConnection(client: Socket) {
-        console.log(`Client connected: ${client.id}`)
+        this.logger.log(`Client connected: ${client.id}`)
     }
 
     handleDisconnect(client: Socket) {
-        `Client disconnected: ${client.id}`
+        this.logger.log(`Client disconnected: ${client.id}`);
     }
 
-    @SubscribeMessage('mensaje')
-    handleMessage(@ConnectedSocket() client: Socket, @MessageBody() data: any){
-        console.log(data);
-        client.broadcast.emit('mensaje', data);
+    @SubscribeMessage('join')
+    handleJoinRoom(client: Socket, room: string): void {
+    client.join(room);
+    this.logger.log(`Client ${client.id} joined room ${room}`);
+    this.server.of('/admin').emit('new_room', room);
     }
+
+    @SubscribeMessage('message')
+    handleMessage(client: Socket, data: { room: string, message: string }): void {
+    const { room, message } = data;
+    this.server.to(room).emit('message', message);
+}
+    
 }
