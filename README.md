@@ -54,13 +54,13 @@ npm install
 
 4. Inicia tanto el frontend como el backend:
 
-# Dentro del directorio frontend
+### Dentro del directorio frontend
 npm run dev
 
-# Dentro del directorio backend
+### Dentro del directorio backend
 npm run start
 
-## *Contribución*
+## Contribución
 
 ¡Las contribuciones son bienvenidas! Si deseas contribuir a FastBurgers, sigue estos pasos:
 
