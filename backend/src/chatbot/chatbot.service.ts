@@ -12,7 +12,7 @@ export class ChatbotService {
         2️⃣ 🏠 Nuestros locales<br>
         3️⃣ 📞 Números de contacto<br>
         📌 🍔 Revisa nuestros productos <a href="https://fast-burguers.vercel.app/product">👉<b>VER</b></a><br>
-        📌 🔄 Conversa con nosotros <a href="https://fast-burguers.vercel.app/chat">👉<b>VER</b></a><br>`,
+        📌 🔄 Conversa con nosotros <a target="_blank" href="https://fast-burguers.vercel.app/chat">👉<b>VER</b></a><br>`,
 
     3: `<b>Aquí tienes algunas hamburguesas sugerencias:</b><br>
         ✅ 🍔 Double Cheeseburger. <a href="https://fast-burguers.vercel.app/product/d71740e6-0aaa-483b-a178-58e0897cbca2">👉<b>VER</b></a><br>
