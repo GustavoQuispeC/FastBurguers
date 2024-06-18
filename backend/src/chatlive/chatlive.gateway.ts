@@ -10,7 +10,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway(3002, {
+@WebSocketGateway({
   cors: {
     origin: '*',
   },
@@ -45,6 +45,9 @@ export class ChatsocketGateway
   @SubscribeMessage('message')
   handleMessage(client: Socket, data: { room: string; message: string }): void {
     const { room, message } = data;
-    this.server.to(room).emit('message', message);
-  }
+    client.join(room)
+    //this.server.to(room).emit('message', message);
+    client.to(room).emit('message',message)
+}
+    
 }

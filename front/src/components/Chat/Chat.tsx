@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
+const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
-const socket: Socket = io("http://localhost:3002");
+const socket: Socket = io(`${apiURL}`);
 
 interface ChatProps {
   room: string;
@@ -47,14 +48,18 @@ const Chat: React.FC<ChatProps> = ({ room }) => {
             Tus problemas, nos importan.
           </p>
           <p className="lg:w-2/3 mx-auto leading-relaxed text-sm text-gray-600">
-            La respuesta del administrador suele tomar de 2 a 5 minutos. Agradecemos tu paciencia.
+            La respuesta del administrador suele tomar de 2 a 5 minutos.
+            Agradecemos tu paciencia.
           </p>
         </div>
         <div className="lg:w-1/2 md:w-2/3 mx-auto">
           <div className="flex flex-wrap -m-2">
             <div className="p-2 w-full">
               <div className="relative">
-                <label htmlFor="chat" className="leading-7 text-sm text-gray-600">
+                <label
+                  htmlFor="chat"
+                  className="leading-7 text-sm text-gray-600"
+                >
                   Chat
                 </label>
                 <div className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-orange-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 h-64 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out overflow-y-auto flex flex-col space-y-2">
@@ -62,7 +67,9 @@ const Chat: React.FC<ChatProps> = ({ room }) => {
                     <div
                       key={index}
                       className={`p-2 rounded max-w-xs text-white ${
-                        msg.isUser ? "bg-orange-500 self-end" : "bg-gray-500 self-start"
+                        msg.isUser
+                          ? "bg-orange-500 self-end"
+                          : "bg-gray-500 self-start"
                       }`}
                     >
                       {msg.text}
@@ -90,7 +97,9 @@ const Chat: React.FC<ChatProps> = ({ room }) => {
             <div className="p-2 w-full pt-8 mt-8 border-t border-gray-200 text-center">
               <a className="text-orange-500">fastburguer@email.com</a>
               <p className="leading-normal my-5">
-                49 Smith St.<br />Saint Cloud, MN 56301
+                49 Smith St.
+                <br />
+                Saint Cloud, MN 56301
               </p>
               <span className="inline-flex">
                 <a className="text-gray-500">
@@ -127,7 +136,14 @@ const Chat: React.FC<ChatProps> = ({ room }) => {
                     className="w-5 h-5"
                     viewBox="0 0 24 24"
                   >
-                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                    <rect
+                      width="20"
+                      height="20"
+                      x="2"
+                      y="2"
+                      rx="5"
+                      ry="5"
+                    ></rect>
                     <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
                   </svg>
                 </a>

@@ -1,19 +1,46 @@
+
 import { Injectable } from '@nestjs/common';
-import { log } from 'console';
 
 @Injectable()
 export class ChatbotService {
   private steps = {
     0: 'Por favor, dime tu nombre.',
-    1: 'Hola {name}, Bienvenido a FastBurgers.¿Te gustaria ver la lista de opciones disponibles?',
-    2: 'Selecciona una opción:1. Las mejores hamburguesas del día 2. Nuestros locales 3. Números de contacto',
-    3: 'Aquí tienes algunas hamburguesas del día:- Hamburguesa clásica - Hamburguesa vegetariana ¿Te gustaría ver más opciones? 1. Si 2. volver al menú anterior',
-    4: 'visita nuestra página web [FastBurgers](https://fast-burguers.vercel.app) para más información. 1. volver al menú anterior 2. salir',
-    5: 'Nuestros locales están ubicados en:- av.lima 123 SMP - Jr. Arica 234 Miraflores. 1. volver al menu anterior 2. salir',
-    6: 'Nuestros números de contacto son:- Teléfono 1: 9999999 - Teléfono 2: 8888888  escriba 1. volver al menu anterior 2. salir',
-    7: 'Gracias por su visita. Visítanos en [FastBurgers](https://fast-burguers.vercel.app)',
-  };
+    1: '👋Hola <b>{name}</b>, Bienvenido a <b>FastBurgers</b>. ¿Te gustaría ver la lista de opciones disponibles?',
+    2: `<b>Selecciona una opción:</b><br>
+        Escribe:<br>
+        1️⃣ 🍔 Las mejores hamburguesas del día<br>
+        2️⃣ 🏠 Nuestros locales<br>
+        3️⃣ 📞 Números de contacto<br>
+        --------------------------------<br>
+        También puedes:<br>
+        🍔 Revisa nuestros productos <a href="https://fast-burguers.vercel.app/product">👉<b>VER</b></a><br>
+        📌  Conversa con nosotros <a href="https://fast-burguers.vercel.app/chat">👉<b>VER</b></a><br>`,
 
+    3: `<b>Aquí tienes algunas hamburguesas sugerencias:</b><br>
+        ✅ 🍔 Double Cheeseburger. <a href="https://fast-burguers.vercel.app/product/d71740e6-0aaa-483b-a178-58e0897cbca2">👉<b>VER</b></a><br>
+        ✅ 🍔 Bacon Burger. <a href="https://fast-burguers.vercel.app/product/f729276f-da23-4726-810f-a8a1a2a1c1cb">👉<b>VER</b></a><br>
+        ✅ 🍔 BBQ Burger. <a href="https://fast-burguers.vercel.app/product/5c3d7af9-8fa5-4bc8-b728-76e99017d604">👉<b>VER</b></a><br>
+        Escribe:<br>
+        1️⃣ Volver al menú principal<br>
+        2️⃣ Salir`,
+
+    4: `<b>Nuestros locales están ubicados en:</b><br>
+        🏠 Av. Lima 123 SMP<br>
+        <a target="_blank" href="https://www.google.com/maps/place/SHALOM+PUENTE+ARICA/@-11.8585891,-77.0897244,15z/data=!4m6!3m5!1s0x9105d7d1c204f9b3:0xa570ac9ea01765c3!8m2!3d-11.8531043!4d-77.0886659!16s%2Fg%2F11lgf2g_gz?entry=ttu">👉<b>VER MAPA</b></a><br>
+        🏠 Jr. Arica 234 Miraflores.<br>
+        <a target="_blank" href="https://www.google.com/maps/place/El+Aguaje+Restaurante+y+Eventos+Amazonicos/@-11.8733579,-77.0740329,16.25z/data=!4m6!3m5!1s0x9105d1350cbe1de1:0xc0e9071b47c6f748!8m2!3d-11.8721596!4d-77.0704163!16s%2Fg%2F11b6nq3xlr?entry=ttu">👉<b>VER MAPA</b></a><br>
+        Escribe:<br>
+        1️⃣ Volver al menú principal<br>
+        2️⃣ Salir`,
+
+    5: `<b>Nuestros números de contacto son:</b><br>
+        📞 Teléfono ➡️: 9999999<br>
+        📞 Teléfono ➡️: 8888888<br>
+        Escribe:<br>
+        1️⃣ Volver al menú principal<br>
+        2️⃣ Salir`,
+    6: `Gracias por su visita</a>`,
+  };
   private userSession = new Map<string, { step: number; name?: string }>();
 
   getNextStep(userId: string, message: string): string {
@@ -23,138 +50,88 @@ export class ChatbotService {
     }
     const session = this.userSession.get(userId);
     let response: string;
-
-    try{
-      switch (session.step) {
-        case 0:
-          // Paso 0: Solicitar nombre
-          response = this.steps[0];
-          session.step++;
-          break;
-        case 1:
-          // Paso 1: Saludo y pregunta sobre recomendaciones
-          session.name = message.trim();
-          response = this.steps[1].replace('{name}', session.name);
-          session.step++;
-          break;
-        case 2:
-          // Paso 2: Mostrar opciones
-          response = this.steps[2];
-          // response = this.handleOptionSelection(message, session);
-          session.step++;
-          break;
-        
-        case 3:
-          // Paso 2: redirigir a opciones
-          response = this.handleOptionSelection(message, session);
-          // session.step++;
-          break;
-        case 4:
-          // Paso 3: Mostrar hamburguesas del día
-          response = this.handleBurgerOptions(message, session);          
-          break;
-        case 5:
-          // Paso 4: Mostrar información adicional
-          response = this.handleAdditionalInfo(message, session);
-          break;
-        case 6:
-          // Paso 5: Mostrar locales
-          response = this.handleLocationInfo(message, session);
-          break;
-        case 7:
-          // Paso 6: Mostrar números de contacto
-          response = this.handleContactInfo(message, session);
-          break;
-        case 8:
-          // Paso 7: Despedida
-          response = this.steps[7];
-          // Reiniciar la conversación eliminando la sesión del usuario
-          this.userSession.delete(userId);
-          break;
-        default:
-          // Por defecto, si se alcanza este caso, se termina la conversación
-          response = 'Gracias por tu tiempo. ¡Hasta luego!';
-          this.userSession.delete(userId);
-      }
-    } catch (error) {
-      response = 'Ha ocurrido un error. Por favor, intenta nuevamente.';
-      console.error(`Error handling step ${session.step} for user ${userId}:`, error);
-    }
-    
-    return response;
-  }
-
-  private handleOptionSelection(message: string, session: { step: number; name?: string }): string {
-    const option = parseInt(message, 10);
-
-    if (isNaN(option) || option < 1 || option > 3) {
-      return 'Opción inválida. Por favor, selecciona una opción correcta.';
-    }
-
-    switch (option) {
+    switch (session.step) {
+      case 0:
+        // Paso 0: Solicitar nombre
+        response = this.steps[0];
+        session.step++;
+        break;
       case 1:
-        session.step = 3;
+        // Paso 1: Saludo y pregunta sobre recomendaciones
+        session.name = message;
+        response = this.steps[1].replace('{name}', session.name);
+        session.step++;
         break;
       case 2:
-        session.step = 5;
+        // Paso 2: Mostrar opciones
+        response = this.steps[2];
+        if (message.toLowerCase() === 'no') {
+          response = this.steps[6];
+          this.userSession.delete(userId);
+        } else {
+          session.step++;
+        }
         break;
       case 3:
-        session.step = 6;
+        // Paso 3: Menu principal
+        if (message === '1') {
+          response = this.steps[3];
+          session.step = 4;
+        } else if (message === '2') {
+          response = this.steps[4];
+          session.step = 5;
+        } else if (message === '3') {
+          response = this.steps[5];
+          session.step = 6;
+        } else {
+          response =
+            '<b>Opción inválida. </b> Por favor, selecciona una opción válida.';
+        }
         break;
-    }
-
-    return this.steps[session.step];
-  }
-
-  private handleBurgerOptions(message: string, session: { step: number; name?: string }): string {
-    switch (message) {
-      case '1':
-        session.step = 4;
-        return this.steps[3];
-      case '2':
-        session.step = 2;
-        return this.steps[2];
+      case 4:
+        // Paso 4: Mostrar hamburguesas sugeridas
+        if (message === '1') {
+          response = this.steps[2]; // Volver al menu principal
+          session.step = 3;
+        } else if (message === '2') {
+          response = this.steps[6];
+          this.userSession.delete(userId);
+        } else {
+          response =
+            'Opción inválida. Por favor, selecciona una opción válida.';
+        }
+        break;
+      case 5:
+        // Paso 5: Mostrar locales
+        if (message === '1') {
+          response = this.steps[2];
+          session.step = 3; // Volver al menu principal
+        } else if (message === '2') {
+          response = this.steps[6];
+          this.userSession.delete(userId);
+        } else {
+          response =
+            'Opción inválida. Por favor, selecciona una opción válida.';
+        }
+        break;
+      case 6:
+        // Paso 6: Mostrar números de contacto
+        if (message === '1') {
+          response = this.steps[2];
+          session.step = 3; // Volver al menu principal
+        } else if (message === '2') {
+          response = this.steps[6];
+          this.userSession.delete(userId);
+        } else {
+          response =
+            'Opción inválida. Por favor, selecciona una opción válida.';
+        }
+        break;
       default:
-        return 'Opción inválida. Por favor, selecciona una opción correcta.';
+        // Por defecto, si se alcanza este caso, se termina la conversación
+        response = 'Gracias por tu tiempo. ¡Hasta luego!';
+        this.userSession.delete(userId);
     }
-  }
-
-  private handleAdditionalInfo(message: string, session: { step: number; name?: string }): string {
-    switch (message) {
-      case '1':
-        session.step = 2;
-        return this.steps[2];
-      case '2':
-        session.step = 7;
-        return this.steps[7];
-      default:
-        return 'Opción inválida. Por favor, selecciona una opción correcta.';
-    }
-  }
-
-  private handleLocationInfo(message: string, session: { step: number; name?: string }): string {
-    switch (message) {
-      case '1':
-        session.step = 2;
-        return this.steps[2];
-      case '2':
-        session.step = 7;
-        return this.steps[7];
-      default:
-        return 'Opción inválida. Por favor, selecciona una opción correcta.';
-    }
-  }
-
-  private handleContactInfo(message: string, session: { step: number; name?: string }): string {
-    switch (message) {
-      case '1':
-        session.step = 2;
-        return this.steps[2];
-      case '2':
-        session.step = 7;
-        return this.steps[7];
-      default:
-        return 'Opción inválida. Por favor, selecciona una opción correcta.';
-    }
+    return response;
   }
 }
