@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsArray, IsBoolean, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUUID, IsUrl, Length, MaxLength, isArray } from "class-validator";
+import { IsArray, IsBoolean, IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString, IsUUID, IsUrl, Length, Max, MaxLength, Min, isArray } from "class-validator";
 import { SizeProduct } from "src/enum/sizeProduct.enum";
 import { UUID } from "typeorm/driver/mongodb/bson.typings";
 
@@ -45,9 +45,11 @@ export class CreateProductdto{
      * Must be a number
      * Example 0.50
      */
-    @IsNumber()
+    @IsInt()
     @Type(()=> Number)
     @IsPositive()
+    @Min(0)
+    @Max(100)
     discount: number
 
     /**
@@ -122,11 +124,14 @@ export class UpdatedProductdto {
     stock?:number
 
     /**
-     * Must be a number
-     * @Example 0.1
+     * Must be a number between 0 and 100
+     * @Example 20
      */
     @IsOptional()
     @Type(()=> Number)
+    @IsInt()
+    @Min(0)
+    @Max(100)
     discount?: number
 
 

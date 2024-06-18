@@ -121,7 +121,7 @@ export class ProductsService {
         objectProduct.price = product.price
         objectProduct.imgUrl = imgUrl
         objectProduct.stock = product.stock
-        objectProduct.discount = product.discount
+        objectProduct.discount = product.discount/100
         objectProduct.size = product.size
 
         await this.productsRepository.createQueryBuilder()
@@ -153,7 +153,7 @@ export class ProductsService {
             ...(product.description && { description: product.description }),
             ...(product.price !== undefined && { price: product.price }),
             ...(product.stock !== undefined && { stock: product.stock }),
-            ...(product.discount !== undefined && { discount: product.discount }),
+            ...(product.discount !== undefined && { discount: product.discount/100 }),
             ...(product.condition !== undefined && { condition: product.condition }),
             ...(imgUrl && { imgUrl })
         };
