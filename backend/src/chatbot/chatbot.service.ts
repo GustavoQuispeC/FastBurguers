@@ -11,8 +11,8 @@ export class ChatbotService {
         1️⃣ 🍔 Las mejores hamburguesas del día<br>
         2️⃣ 🏠 Nuestros locales<br>
         3️⃣ 📞 Números de contacto<br>
-        4️⃣ 🍔 Revisa nuestros productos
-        5️⃣ 🔄 Conversa con nosotros`,
+        📌 🍔 Revisa nuestros productos <a href="https://fast-burguers.vercel.app/product">👉<b>VER</b></a><br>
+        📌 🔄 Conversa con nosotros <a href="https://fast-burguers.vercel.app/chat">👉<b>VER</b></a><br>`,
 
     3: `<b>Aquí tienes algunas hamburguesas sugerencias:</b><br>
         ✅ 🍔 Double Cheeseburger. <a href="https://fast-burguers.vercel.app/product/d71740e6-0aaa-483b-a178-58e0897cbca2">👉<b>VER</b></a><br>
@@ -24,9 +24,9 @@ export class ChatbotService {
 
     4: `<b>Nuestros locales están ubicados en:</b><br>
         🏠 Av. Lima 123 SMP<br>
-        <a href="https://www.google.com/maps/place/SHALOM+PUENTE+ARICA/@-11.8585891,-77.0897244,15z/data=!4m6!3m5!1s0x9105d7d1c204f9b3:0xa570ac9ea01765c3!8m2!3d-11.8531043!4d-77.0886659!16s%2Fg%2F11lgf2g_gz?entry=ttu">👉<b>VER MAPA</b></a><br>
+        <a target="_blank" href="https://www.google.com/maps/place/SHALOM+PUENTE+ARICA/@-11.8585891,-77.0897244,15z/data=!4m6!3m5!1s0x9105d7d1c204f9b3:0xa570ac9ea01765c3!8m2!3d-11.8531043!4d-77.0886659!16s%2Fg%2F11lgf2g_gz?entry=ttu">👉<b>VER MAPA</b></a><br>
         🏠 Jr. Arica 234 Miraflores.<br>
-        <a href="https://www.google.com/maps/place/El+Aguaje+Restaurante+y+Eventos+Amazonicos/@-11.8733579,-77.0740329,16.25z/data=!4m6!3m5!1s0x9105d1350cbe1de1:0xc0e9071b47c6f748!8m2!3d-11.8721596!4d-77.0704163!16s%2Fg%2F11b6nq3xlr?entry=ttu">👉<b>VER MAPA</b></a><br>
+        <a target="_blank" href="https://www.google.com/maps/place/El+Aguaje+Restaurante+y+Eventos+Amazonicos/@-11.8733579,-77.0740329,16.25z/data=!4m6!3m5!1s0x9105d1350cbe1de1:0xc0e9071b47c6f748!8m2!3d-11.8721596!4d-77.0704163!16s%2Fg%2F11b6nq3xlr?entry=ttu">👉<b>VER MAPA</b></a><br>
         Escribe:<br>
         1️⃣ Volver al menú principal<br>
         2️⃣ Salir`,
