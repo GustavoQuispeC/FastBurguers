@@ -36,7 +36,9 @@ export class ChatsocketGateway implements OnGatewayConnection, OnGatewayDisconne
     @SubscribeMessage('message')
     handleMessage(client: Socket, data: { room: string, message: string }): void {
     const { room, message } = data;
-    this.server.to(room).emit('message', message);
+    client.join(room)
+    //this.server.to(room).emit('message', message);
+    client.to(room).emit('message',message)
 }
     
 }
