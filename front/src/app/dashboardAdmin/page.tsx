@@ -57,6 +57,7 @@ const DashboardAdmin = () => {
 
   const handleSignOut = () => {
     localStorage.removeItem("userSession");
+    localStorage.removeItem("rooms");
     setUserSessionData(null);
     router.push("/home");
   };
