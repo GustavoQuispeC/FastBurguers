@@ -101,18 +101,13 @@ const Checkout = () => {
   };
 
   return (
-    <div className="font-[sans-serif] bg-white pt-6">
+    <div className="font-[sans-serif] bg-white pt-6 dark:bg-gray-600">
       <div className="max-lg:max-w-xl mx-auto w-full relative z-10">
         <div className="grid lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 max-lg:order-1 p-6 max-w-4xl mx-auto w-full">
-            <div className="text-center max-lg:hidden">
-              <h2 className="text-3xl font-extrabold text-[#333] inline-block border-b-4 border-[#333] pb-1">
-                Verificar
-              </h2>
-            </div>
             <form className="lg:mt-12">
               <div>
-                <h2 className="text-2xl font-extrabold text-[#333]">
+                <h2 className="text-2xl font-extrabold text-[#333] dark:text-orange-400">
                   Datos de envío
                 </h2>
                 <div className="grid grid-cols-2 gap-6 mt-8">
@@ -120,7 +115,7 @@ const Checkout = () => {
                     type="text"
                     name="name"
                     placeholder="Nombre"
-                    className="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none"
+                    className=" text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none"
                     onChange={handleChange}
                     value={user.name}
                     required
@@ -129,7 +124,7 @@ const Checkout = () => {
                     type="email"
                     name="email"
                     placeholder="Correo"
-                    className="px-2 py-3.5 bg-white text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none"
+                    className=" text-[#333] w-full text-sm border-b-2 focus:border-[#333] outline-none"
                     onChange={handleChange}
                     value={user.email}
                     required
@@ -142,19 +137,19 @@ const Checkout = () => {
               </div>
 
               <div className="mt-12 pb-6">
-                <h2 className="text-2xl font-extrabold text-gray-800 my-5">
+                <h2 className="text-2xl font-extrabold text-gray-800 my-5 dark:text-orange-400">
                   Método de Pago
                 </h2>
-                <PayPalButton allFieldsCompleted={allFieldsCompleted}/>
+                <PayPalButton allFieldsCompleted={allFieldsCompleted} />
               </div>
             </form>
           </div>
 
           {/* Mis pedidos */}
-          <div className="bg-gray-100 lg:h-auto lg:sticky lg:top-0 lg:overflow-y-auto lg:col-span-1 md:col-span-2">
+          <div className="bg-gray-100 dark:bg-gray-700 lg:h-auto lg:sticky lg:top-0 lg:overflow-y-auto lg:col-span-1 md:col-span-2 rounded-xl">
             <div className="relative">
               <div className="p-8 lg:overflow-auto lg:h-[calc(100vh-60px)] max-lg:mb-8">
-                <h2 className="text-2xl font-extrabold text-[#333]">
+                <h2 className="text-2xl font-extrabold text-[#333] dark:text-orange-400">
                   Mis Pedidos
                 </h2>
                 <div className="space-y-6 mt-10">
@@ -163,7 +158,7 @@ const Checkout = () => {
                       key={item.id}
                       className="grid sm:grid-cols-2 items-start gap-6"
                     >
-                      <div className="max-w-[190px] px-4 py-6 shrink-0 bg-gray-200 rounded-md">
+                      <div className="max-w-[190px] shrink-0 rounded-md">
                         <img
                           src={item.imgUrl}
                           className="w-40 h-40 rounded-xl"
@@ -171,31 +166,34 @@ const Checkout = () => {
                         />
                       </div>
                       <div className="sm:col-span-1">
-                        <h3 className="text-base text-[#333] font-bold">
+                        <h3 className="text-base text-[#333] font-bold dark:text-white">
                           {item.name}
                         </h3>
                         <ul className="text-xs text-[#333] space-y-2 mt-2">
-                          <li className="flex flex-wrap gap-4">
-                            Tamaño <span className="ml-auto">{item.size}</span>
+                          <li className="flex flex-wrap gap-4 dark:text-orange-400">
+                            Tamaño{" "}
+                            <span className="ml-auto dark:text-white">
+                              {item.size}
+                            </span>
                           </li>
-                          <li className="flex flex-wrap gap-4">
+                          <li className="flex flex-wrap gap-4 dark:text-orange-400">
                             Cantidad{" "}
-                            <span className="ml-auto">
+                            <span className="ml-auto dark:text-white">
                               {item.quantity || 1}
                             </span>
                           </li>
-                          <li className="flex flex-wrap gap-4">
+                          <li className="flex flex-wrap gap-4 dark:text-orange-400">
                             Producto{" "}
-                            <span className="ml-auto">
+                            <span className="ml-auto dark:text-white">
                               ${item.price.toFixed(2)}
                             </span>
                           </li>
 
                           {calculateDiscountAmount(item.price, item.discount) >
                             0 && (
-                            <li className="flex flex-wrap gap-4">
+                            <li className="flex flex-wrap gap-4 dark:text-orange-400">
                               Descuento{" "}
-                              <span className="ml-auto">
+                              <span className="ml-auto dark:text-white">
                                 -$
                                 {calculateDiscountAmount(
                                   item.price,

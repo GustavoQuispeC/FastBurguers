@@ -132,7 +132,7 @@ const Register = () => {
         transition={Zoom}
       />
 
-      <div className="min-h-screen dark:bg-gray-800 flex justify-center py-10 md:pt-0 md:items-center">
+      <div className="min-h-screen dark:bg-gray-600 flex justify-center py-10 md:pt-0 md:items-center">
         <div className="w-11/12 sm:w-2/3 md:w-1/2 lg:w-2/5">
           <form
             onSubmit={handleSubmit}

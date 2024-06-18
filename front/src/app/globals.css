@@ -2,14 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* Darle un color al fondo de la página */
 body {
-    background-color: rgb(245, 248, 252);
-   
-  }
-    
-  
+  background-color: rgb(245, 248, 252);
+}
+
 /* 
   @layer base {
     button {
@@ -17,11 +14,11 @@ body {
     }
   } */
 
-  @layer utilities {
-    .animation-delay-200 {
-      animation-delay: 0.2s;
-    }
-    .animation-delay-400 {
-      animation-delay: 0.4s;
-    }
+@layer utilities {
+  .animation-delay-200 {
+    animation-delay: 0.2s;
   }
+  .animation-delay-400 {
+    animation-delay: 0.4s;
+  }
+}

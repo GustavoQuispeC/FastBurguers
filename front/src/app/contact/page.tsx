@@ -1,16 +1,16 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import { TextInput, Textarea } from "flowbite-react";
-import RatingStars from "@/components/ratingStars/ratingStars"; 
+import RatingStars from "@/components/ratingStars/ratingStars";
 
-import { useRouter } from "next/navigation"
+import { useRouter } from "next/navigation";
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 const Contacto: React.FC = () => {
-  const [name, setName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [punctuation, setPunctuation] = useState<number>(0);
 
   const router = useRouter();
@@ -25,7 +25,7 @@ const Contacto: React.FC = () => {
       name,
       email,
       description,
-      punctuation
+      punctuation,
     };
 
     try {
@@ -39,18 +39,20 @@ const Contacto: React.FC = () => {
 
       if (!res.ok) {
         const errorDetails = await res.json();
-        throw new Error(`Error creando review: ${res.status} - ${errorDetails.message}`);
+        throw new Error(
+          `Error creando review: ${res.status} - ${errorDetails.message}`
+        );
       }
 
-      alert('Review creada correctamente');
-      setName('');
-      setEmail('');
-      setDescription('');
+      alert("Review creada correctamente");
+      setName("");
+      setEmail("");
+      setDescription("");
       setPunctuation(0);
-      router.push('/');
+      router.push("/");
     } catch (error: any) {
-      console.error('Error creando review:', error);
-      alert('No se pudo crear la review');
+      console.error("Error creando review:", error);
+      alert("No se pudo crear la review");
     }
   };
 
@@ -67,60 +69,88 @@ const Contacto: React.FC = () => {
             marginWidth={0}
             title="mapa"
             scrolling="no"
-            style={{ filter: 'grayscale(1) contrast(1.2) opacity(0.4)' }}
+            style={{ filter: "grayscale(1) contrast(1.2) opacity(0.4)" }}
           ></iframe>
         </div>
         <div className="container px-5 py-24 mx-auto flex">
-          <div className="lg:w-1/3 md:w-1/2 bg-white rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10 shadow-md">
-            <h2 className="text-gray-900 text-lg mb-1 font-medium title-font">Danos tu Opinion!</h2>
-            <p className="leading-relaxed mb-5 text-gray-600">Valoramos tus comentarios y preocupaciones. Por favor, háznos saber cómo fue tu experiencia de compra y cómo podemos mejorar nuestros servicios.</p>
+          <div className="lg:w-1/3 md:w-1/2 bg-white dark:bg-gray-700 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10 shadow-md">
+            <h2 className="text-gray-900 text-lg mb-1 font-medium title-font dark:text-orange-500">
+              Danos tu Opinion!
+            </h2>
+            <p className="leading-relaxed mb-5 text-gray-600 dark:text-white">
+              Valoramos tus comentarios y preocupaciones. Por favor, háznos
+              saber cómo fue tu experiencia de compra y cómo podemos mejorar
+              nuestros servicios.
+            </p>
             <form onSubmit={handleSubmit}>
               <div className="relative mb-4">
-                <label htmlFor="name" className="leading-7 text-sm text-gray-600">Tu Nombre</label>
-                <TextInput 
-                  id="name" 
-                  name="name" 
-                  placeholder="Ingresa tu nombre" 
-                  required 
+                <label
+                  htmlFor="name"
+                  className="leading-7 text-sm text-gray-600 dark:text-orange-400"
+                >
+                  Tu Nombre
+                </label>
+                <TextInput
+                  id="name"
+                  name="name"
+                  placeholder="Ingresa tu nombre"
+                  required
                   value={name}
-                  onChange={(e) => setName(e.target.value)} 
+                  onChange={(e) => setName(e.target.value)}
                 />
               </div>
               <div className="relative mb-4">
-                <label htmlFor="email" className="leading-7 text-sm text-gray-600">Tu Correo Electrónico</label>
-                <TextInput 
-                  type="email" 
-                  id="email" 
-                  name="email" 
-                  placeholder="Ingresa tu correo electrónico" 
-                  required 
+                <label
+                  htmlFor="email"
+                  className="leading-7 text-sm text-gray-600 dark:text-orange-400"
+                >
+                  Tu Correo Electrónico
+                </label>
+                <TextInput
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Ingresa tu correo electrónico"
+                  required
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)} 
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div className="relative mb-4">
-                <label htmlFor="message" className="leading-7 text-sm text-gray-600">Tu Mensaje</label>
-                <Textarea 
-                  id="message" 
-                  name="message" 
-                  placeholder="Ingresa tu mensaje" 
-                  required 
+                <label
+                  htmlFor="message"
+                  className="leading-7 text-sm text-gray-600 dark:text-orange-400"
+                >
+                  Tu Mensaje
+                </label>
+                <Textarea
+                  id="message"
+                  name="message"
+                  placeholder="Ingresa tu mensaje"
+                  required
                   value={description}
-                  onChange={(e) => setDescription(e.target.value)} 
+                  onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
               <div className="relative mb-4">
-                <label htmlFor="rating" className="leading-7 text-sm text-gray-600">Calificación</label>
+                <label
+                  htmlFor="rating"
+                  className="leading-7 text-sm text-gray-600 dark:text-orange-400"
+                >
+                  Calificación
+                </label>
                 <RatingStars onChange={handleCambioDeCalificacion} />
               </div>
-              <button 
+              <button
                 type="submit"
                 className="text-white bg-orange-500 border-0 py-2 px-6 focus:outline-none hover:bg-orange-800 rounded text-lg"
               >
                 Enviar Opinion
               </button>
             </form>
-            <p className="text-xs text-gray-500 mt-3">¡Gracias por ayudarnos a mejorar tus futuras experiencias!</p>
+            <p className="text-xs text-gray-500 mt-3">
+              ¡Gracias por ayudarnos a mejorar tus futuras experiencias!
+            </p>
           </div>
         </div>
       </section>
