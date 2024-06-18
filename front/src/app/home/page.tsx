@@ -39,10 +39,14 @@ const Home = () => {
     <div className="dark:bg-gray-700 my-10">
       <Carrusel />
 
-      <h1 className="font-bold mt-10 ml-5 text-2xl dark: text-white">NUESTRAS PROMOCIONES</h1>
+      <h1 className="font-bold mt-10 ml-5 text-2xl dark: text-white">
+        NUESTRAS PROMOCIONES
+      </h1>
       <GridProducts products={promocionesProducts} />
 
-      <h1 className="font-bold mt-10 ml-5 text-2xl dark:text-white">MENU DE HAMBURGUESAS</h1>
+      <h1 className="font-bold mt-10 ml-5 text-2xl dark:text-white">
+        MENU DE HAMBURGUESAS
+      </h1>
       <GridProducts products={menuHamburguesas} />
     </div>
   );
