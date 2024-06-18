@@ -27,6 +27,7 @@ import { StorageService } from './modules/storage/storage.service';
 import { StorageModule } from './modules/storage/storage.module';
 import { Testimony } from './entities/testimony.entity';
 import { ChatbotModule } from './chatbot/chatbot.module';
+import { ChatliveModule } from './chatlive/chatlive.module';
 
 @Module({
   imports: [
@@ -59,7 +60,8 @@ import { ChatbotModule } from './chatbot/chatbot.module';
     OrderRatingsModule,
     ProductRatingsModule,
     StorageModule,
-    ChatbotModule
+    ChatbotModule,
+    ChatliveModule
   ],
   controllers: [AppController,],
   providers: [AppService, PreloadService,],
