@@ -18,6 +18,7 @@ const ChatContainer: React.FC = () => {
     } else {
       // Redireccionar al usuario a la página de inicio si no está logueado
       router.push("/home");
+      alert("Por favor inicie sesión para acceder al chat");
     }
   }, [router]);
 
