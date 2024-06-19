@@ -1,4 +1,3 @@
-
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -84,8 +83,8 @@ export class ChatbotService {
           response = this.steps[5];
           session.step = 6;
         } else {
-          response =
-            '<b>Opción inválida. </b> Por favor, selecciona una opción válida.';
+          response = this.steps[2];
+          session.step = 2;
         }
         break;
       case 4:
@@ -93,7 +92,6 @@ export class ChatbotService {
         if (message === '1') {
           response = this.steps[2]; // Volver al menu principal
           session.step = 3;
-        
         } else if (message === '2') {
           response = this.steps[6];
           this.userSession.delete(userId);
