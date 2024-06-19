@@ -5,14 +5,10 @@
 /* Darle un color al fondo de la página */
 body {
   background-color: rgb(245, 248, 252);
+  color: rgb(0, 0, 0); /* Color del texto en modo claro */
 }
 
-/* 
-  @layer base {
-    button {
-      @apply border border-black rounded-xl px-5 py-1
-    }
-  } */
+
 
 @layer utilities {
   .animation-delay-200 {

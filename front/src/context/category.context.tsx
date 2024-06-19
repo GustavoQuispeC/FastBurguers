@@ -1,10 +1,9 @@
 "use client"
-
 import { createContext, useContext, useState, ReactNode } from "react";
 
 interface CategoryContextProps {
-  selectedCategory: number;
-  setSelectedCategory: (category: number) => void;
+  selectedCategoryName: string;
+  setSelectedCategoryName: (categoryName: string) => void;
 }
 
 const CategoryContext = createContext<CategoryContextProps | undefined>(undefined);
@@ -18,9 +17,9 @@ export const useCategory = () => {
 };
 
 export const CategoryProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedCategory, setSelectedCategory] = useState<number>(1);
+  const [selectedCategoryName, setSelectedCategoryName] = useState<string>("Hamburguesas");
   return (
-    <CategoryContext.Provider value={{ selectedCategory, setSelectedCategory }}>
+    <CategoryContext.Provider value={{ selectedCategoryName, setSelectedCategoryName }}>
       {children}
     </CategoryContext.Provider>
   );

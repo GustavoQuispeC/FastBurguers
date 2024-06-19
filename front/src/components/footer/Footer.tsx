@@ -9,9 +9,13 @@ import FooterList from "./FooterList";
 import Link from "next/link";
 import { MdFacebook } from "react-icons/md";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useCategory } from "@/context/category.context";
 
 const Footer: React.FC = (): React.ReactElement => {
   const [footerHeight, setFooterHeight] = useState("500px");
+  const { setSelectedCategoryName } = useCategory();
+  const router = useRouter();
 
   useEffect(() => {
     // Función para actualizar el height basado en el tamaño de la pantalla
@@ -31,6 +35,11 @@ const Footer: React.FC = (): React.ReactElement => {
     return () => window.removeEventListener("resize", updateSize);
   }, []);
 
+  const handleCategoryClick = (categoryName: string) => {
+    setSelectedCategoryName(categoryName);
+    router.push("/product");
+  };
+
   return (
     <footer
       style={{
@@ -45,34 +54,32 @@ const Footer: React.FC = (): React.ReactElement => {
     >
       <Container>
         <div className="flex flex-col md:flex-row justify-around  pt-16 pb-8">
-          <Link href="/product">
           <FooterList>
             <h3 className=" text-base text-orange-500 font-bold mb-3">
-           Menu
+              Menu
             </h3>
 
-            <div>Hamburguesas </div>
-            <div>Postres</div>
-            <div>Bebidas</div>
-            <div>Sandwiches</div>
+            <div onClick={() => handleCategoryClick("Hamburguesas")}>Hamburguesas</div>
+            <div onClick={() => handleCategoryClick("Postres")}>Postres</div>
+            <div onClick={() => handleCategoryClick("Bebidas")}>Bebidas</div>
+            <div onClick={() => handleCategoryClick("Sandwiches")}>Sandwiches</div>
           </FooterList>
-</Link>
           <FooterList>
             <h3 className=" text-base text-orange-500 font-bold mb-2">
               Servicio al Cliente
             </h3>
-<Link href="/contact">
-            <div>Contáctanos</div>
-</Link>
-<Link href="/politica">
-            <div>Política de Entrega</div>
-</Link>
-<Link href="/devoluciones">
-            <div>Devoluciones y Cambios</div>
-</Link>
-<Link href="/faq">
-            <div>Preguntas Frecuentes</div>
-</Link>
+            <Link href="/contact">
+              <div>Contáctanos</div>
+            </Link>
+            <Link href="/politica">
+              <div>Política de Entrega</div>
+            </Link>
+            <Link href="/devoluciones">
+              <div>Devoluciones y Cambios</div>
+            </Link>
+            <Link href="/faq">
+              <div>Preguntas Frecuentes</div>
+            </Link>
           </FooterList>
 
           <div className=" w-full md:w-1/3 mb-6 md:mb-0">
@@ -82,7 +89,7 @@ const Footer: React.FC = (): React.ReactElement => {
             <p className="mb-2">
               {" "}
               ¡Bienvenido a Fast Burgers, tu lugar para hamburguesas rápidas y
-              deliciosas y más! Nos enfocamos en ingredientes frescos y un
+              deliciosas comidas y más! Nos enfocamos en ingredientes frescos y un
               servicio rápido para ofrecer una experiencia gastronómica de
               primera clase. Disfruta de nuestra variedad de hamburguesas,
               acompañamientos y bebidas hoy. ©2024 Fast Burgers. Todos los
