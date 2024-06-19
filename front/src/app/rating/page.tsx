@@ -132,9 +132,9 @@ const Rating: React.FC = () => {
     <div className="mx-5 text-center my-10">
       <h1 className="text-2xl font-bold mb-4">Reseñas</h1>
       {order && (
-        <div className="p-4 rounded-lg mb-4 mx-5 flex flex-col items-center">
-          <fieldset className="border-2 border-orange-500 p-4 rounded-lg mb-4 w-full ">
-            <legend className="text-xl font-bold">
+        <div className="p-4 rounded-lg mb-4 mx-5 flex flex-col items-center dark:bg-gray-600">
+          <fieldset className="border-2 border-orange-500 p-4 rounded-lg mb-4 w-full dark:bg-gray-700 ">
+            <legend className="text-xl font-bold dark:text-orange-400">
               Reseña nuestros productos
             </legend>
             {order.orderDetails.orderDetailsProducts.map((product) => (
@@ -149,14 +149,16 @@ const Rating: React.FC = () => {
                     className="w-20 h-20 mr-4 rounded-xl"
                   />
                   <div>
-                    <h2 className="text-lg font-bold">
+                    <h2 className="text-lg font-bold dark:text-orange-300">
                       {product.products.name}
                     </h2>
-                    <p className="font-bold">${product.products.price}</p>
+                    <p className="font-bold dark:text-gray-400">
+                      ${product.products.price}
+                    </p>
                   </div>
                 </div>
                 <div className="flex flex-col items-center">
-                  <label className="flex items-center mb-2">
+                  <label className="flex items-center mb-2 dark:text-white">
                     ¿Desea dejar su opinión?
                     <input
                       type="checkbox"
@@ -214,8 +216,10 @@ const Rating: React.FC = () => {
               </div>
             ))}
           </fieldset>
-          <fieldset className="border-2 border-orange-500 p-4 rounded-lg mb-4 w-full">
-            <legend className="text-xl font-bold">Reseña su Orden</legend>
+          <fieldset className="border-2 border-orange-500 dark:bg-gray-700 p-4 rounded-lg mb-4 w-full">
+            <legend className="text-xl font-bold dark:text-orange-400">
+              Reseña su Orden
+            </legend>
             <textarea
               className="mb-2 p-2 border rounded w-full"
               placeholder="Deja tu comentario general"
