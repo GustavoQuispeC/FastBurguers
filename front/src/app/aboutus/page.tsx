@@ -22,7 +22,7 @@ const AboutUs = () => {
             </div>
             <div className="p-2 lg:w-1/3 md:w-1/2 w-full">
               <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg">
-                <img alt="team" className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="https://images.pexels.com/photos/1181695/pexels-photo-1181695.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"/>
+                <img alt="team" className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="gabriel.jpeg"/>
                 <div className="flex-grow">
                   <h2 className="text-gray-900 title-font font-medium">Gabriel Lazo</h2>
                   <p className="text-gray-500">Frontend Developer</p>
@@ -31,7 +31,7 @@ const AboutUs = () => {
             </div>
             <div className="p-2 lg:w-1/3 md:w-1/2 w-full">
               <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg">
-                <img alt="team" className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="https://images.pexels.com/photos/2955375/pexels-photo-2955375.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"/>
+                <img alt="team" className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="gustavo.jpeg"/>
                 <div className="flex-grow">
                   <h2 className="text-gray-900 title-font font-medium">Gustavo Quispe</h2>
                   <p className="text-gray-500">Frontend Developer</p>
@@ -40,7 +40,7 @@ const AboutUs = () => {
             </div>
             <div className="p-2 lg:w-1/3 md:w-1/2 w-full">
               <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg">
-                <img alt="team" className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="https://images.pexels.com/photos/3778680/pexels-photo-3778680.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"/>
+                <img alt="team" className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="renzo.jpeg"/>
                 <div className="flex-grow">
                   <h2 className="text-gray-900 title-font font-medium">Renzo Alvarado</h2>
                   <p className="text-gray-500">Backend Developer</p>
@@ -49,7 +49,7 @@ const AboutUs = () => {
             </div>
             <div className="p-2 lg:w-1/3 md:w-1/2 w-full">
               <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg">
-                <img alt="team" className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="https://images.pexels.com/photos/3756681/pexels-photo-3756681.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"/>
+                <img alt="team" className="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4" src="paolo.jpeg"/>
                 <div className="flex-grow">
                   <h2 className="text-gray-900 title-font font-medium">Omar Aliaga</h2>
                   <p className="text-gray-500">Backend Developer</p>

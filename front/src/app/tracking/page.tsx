@@ -9,6 +9,7 @@ import {
   FaHouseChimney,
   FaTruckArrowRight,
 } from "react-icons/fa6";
+
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 const steps = [
@@ -54,6 +55,15 @@ const OrderStatus = () => {
   const router = useRouter();
 
   useEffect(() => {
+    const userSession = JSON.parse(localStorage.getItem("userSession") || "{}");
+    const token = userSession.userData?.token;
+
+    if (!token) {
+      router.push("/home");
+      alert("Debe estar logueado y comprar algun producto para acceder al seguimiento de los envíos");
+      return;
+    }
+
     const orderDataArray = JSON.parse(localStorage.getItem("Order") || "[]");
     console.log("Order data from local storage:", orderDataArray);
 
@@ -66,59 +76,52 @@ const OrderStatus = () => {
       console.log("Order Date:", orderDate);
 
       if (orderId) {
-        const userSession = JSON.parse(
-          localStorage.getItem("userSession") || "{}"
-        );
-        const token = userSession.userData?.token;
-        console.log("Token:", token);
-
-        if (token) {
-          const fetchOrderStatus = async () => {
-            try {
-              setLoading(true);
-              const response = await fetch(
-                `${apiURL}/status-histories/${orderId}`,
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                }
-              );
-              const data: Array<any> = await response.json();
-              console.log("Response data from server:", data);
-
-              const stepIndex = data.length - 1;
-              setCurrentStep(stepIndex);
-
-              if (data[stepIndex].status === "entregado") {
-                // Si es 'entregado', redirecciona a la página de rating
-                router.push("/rating");
+        const fetchOrderStatus = async () => {
+          try {
+            setLoading(true);
+            const response = await fetch(
+              `${apiURL}/status-histories/${orderId}`,
+              {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
               }
+            );
+            const data: Array<any> = await response.json();
+            console.log("Response data from server:", data);
 
-              setLoading(false);
-            } catch (err) {
-              setError("Error al obtener el estado de la orden");
-              setLoading(false);
+            const stepIndex = data.length - 1;
+            setCurrentStep(stepIndex);
+
+            if (data[stepIndex].status === "entregado") {
+              // Si es 'entregado', redirecciona a la página de rating
+              router.push("/rating");
             }
-          };
 
-          fetchOrderStatus();
-          const intervalId = setInterval(fetchOrderStatus, 30000);
+            setLoading(false);
+          } catch (err) {
+            setError("Error al obtener el estado de la orden");
+            setLoading(false);
+          }
+        };
 
-          return () => clearInterval(intervalId);
-        } else {
-          setError("Token no encontrado en el local storage");
-          setLoading(false);
-        }
+        fetchOrderStatus();
+        const intervalId = setInterval(fetchOrderStatus, 30000);
+
+        return () => clearInterval(intervalId);
       } else {
-        setError("ID de orden no encontrado en el objeto de la orden");
+        setError(
+          "Debe estar logueado y hacer un pedido para acceder al seguimiento de los envíos"
+        );
         setLoading(false);
       }
     } else {
-      setError("Datos de orden no encontrados en el local storage");
+      setError(
+        "Debe estar logueado y hacer un pedido para acceder al seguimiento de los envíos"
+      );
       setLoading(false);
     }
-  }, []);
+  }, [router]);
 
   if (loading) return <Spinner />;
   if (error) return <p className="text-center">{error}</p>;
