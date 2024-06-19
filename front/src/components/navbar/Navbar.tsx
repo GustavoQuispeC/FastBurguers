@@ -259,7 +259,7 @@ const Navbar = () => {
               <li className="text-xl py-4 flex">
                 <AiFillTag size={25} className="mr-4" />
                 <Link
-                  href="#"
+                  href="/home"
                   className="hover:text-orange-400"
                   onClick={handleNavLinkClick}
                 >

@@ -154,7 +154,7 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
             <div className="flex flex-wrap gap-4 mt-8">
               {producto?.discount && producto.discount > 0 ? (
                 <>
-                  <h3 className="text-gray-800  text-4xl max-sm:text-3xl font-bold">
+                  <h3 className="text-gray-800 dark:text-white text-4xl max-sm:text-3xl font-bold">
                     ${getPrecioConDescuento()}
                   </h3>
                   <h3 className="text-gray-400 text-xl text-center mt-2  ">

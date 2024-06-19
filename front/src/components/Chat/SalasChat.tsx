@@ -6,7 +6,11 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 const adminSocket: Socket = io(`${apiURL}/admin`);
 
 const SalasChat: React.FC = () => {
-  const [rooms, setRooms] = useState<string[]>([]);
+  const [rooms, setRooms] = useState<string[]>(() => {
+    // Recupera las salas almacenadas en localStorage
+    const storedRooms = localStorage.getItem("rooms");
+    return storedRooms ? JSON.parse(storedRooms) : [];
+  });
   const [currentRoom, setCurrentRoom] = useState<string | null>(null);
 
   useEffect(() => {
@@ -14,7 +18,10 @@ const SalasChat: React.FC = () => {
       console.log(`New room received: ${room}`);
       setRooms((prevRooms) => {
         if (room && !prevRooms.includes(room)) {
-          return [...prevRooms, room];
+          const newRooms = [...prevRooms, room];
+          // Almacena las salas en localStorage
+          localStorage.setItem("rooms", JSON.stringify(newRooms));
+          return newRooms;
         }
         return prevRooms;
       });

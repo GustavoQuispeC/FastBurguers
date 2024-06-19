@@ -185,7 +185,7 @@ const Cart = () => {
   if (cart.length === 0) {
     return (
       <section className="text-gray-600 body-font">
-        <div className="container mx-auto flex px-5 py-24 mt-14 items-center justify-center flex-col">
+        <div className="container mx-auto flex px-5 py-24 mt-14 items-center justify-center flex-col ">
           <img
             className="lg:w-2/6 md:w-3/6 w-5/6 mb-10 object-cover object-center rounded"
             alt="hero"
@@ -196,7 +196,8 @@ const Cart = () => {
               Tu carrito está vacío
             </h1>
             <p className="mb-8 leading-relaxed">
-              Parece que aún no has agregado nada a tu carrito. ¡Empieza a comprar ahora!
+              Parece que aún no has agregado nada a tu carrito. ¡Empieza a
+              comprar ahora!
             </p>
             <div className="flex justify-center">
               <Link href="/home">
@@ -212,10 +213,12 @@ const Cart = () => {
   }
 
   return (
-    <div className="font-sans max-w-4xl mx-auto py-4 h-screen">
+    <div className="font-sans max-w-full mx-auto py-4 h-screen dark:bg-gray-600">
       <div className="grid md:grid-cols-3 gap-4">
-        <div className="md:col-span-2 bg-white p-4 rounded-md">
-          <h2 className="text-2xl font-bold text-gray-900">Carrito</h2>
+        <div className="md:col-span-2 bg-white p-4 rounded-md dark:bg-gray-700">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Carrito
+          </h2>
           <hr className="border-white my-4" />
 
           <div className="space-y-4">
@@ -225,14 +228,14 @@ const Cart = () => {
                 className="grid sm:grid-cols-3 items-center gap-4"
               >
                 <div className="sm:col-span-2 flex items-center gap-4">
-                  <div className="w-24 h-24 shrink-0 bg-white p-1 rounded-md">
+                  <div className="w-24 h-24 shrink-0 bg-white p-1 rounded-md ">
                     <img
                       src={item.imgUrl}
                       className="w-full h-full object-contain"
                     />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-gray-800">
+                    <h3 className="text-base font-bold text-gray-800 dark:text-white">
                       {item.name}
                       {item.size === "Grande" || item.size === "Clasica"
                         ? ` (${item.size})`
@@ -268,7 +271,7 @@ const Cart = () => {
                 <div className="ml-auto">
                   {item.discount && item.discount > 0 ? (
                     <div>
-                      <h4 className="text-lg font-bold text-gray-800">
+                      <h4 className="text-lg font-bold text-gray-800 dark:text-white">
                         $
                         {(
                           item.price *

@@ -127,7 +127,7 @@ const OrderStatus = () => {
     <>
       <div className="flex flex-col overflow-auto h-screen text-black my-5">
         <div className="container mx-auto px-4 py-5 h-full">
-          <div className="card bg-gray-200 shadow-lg border border-black rounded-lg py-3 px-5 my-5">
+          <div className="card bg-gray-200 dark:bg-gray-700 shadow-lg border border-black rounded-lg py-3 px-5 my-5">
             <div className="flex flex-col sm:flex-row justify-between mx-5 pt-3 my-3">
               <div className="text-center sm:text-left mb-4 sm:mb-0">
                 <p className="text-2xl sm:text-3xl text-orange-500 mb-3">
