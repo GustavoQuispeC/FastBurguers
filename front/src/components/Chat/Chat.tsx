@@ -37,6 +37,12 @@ const Chat: React.FC<ChatProps> = ({ room }) => {
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      sendMessage();
+    }
+  };
+
   return (
     <section className="text-gray-600 body-font relative">
       <div className="container px-5 py-24 mx-auto ">
@@ -81,7 +87,8 @@ const Chat: React.FC<ChatProps> = ({ room }) => {
                     type="text"
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    className=" rounded p-2 flex-grow"
+                    onKeyDown={handleKeyDown} // Añadir el evento onKeyDown aquí
+                    className="rounded p-2 flex-grow"
                   />
                 </div>
               </div>
