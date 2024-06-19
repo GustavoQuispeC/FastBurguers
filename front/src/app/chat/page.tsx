@@ -17,7 +17,7 @@ const ChatContainer: React.FC = () => {
       setUserSession(userId);
     } else {
       // Redireccionar al usuario a la página de inicio si no está logueado
-      router.push("/home");
+      router.push("/login");
       alert("Por favor inicie sesión para acceder al chat");
     }
   }, [router]);
