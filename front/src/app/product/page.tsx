@@ -8,14 +8,12 @@ import { useCategory } from "@/context/category.context";
 import { getCategories } from "@/helpers/categories.helper";
 
 const Product = () => {
-  const { selectedCategory, setSelectedCategory } = useCategory();
+  const { selectedCategoryName, setSelectedCategoryName } = useCategory();
   const [categories, setCategories] = useState<any[]>([]);
   const [minPrice, setMinPrice] = useState<number>(1);
   const [maxPrice, setMaxPrice] = useState<number>(Infinity);
   const [tempRange, setTempRange] = useState<[number, number]>([1, 20]);
   const [filterApplied, setFilterApplied] = useState<boolean>(false);
-  const [selectedCategoryName, setSelectedCategoryName] =
-    useState<string>("Hamburguesas");
 
   useEffect(() => {
     const loadCategories = async () => {
@@ -26,8 +24,7 @@ const Product = () => {
     loadCategories();
   }, []);
 
-  const handleCategoryClick = (categoryId: string, categoryName: string) => {
-    setSelectedCategory(Number(categoryId));
+  const handleCategoryClick = (categoryName: string) => {
     setSelectedCategoryName(categoryName);
   };
 
@@ -37,9 +34,9 @@ const Product = () => {
     }
   };
 
-  const getButtonClass = (categoryId: string) => {
+  const getButtonClass = (categoryName: string) => {
     return `p-2 rounded-xl border-none shadow-md ${
-      String(selectedCategory) === categoryId
+      selectedCategoryName === categoryName
         ? "text-orange-400 shadow-lg"
         : "hover:text-orange-400"
     }`;
@@ -62,10 +59,10 @@ const Product = () => {
     <div className=" py-5 dark:bg-gray-700">
       <ul className=" flex flex-wrap gap-3 bg-slate-700 dark:bg-gray-300 mt-10 p-3 justify-around font-bold text-white w-11/12 rounded-lg items-center m-auto">
         {categories.map((category) => (
-          <li key={category.id} className="w-full sm:w-auto text-center dark:bg-gray-400 rounded-md dark:text-black">
+          <li key={category.id} className="w-full sm:w-auto text-center  dark:bg-gray-400 rounded-md dark:text-black">
             <button
-              onClick={() => handleCategoryClick(category.id, category.name)}
-              className={getButtonClass(category.id)}
+              onClick={() => handleCategoryClick(category.name)}
+              className={getButtonClass(category.name)}
             >
               {category.name}
             </button>
@@ -110,7 +107,7 @@ const Product = () => {
       </div>
 
       <FiltroProductos
-        categoryName={selectedCategoryName} // Pasar el nombre de la categoría aquí
+        categoryName={selectedCategoryName}
         minPrice={minPrice}
         maxPrice={maxPrice}
       />
