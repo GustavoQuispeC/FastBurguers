@@ -9,20 +9,11 @@ export class TestimonyService {
 
     constructor(@InjectRepository(Testimony) private testimonyRepository: Repository<Testimony>){}
 
-    async getTestimonials(page: string, limit: string) {
-        try {
-            const npage = Number(page)  
-            const nlimit = Number(limit)
-            if(npage<=0 || nlimit<=0) throw new Error();
-            const users = await this.testimonyRepository.find({
-                take: nlimit,
-                skip: (npage-1)*nlimit
+    async getTestimonials() {
+            const testimonies = await this.testimonyRepository.find({
             })
-            return users
+            return testimonies
 
-        } catch (error) {
-            throw new BadRequestException('Page and limit must be positive integers')
-        }
     }
 
     async createTestimony(testimony: CreateTestimonyDto) {
@@ -30,7 +21,9 @@ export class TestimonyService {
         const findTestimony = await this.testimonyRepository.find({where: { email: newTestimony.email }})
         if (!findTestimony) throw new BadRequestException('Testimony not found after creation');
         const {name } = findTestimony[0];
-        return { message: name + ' left a comment' };
+        return { message: name + ' left a comment',
+            testimony:findTestimony
+        };
 
     }
 

@@ -7,11 +7,8 @@ export class TestimonyController {
     constructor(private readonly testimonyService:TestimonyService){}
 
     @Get()
-    getTestimonials(@Query('page') page:string, @Query('limit') limit:string){
-        if(page && limit){
-            return this.testimonyService.getTestimonials(page, limit)
-        }
-        return this.testimonyService.getTestimonials('1','10')
+    getTestimonials(){
+            return this.testimonyService.getTestimonials()
     }
 
     @Post()

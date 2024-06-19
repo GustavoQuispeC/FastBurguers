@@ -119,6 +119,10 @@ export class PreloadService implements OnModuleInit {
 
     async addDefaultTestimonies(){
 
+        const comments = await this.testimonyRepository.find();
+        if(comments.length >= 1) 
+            {console.log("Se cargo data de testimonios") ;return}
+
         await Promise.all(
             dataComentarios.map(async(element)=>{
                 const commnet =this.testimonyRepository.create({
