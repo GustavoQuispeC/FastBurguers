@@ -96,8 +96,8 @@ export class ChatbotService {
           response = this.steps[6];
           this.userSession.delete(userId);
         } else {
-          response =
-            'Opción inválida. Por favor, selecciona una opción válida.';
+          response = this.steps[2];
+          session.step = 2;
         }
         break;
       case 5:
@@ -109,8 +109,8 @@ export class ChatbotService {
           response = this.steps[6];
           this.userSession.delete(userId);
         } else {
-          response =
-            'Opción inválida. Por favor, selecciona una opción válida.';
+          response = this.steps[2];
+          session.step = 2;
         }
         break;
       case 6:
@@ -122,8 +122,8 @@ export class ChatbotService {
           response = this.steps[6];
           this.userSession.delete(userId);
         } else {
-          response =
-            'Opción inválida. Por favor, selecciona una opción válida.';
+          response = this.steps[2];
+          session.step = 2;
         }
         break;
       default:
