@@ -10,7 +10,7 @@ export class ChatbotService {
         1️⃣ 🍔 Las mejores hamburguesas del día<br>
         2️⃣ 🏠 Nuestros locales<br>
         3️⃣ 📞 Números de contacto<br>
-        --------------------------------<br>
+        ----------------------<br>
         También puedes:<br>
         🍔 Revisa nuestros productos <a href="https://fast-burguers.vercel.app/product">👉<b>VER</b></a><br>
         📌  Conversa con nosotros <a href="https://fast-burguers.vercel.app/chat">👉<b>VER</b></a><br>`,
@@ -92,6 +92,7 @@ export class ChatbotService {
         if (message === '1') {
           response = this.steps[2]; // Volver al menu principal
           session.step = 3;
+        
         } else if (message === '2') {
           response = this.steps[6];
           this.userSession.delete(userId);
