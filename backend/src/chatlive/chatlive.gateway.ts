@@ -45,9 +45,8 @@ export class ChatsocketGateway
   @SubscribeMessage('message')
   handleMessage(client: Socket, data: { room: string; message: string }): void {
     const { room, message } = data;
-    client.join(room)
+    client.join(room);
     //this.server.to(room).emit('message', message);
-    client.to(room).emit('message',message)
-}
-    
+    client.to(room).emit('message', message);
+  }
 }
