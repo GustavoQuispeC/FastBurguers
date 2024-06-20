@@ -33,7 +33,9 @@ const SalasChat: React.FC = () => {
   }, []);
 
   const joinRoom = (room: string) => {
-    if (room && room.trim() !== "") {
+    if (currentRoom === room) {
+      setCurrentRoom(null);
+    } else {
       adminSocket.emit("join", room);
       setCurrentRoom(room);
     }
@@ -52,7 +54,11 @@ const SalasChat: React.FC = () => {
         {rooms.map((room) => (
           <li key={room}>
             <button
-              className="w-full py-2 px-4 bg-gray-300 rounded hover:bg-gray-400"
+              className={`w-full py-2 px-4 rounded ${
+                currentRoom === room
+                  ? "bg-gray-400"
+                  : "bg-gray-300 hover:bg-gray-400"
+              }`}
               onClick={() => joinRoom(room)}
             >
               {room}
