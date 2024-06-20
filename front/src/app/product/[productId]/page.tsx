@@ -185,8 +185,8 @@ const DetalleProduct = ({ params }: { params: { productId: number } }) => {
                   <div
                     className={`w-16 h-11 border-2 font-bold text-xs text-gray-800  rounded-lg flex items-center justify-center shrink-0 ${
                       tamaño === "Clasica"
-                        ? "bg-orange-500 border-gray-800"
-                        : "hover:bg-orange-400 hover:text-white"
+                        ? "bg-orange-400 border-gray-800"
+                        : "hover:bg-orange-500 hover:text-white"
                     }`}
                   >
                     Clásica
