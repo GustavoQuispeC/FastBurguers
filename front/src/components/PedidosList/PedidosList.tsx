@@ -10,7 +10,10 @@ const PedidosList = () => {
 
   const fetchPedidos = async (token: string) => {
     const pedidos = await GetPedidos(token);
-    setPedidos(pedidos);
+    const sortedPedidos = pedidos.sort((a: IOrderList, b: IOrderList) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+    setPedidos(sortedPedidos);
     setLoading(false);
   };
 

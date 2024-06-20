@@ -39,8 +39,10 @@ const Dashboard = () => {
           Authorization: `Bearer ${token?.userData.token}`,
         },
       });
-      console.log(data.orders);
-      return data.orders;
+      const sortedOrders = data.orders.sort((a: IOrderList, b: IOrderList) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
+      return sortedOrders;
     } catch (error: any) {
       console.error(error);
       return [];
@@ -174,12 +176,13 @@ const Dashboard = () => {
                         const orderReview = userReviews.find(
                           (review) => review.order.id === order.id
                         );
+
                         return (
                           <tr
                             key={index}
                             className="border-b dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
                           >
-                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white  ">
+                            <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                               {formatDate(order.date)}
                             </td>
                             <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
