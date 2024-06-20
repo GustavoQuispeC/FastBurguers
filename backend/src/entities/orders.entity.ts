@@ -10,7 +10,7 @@ export class Orders {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({type: 'date'})
+    @Column({type: 'timestamp'})
     date: Date;
 
     @Column({default:false})
