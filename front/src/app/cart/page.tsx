@@ -184,7 +184,7 @@ const Cart = () => {
 
   if (cart.length === 0) {
     return (
-      <section className="text-gray-600 body-font">
+      <section className="text-gray-600 body-font min-h-screen flex flex-col justify-center items-center">
         <div className="container mx-auto flex px-5 py-24 mt-14 items-center justify-center flex-col ">
           <img
             className="lg:w-2/6 md:w-3/6 w-5/6 mb-10 object-cover object-center rounded"
@@ -213,8 +213,8 @@ const Cart = () => {
   }
 
   return (
-    <div className="font-sans max-w-full mx-auto py-4 h-screen dark:bg-gray-600">
-      <div className="grid md:grid-cols-3 gap-4">
+    <div className="font-sans max-w-full mx-auto py-4 min-h-screen flex flex-col dark:bg-gray-600">
+      <div className="grid md:grid-cols-3 gap-4 flex-grow">
         <div className="md:col-span-2 bg-white p-4 rounded-md dark:bg-gray-700">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
             Carrito
