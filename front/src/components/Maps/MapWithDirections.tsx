@@ -14,8 +14,8 @@ const containerStyle = {
 };
 
 const restaurantLocation = {
-  lat: -3.745,
-  lng: -38.523,
+  lat: -34.6037,
+  lng: -58.3816,
 };
 
 const MapWithDirections: React.FC = () => {
